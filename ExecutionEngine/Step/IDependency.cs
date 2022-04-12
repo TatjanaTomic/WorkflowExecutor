@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace ExecutionEngine.Step
 {
-    public class Parameter
+    public interface IDependency
     {
-        string? KeyWord { get; }
-        string? Value { get; }
+        string? DependencyStep { get; }
     }
 }

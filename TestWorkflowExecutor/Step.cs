@@ -9,8 +9,20 @@ using System.Xml.Serialization;
 namespace TestExecutionEngine
 {
 
+    public class Dependency : IDependency
+    {
+        public string? DependencyStep { get; set; }
+    }
+
+    public class Parameter : IParameter
+    {
+        public string? KeyWord { get; set; }
+
+        public string? Value { get; set; }
+    }
+
     [XmlRoot("Step")]
-    public class Step : IStepDetail, IStep
+    public class Step : IStepDetail<Dependency, Parameter>, IStep
     {
         [XmlAttribute("Id")]
         public string Id { get; set; }

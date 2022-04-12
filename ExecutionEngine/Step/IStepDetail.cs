@@ -13,7 +13,7 @@ namespace ExecutionEngine.Step
         Download
     }
 
-    public interface IStepDetail
+    public interface IStepDetail<D, P> where D : IDependency where P : IParameter
     {
         string Id { get; }
         string? ExecutablePath { get; }
@@ -21,7 +21,7 @@ namespace ExecutionEngine.Step
         TaskType Type { get; }
         bool CanBeExecutedInParallel { get; }
         string? Description { get; }
-        List<Dependency>? Dependencies { get; }
-        List<Parameter>? Parameters { get; }
+        List<D>? Dependencies { get; }
+        List<P>? Parameters { get; }
     }
 }
