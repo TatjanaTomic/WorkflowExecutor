@@ -1,14 +1,23 @@
-﻿using System.Xml.Serialization;
+﻿using ExecutionEngine.Xml;
+using System.Xml.Serialization;
 
 namespace TestExecutionEngine
 {
     public class Program
     {
         private static readonly string BASE_PATH = @"C:\Users\EC\Desktop\WorkflowExecutorTest";
-        private static readonly string TEST_PATH = Path.Combine(BASE_PATH, "testStep.xml");
+        private static readonly string TEST_STEP_PATH = Path.Combine(BASE_PATH, "testStep.xml");
+        private static readonly string TEST_STAGE_PATH = Path.Combine(BASE_PATH, "testStage.xml");
+        private static readonly string TEST_CONFIG_PATH = Path.Combine(BASE_PATH, "WorkflowConfig.xml");
+       
         public static void Main(string[] args)
         {
-            using (var fileStream = File.Open(TEST_PATH, FileMode.Open))
+            ReadWorkflowConfig();
+        }
+
+        private static void ReadStep()
+        {
+            using (var fileStream = File.Open(TEST_STEP_PATH, FileMode.Open))
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(Step));
                 var myDocument = (Step)serializer.Deserialize(fileStream);
@@ -20,5 +29,64 @@ namespace TestExecutionEngine
                 }
             }
         }
+
+        private static void ReadStage()
+        {
+            using (var fileStream = File.Open(TEST_STAGE_PATH, FileMode.Open))
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(Stage));
+                var myDocument = (Stage)serializer.Deserialize(fileStream);
+                Console.WriteLine($"Stage: {myDocument.Id}");
+                foreach (var item in myDocument.Steps)
+                {
+                    Console.WriteLine("Step: " + item.Id);
+                    Console.WriteLine("    Executable path: " + item.ExecutablePath);
+                    Console.WriteLine("    File: " + item.File);
+                    Console.WriteLine("    Type: " + item.Type);
+                    Console.WriteLine("    Parallel: " + item.CanBeExecutedInParallel);
+                    Console.WriteLine("    Description: " + item.Description);
+                    foreach(var dependency in item.Dependencies)
+                    {
+                        Console.WriteLine("    Dependency: " + dependency.DependencyStep);
+                    }
+                    foreach(var parameter in item.Parameters)
+                    {
+                        Console.WriteLine("    Parameters: " + parameter.KeyWord + " " + parameter.Value);
+                    }
+                }
+            }
+        }
+
+        private static void ReadWorkflowConfig()
+        {
+            using (var fileStream = File.Open(TEST_CONFIG_PATH, FileMode.Open))
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(StageList));
+                var myDocument = (StageList)serializer.Deserialize(fileStream);
+
+                foreach (var stage in myDocument.Stages)
+                {
+                    Console.WriteLine("Stage: " + stage.Id);
+                    foreach (var item in stage.Steps)
+                    {
+                        Console.WriteLine("  Step: " + item.Id);
+                        Console.WriteLine("    Executable path: " + item.ExecutablePath);
+                        Console.WriteLine("    File: " + item.File);
+                        Console.WriteLine("    Type: " + item.Type);
+                        Console.WriteLine("    Parallel: " + item.CanBeExecutedInParallel);
+                        Console.WriteLine("    Description: " + item.Description);
+                        foreach (var dependency in item.Dependencies)
+                        {
+                            Console.WriteLine("    Dependency: " + dependency.DependencyStep);
+                        }
+                        foreach (var parameter in item.Parameters)
+                        {
+                            Console.WriteLine("    Parameters: " + parameter.KeyWord + " " + parameter.Value);
+                        }
+                    }
+                }
+            }
+        }
+
     }
 }

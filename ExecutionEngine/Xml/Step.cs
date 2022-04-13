@@ -6,23 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace TestExecutionEngine
+namespace ExecutionEngine.Xml
 {
-
-    public class Dependency : IDependency
-    {
-        public string? DependencyStep { get; set; }
-    }
-
-    public class Parameter : IParameter
-    {
-        public string? KeyWord { get; set; }
-
-        public string? Value { get; set; }
-    }
-
     [XmlRoot("Step")]
-    public class Step : IStepDetail<Dependency, Parameter>, IStep
+    public class Step : IStep<Dependency, Parameter>
     {
         [XmlAttribute("Id")]
         public string Id { get; set; }
@@ -33,13 +20,13 @@ namespace TestExecutionEngine
         [XmlAttribute("File")]
         public string? File { get; set; }
 
-
         [XmlAttribute("Type")]
         public TaskType Type { get; set; }
- 
+
         [XmlAttribute("CanBeExecutedInParallel")]
         public bool CanBeExecutedInParallel { get; set; }
 
+        [XmlElement]
         public string? Description { get; set; }
 
         [XmlArray]
@@ -50,10 +37,10 @@ namespace TestExecutionEngine
         [XmlArrayItem(ElementName = "Parameter")]
         public List<Parameter>? Parameters { get; set; }
 
+
         public void Execute()
         {
             throw new NotImplementedException();
         }
     }
-
 }
