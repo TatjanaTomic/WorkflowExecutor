@@ -12,6 +12,7 @@ namespace ExecutionEngine.Xml
     public class Dependency : IDependency
     {
         [XmlAttribute("Id")]
-        public string? DependencyStep { get; set; }
+        public string DependencyStep { get; set; }
+
     }
 }

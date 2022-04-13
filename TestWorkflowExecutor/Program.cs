@@ -1,4 +1,5 @@
 ﻿using ExecutionEngine.Xml;
+using ExecutionEngine.Xml.StageListBuilder;
 using System.Xml.Serialization;
 
 namespace TestExecutionEngine
@@ -12,6 +13,7 @@ namespace TestExecutionEngine
        
         public static void Main(string[] args)
         {
+            Console.WriteLine("Hello");
             ReadWorkflowConfig();
         }
 
@@ -59,34 +61,42 @@ namespace TestExecutionEngine
 
         private static void ReadWorkflowConfig()
         {
-            using (var fileStream = File.Open(TEST_CONFIG_PATH, FileMode.Open))
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(StageList));
-                var myDocument = (StageList)serializer.Deserialize(fileStream);
 
-                foreach (var stage in myDocument.Stages)
+            var stageList = StageListBuilder.GetStageList(TEST_CONFIG_PATH);
+
+            if (stageList != null && stageList.Stages != null)
+            {
+                foreach (var stage in stageList.Stages)
                 {
                     Console.WriteLine("Stage: " + stage.Id);
-                    foreach (var item in stage.Steps)
+                    if (stage.Steps != null)
                     {
-                        Console.WriteLine("  Step: " + item.Id);
-                        Console.WriteLine("    Executable path: " + item.ExecutablePath);
-                        Console.WriteLine("    File: " + item.File);
-                        Console.WriteLine("    Type: " + item.Type);
-                        Console.WriteLine("    Parallel: " + item.CanBeExecutedInParallel);
-                        Console.WriteLine("    Description: " + item.Description);
-                        foreach (var dependency in item.Dependencies)
+                        foreach (var item in stage.Steps)
                         {
-                            Console.WriteLine("    Dependency: " + dependency.DependencyStep);
-                        }
-                        foreach (var parameter in item.Parameters)
-                        {
-                            Console.WriteLine("    Parameters: " + parameter.KeyWord + " " + parameter.Value);
+                            Console.WriteLine("  Step: " + item.Id);
+                            Console.WriteLine("    Executable path: " + item.ExecutablePath);
+                            Console.WriteLine("    File: " + item.File);
+                            Console.WriteLine("    Type: " + item.Type);
+                            Console.WriteLine("    Parallel: " + item.CanBeExecutedInParallel);
+                            Console.WriteLine("    Description: " + item.Description);
+                            if (item.Dependencies != null)
+                            {
+                                foreach (var dependency in item.Dependencies)
+                                {
+                                    Console.WriteLine("    Dependency: " + dependency.DependencyStep);
+                                }
+                            }
+                            if (item.Parameters != null)
+                            {
+                                foreach (var parameter in item.Parameters)
+                                {
+                                    Console.WriteLine("    Parameters: " + parameter.KeyWord + " " + parameter.Value);
+                                }
+                            }
                         }
                     }
                 }
             }
         }
-
     }
 }

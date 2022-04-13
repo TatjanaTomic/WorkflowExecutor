@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using TaskStatus = ExecutionEngine.Step.TaskStatus;
 
 namespace ExecutionEngine.Xml
 {
@@ -36,6 +37,8 @@ namespace ExecutionEngine.Xml
         [XmlArray]
         [XmlArrayItem(ElementName = "Parameter")]
         public List<Parameter>? Parameters { get; set; }
+
+        public TaskStatus Status { get; set; }
 
 
         public void Execute()

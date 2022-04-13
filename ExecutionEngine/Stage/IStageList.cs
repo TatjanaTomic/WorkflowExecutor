@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace ExecutionEngine.Stage
 {
-    public interface IStage<Step>
+    public interface IStageList<IStage>
     {
-        string Id { get; }
-        List<Step>? Steps { get; }
+        List<IStage>? Stages { get; }
     }
 }

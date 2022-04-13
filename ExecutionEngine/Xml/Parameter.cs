@@ -12,9 +12,10 @@ namespace ExecutionEngine.Xml
     public class Parameter : IParameter
     {
         [XmlAttribute("KeyWord")]
-        public string? KeyWord { get; set; }
+        public string KeyWord { get; set; }
 
         [XmlAttribute("Value")]
-        public string? Value { get; set; }
+        public string Value { get; set; }
+
     }
 }

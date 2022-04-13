@@ -8,6 +8,6 @@ namespace ExecutionEngine.Step
 {
     public interface IDependency
     {
-        string? DependencyStep { get; }
+        string DependencyStep { get; }
     }
 }

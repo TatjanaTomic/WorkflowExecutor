@@ -8,7 +8,7 @@ namespace ExecutionEngine.Step
 {
     public interface IParameter
     {
-        string? KeyWord { get; }
-        string? Value { get; }
+        string KeyWord { get; }
+        string Value { get; }
     }
 }
