@@ -7,7 +7,7 @@ namespace TestExecutionEngine
 {
     public class Program
     {
-        private static readonly string BASE_PATH = @"C:\Users\EC\Desktop\WorkflowExecutorTest";
+        private static readonly string BASE_PATH = Directory.GetCurrentDirectory();
         private static readonly string TEST_STEP_PATH = Path.Combine(BASE_PATH, "testStep.xml");
         private static readonly string TEST_STAGE_PATH = Path.Combine(BASE_PATH, "testStage.xml");
         private static readonly string TEST_CONFIG_PATH = Path.Combine(BASE_PATH, "WorkflowConfig.xml");
