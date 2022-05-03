@@ -1,4 +1,5 @@
 ﻿using ExecutionEngine.Xml;
+using ExecutionEngine.Xml.Queue;
 using ExecutionEngine.Xml.StageListBuilder;
 using System.Xml.Serialization;
 
@@ -14,7 +15,77 @@ namespace TestExecutionEngine
         public static void Main(string[] args)
         {
             Console.WriteLine("Hello");
-            ReadWorkflowConfig();
+            var stageList = ReadWorkflowConfig();
+            Console.WriteLine();
+            //ExecuteAllSteps(stageList);
+
+            var stepQueue = StepQueue.Instance;
+            stepQueue.BuildQueue(stageList);
+
+            stepQueue.ExecuteParallelSteps();
+            
+        }
+
+        private static StageList? ReadWorkflowConfig()
+        {
+
+            var stageList = StageListBuilder.GetStageList(TEST_CONFIG_PATH);
+
+            if (stageList != null && stageList.Stages != null)
+            {
+                foreach (var stage in stageList.Stages)
+                {
+                    Console.WriteLine("Stage: " + stage.Id);
+                    if (stage.Steps != null)
+                    {
+                        foreach (var step in stage.Steps)
+                        {
+                            Console.WriteLine("  Step: " + step.Id);
+                            Console.WriteLine("    Executable path: " + step.ExecutablePath);
+                            Console.WriteLine("    File: " + step.File);
+                            Console.WriteLine("    Type: " + step.Type);
+                            Console.WriteLine("    Parallel: " + step.CanBeExecutedInParallel);
+                            Console.WriteLine("    Description: " + step.Description);
+                            if (step.Dependencies != null)
+                            {
+                                foreach (var dependency in step.Dependencies)
+                                {
+                                    Console.WriteLine("    Dependency: " + dependency.DependencyStep);
+                                }
+                            }
+                            if (step.Parameters != null)
+                            {
+                                foreach (var parameter in step.Parameters)
+                                {
+                                    Console.WriteLine("    Parameters: " + parameter.KeyWord + " " + parameter.Value);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return stageList;
+        }
+
+        private static void ExecuteAllSteps(StageList? stageList)
+        {
+            Console.WriteLine("Executing...");
+            if(stageList != null && stageList.Stages != null)
+            {
+                foreach(var stage in stageList.Stages)
+                {
+                    Console.WriteLine("  Stage: " + stage.Id);
+                    if (stage.Steps != null)
+                    {
+                        foreach (var step in stage.Steps)
+                        {
+                            Console.WriteLine("    Step: " + step.Id);
+                            step.Execute();
+                        }
+                    }
+                }
+            }
         }
 
         private static void ReadStep()
@@ -59,44 +130,6 @@ namespace TestExecutionEngine
             }
         }
 
-        private static void ReadWorkflowConfig()
-        {
-
-            var stageList = StageListBuilder.GetStageList(TEST_CONFIG_PATH);
-
-            if (stageList != null && stageList.Stages != null)
-            {
-                foreach (var stage in stageList.Stages)
-                {
-                    Console.WriteLine("Stage: " + stage.Id);
-                    if (stage.Steps != null)
-                    {
-                        foreach (var item in stage.Steps)
-                        {
-                            Console.WriteLine("  Step: " + item.Id);
-                            Console.WriteLine("    Executable path: " + item.ExecutablePath);
-                            Console.WriteLine("    File: " + item.File);
-                            Console.WriteLine("    Type: " + item.Type);
-                            Console.WriteLine("    Parallel: " + item.CanBeExecutedInParallel);
-                            Console.WriteLine("    Description: " + item.Description);
-                            if (item.Dependencies != null)
-                            {
-                                foreach (var dependency in item.Dependencies)
-                                {
-                                    Console.WriteLine("    Dependency: " + dependency.DependencyStep);
-                                }
-                            }
-                            if (item.Parameters != null)
-                            {
-                                foreach (var parameter in item.Parameters)
-                                {
-                                    Console.WriteLine("    Parameters: " + parameter.KeyWord + " " + parameter.Value);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        
     }
 }

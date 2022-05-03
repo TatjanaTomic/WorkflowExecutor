@@ -15,7 +15,7 @@ namespace ExecutionEngine.Xml.StageListBuilder
         public static StageList GetStageList(string configPath)
         {
             if (!File.Exists(configPath))
-                throw new ReadingConfigurationException("Missing configuration file.");
+                throw new ConfigurationException("Missing configuration file.");
 
             try
             {
@@ -24,14 +24,14 @@ namespace ExecutionEngine.Xml.StageListBuilder
 
                 var configuration = serializer.Deserialize(fileStream);
                 if (configuration == null)
-                    throw new ReadingConfigurationException("Error deserializing XML configuration.");
+                    throw new ConfigurationException("Error deserializing XML configuration.");
                 else
                     return (StageList)configuration;
 
             }
             catch (Exception ex)
             {
-                throw new ReadingConfigurationException("Error reading XML configuration.", ex);
+                throw new ConfigurationException("Error reading XML configuration.", ex);
             }
             
 

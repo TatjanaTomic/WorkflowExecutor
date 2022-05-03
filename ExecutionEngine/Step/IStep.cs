@@ -11,24 +11,24 @@ namespace ExecutionEngine.Step
         string Id { get; }
         string? ExecutablePath { get; }
         string? File { get; }
-        TaskType Type { get; }
+        StepType Type { get; }
         bool CanBeExecutedInParallel { get; }
         string? Description { get; }
         List<Dependency>? Dependencies { get; }
         List<Parameter>? Parameters { get; }
-        TaskStatus Status { get; set; }
+        StepStatus Status { get; set; }
 
         void Execute();
     }
 
-    public enum TaskType
+    public enum StepType
     {
         Executable,
         Upload,
         Download
     }
 
-    public enum TaskStatus
+    public enum StepStatus
     {
         NotStarted,
         InProgress,

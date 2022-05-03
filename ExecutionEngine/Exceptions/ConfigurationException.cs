@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace ExecutionEngine.Exceptions
 {
-    public class ReadingConfigurationException : Exception
+    public class ConfigurationException : Exception
     {
-        public ReadingConfigurationException()
+        public ConfigurationException()
         {
         }
 
-        public ReadingConfigurationException(string message)
+        public ConfigurationException(string message)
             : base(message)
         {
         }
 
-        public ReadingConfigurationException(string message, Exception inner)
+        public ConfigurationException(string message, Exception inner)
             : base(message, inner)
         {
         }
