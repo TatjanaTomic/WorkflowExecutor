@@ -1,0 +1,33 @@
+<Config>
+	<Stages>
+		<Stage Id="Stage 1">
+			<Steps>
+				<Step Id="Step 1" ExecutablePath="C:\Users\EC\Desktop\WorkflowExecutorTest\script1.sh" Type="Executable" CanBeExecutedInParallel="true">
+					<Parameters>
+						<Parameter KeyWord="" Value="value1" />
+					</Parameters>
+					<Description>I'm going to execute script1.sh</Description>
+				</Step>
+				<Step Id="Step 2" ExecutablePath="C:\Users\EC\Desktop\WorkflowExecutorTest\script2.sh" Type="Executable" CanBeExecutedInParallel="true">
+					<Dependencies>
+						<Dependency Id="Step 1" />
+					</Dependencies>
+					<Parameters>
+						<Parameter KeyWord="" Value="value2" />
+					</Parameters>
+				</Step>
+			</Steps>
+		</Stage>
+		
+		<Stage Id="Stage 2">
+			<Steps>
+				<Step Id="Step 3" ExecutablePath="C:\Users\EC\Desktop\WorkflowExecutorTest\script3.sh" Type="Executable" CanBeExecutedInParallel="true">
+					<Parameters>
+						<Parameter KeyWord="" Value="value3" />
+					</Parameters>
+					<Description>I'm going to execute script3.sh</Description>
+				</Step>
+			</Steps>
+		</Stage>
+	</Stages>
+</Config>
