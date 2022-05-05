@@ -1,6 +1,5 @@
 ﻿using ExecutionEngine.Step;
 using System.Xml.Serialization;
-using StepStatus = ExecutionEngine.Step.StepStatus;
 
 namespace ExecutionEngine.Xml
 {
@@ -17,7 +16,7 @@ namespace ExecutionEngine.Xml
         public string? File { get; set; }
 
         [XmlAttribute("Type")]
-        public StepType Type { get; set; }
+        public ExecutionEngine.Step.Type Type { get; set; }
 
         [XmlAttribute("CanBeExecutedInParallel")]
         public bool CanBeExecutedInParallel { get; set; }
@@ -33,7 +32,7 @@ namespace ExecutionEngine.Xml
         [XmlArrayItem(ElementName = "Parameter")]
         public List<Parameter>? Parameters { get; set; }
 
-        public StepStatus Status { get; set; }
+//        
 
 
         public void Execute()

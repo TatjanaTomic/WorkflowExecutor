@@ -1,4 +1,5 @@
-﻿using ExecutionEngine.Xml;
+﻿using ExecutionEngine.ExecutorService;
+using ExecutionEngine.Xml;
 using ExecutionEngine.Xml.Queue;
 using ExecutionEngine.Xml.StageListBuilder;
 using System.Xml.Serialization;
@@ -17,13 +18,10 @@ namespace TestExecutionEngine
             Console.WriteLine("Hello");
             var stageList = ReadWorkflowConfig();
             Console.WriteLine();
-            //ExecuteAllSteps(stageList);
-
-            var stepQueue = StepQueue.Instance;
-            stepQueue.BuildQueue(stageList);
-
-            stepQueue.ExecuteParallelSteps();
             
+            ExecuteAllSteps(stageList);
+
+            Thread.Sleep(5000);
         }
 
         private static StageList? ReadWorkflowConfig()
@@ -75,13 +73,14 @@ namespace TestExecutionEngine
             {
                 foreach(var stage in stageList.Stages)
                 {
-                    Console.WriteLine("  Stage: " + stage.Id);
+                    //Console.WriteLine("  Stage: " + stage.Id);
                     if (stage.Steps != null)
                     {
                         foreach (var step in stage.Steps)
                         {
-                            Console.WriteLine("    Step: " + step.Id);
-                            step.Execute();
+                            //Console.WriteLine("    Step: " + step.Id);
+                            ScriptExecutorService test = new(step);
+                            _ = test.Start();
                         }
                     }
                 }

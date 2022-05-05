@@ -1,4 +1,4 @@
-﻿using ExecutionEngine.Step;
+﻿using ExecutionEngine.Xml;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -6,27 +6,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExecutionEngine.Xml.StepExecutor
+namespace ExecutionEngine.ExecutorService
 {
-    internal class StepExecutor
+    public class ScriptExecutorService 
     {
-        public static void ExecuteStep(Step step)
+        private Xml.Step step;
+        public ScriptExecutorService(Xml.Step step)
         {
-            //TODO : Provjeriti prvo da li su zavisni koraci izveseni
-
-            switch (step.Type)
-            {
-                case ExecutionEngine.Step.Type.Executable:
-                    if (!string.IsNullOrEmpty(step.ExecutablePath))
-                        ExecuteScript(step.ExecutablePath, step.Parameters);
-                    break;
-            }
+            this.step = step;
         }
 
-        private static void ExecuteScript(string executablePath, List<Parameter>? parameters)
+        public async Task Start()
+        {
+            //await Task.Run(() => ExecuteScript());
+            await Task.Run(() => step.Execute());
+        }
+
+        public Task Stop()
+        {
+            throw new NotImplementedException();
+        }
+
+        /*
+        private void ExecuteScript()
         {
             //Pokretanje shall skripte
-            string command = "/C " + executablePath + " " + BuildParameters(parameters);
+            string command = "/C " + step.ExecutablePath + " " + BuildParameters(step.Parameters);
             Console.WriteLine("      Command: " + command);
 
             ProcessStartInfo startInfo = new("cmd.exe", command);
@@ -35,7 +40,7 @@ namespace ExecutionEngine.Xml.StepExecutor
             //startInfo.FileName = executablePath;
             //startInfo.Arguments = BuildParameters(parameters);
 
-            using Process? process = Process.Start(startInfo);        
+            using Process? process = Process.Start(startInfo);
             if (process != null)
             {
                 using StreamReader reader = process.StandardOutput;
@@ -62,5 +67,7 @@ namespace ExecutionEngine.Xml.StepExecutor
 
             return sb.ToString();
         }
+
+        */
     }
 }
