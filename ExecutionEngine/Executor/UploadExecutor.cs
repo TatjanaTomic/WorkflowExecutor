@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ExecutionEngine.Executor
 {
-    public class UploadExecutor : AbastractExecutor
+    public class UploadExecutor : AbstractExecutor
     {
         public override Task Start()
         {

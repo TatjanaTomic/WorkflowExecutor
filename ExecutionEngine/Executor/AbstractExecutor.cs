@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ExecutionEngine.Executor
 {
     
-    public abstract class AbastractExecutor
+    public abstract class AbstractExecutor
     {
         //dodati event execution finished koji prosljedjuje status
         //kroz runove envoke/ati event

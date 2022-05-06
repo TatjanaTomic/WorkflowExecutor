@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ExecutionEngine.Executor
 {
-    public class ScriptExecutor : AbastractExecutor
+    public class ScriptExecutor : AbstractExecutor
     {
         private Xml.Step step;
         public ScriptExecutor(Xml.Step step)
@@ -19,7 +19,6 @@ namespace ExecutionEngine.Executor
         public override async Task Start()
         {
             await Task.Run(() => {
-                // TODO : Zavrsi / provjeri ovo
 
                 string command = "/C " + step.ExecutablePath + " " + BuildParameters(step.Parameters);
                 Console.WriteLine("      Command: " + command);
@@ -37,6 +36,9 @@ namespace ExecutionEngine.Executor
                     string result = reader.ReadToEnd();
                     Console.Write(result);
                 }
+
+                //process.WaitForExit();
+                //process.WaitForExitAsync();
             });
         }
 

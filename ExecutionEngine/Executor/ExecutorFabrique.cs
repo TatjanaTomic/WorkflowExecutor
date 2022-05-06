@@ -28,13 +28,13 @@ namespace ExecutionEngine.Executor
             }
         }
 
-        public AbastractExecutor? CreateExecutor(Step.Type stepType)
+        public AbstractExecutor? CreateExecutor(Xml.Step step)
         {
-            AbastractExecutor? executor = null;
-            switch (stepType)
+            AbstractExecutor? executor = null;
+            switch (step.Type)
             {
                 case Step.Type.Executable:
-                    executor = new ScriptExecutor();
+                    executor = new ScriptExecutor(step);
                     break;
 
                 case Step.Type.Upload:

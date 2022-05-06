@@ -30,9 +30,7 @@ namespace ExecutionEngine.Xml
 
         [XmlArray]
         [XmlArrayItem(ElementName = "Parameter")]
-        public List<Parameter>? Parameters { get; set; }
-
-//        
+        public List<Parameter>? Parameters { get; set; }       
 
 
         public void Execute()

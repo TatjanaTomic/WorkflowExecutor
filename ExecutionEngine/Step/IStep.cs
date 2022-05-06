@@ -16,7 +16,6 @@ namespace ExecutionEngine.Step
         string? Description { get; }
         List<Dependency>? Dependencies { get; }
         List<Parameter>? Parameters { get; }
-        Status Status { get; set; }
 
         void Execute();
     }
