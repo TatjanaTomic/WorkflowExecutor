@@ -35,7 +35,7 @@ namespace ExecutionEngine.Xml
 
         public void Execute()
         {
-            StepExecutor.StepExecutor.ExecuteStep(this);
+            //StepExecutor.StepExecutor.ExecuteStep(this);
         }
     }
 }

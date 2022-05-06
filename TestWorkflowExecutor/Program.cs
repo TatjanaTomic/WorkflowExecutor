@@ -1,6 +1,5 @@
-﻿using ExecutionEngine.ExecutorService;
+﻿using ExecutionEngine.Executor;
 using ExecutionEngine.Xml;
-using ExecutionEngine.Xml.Queue;
 using ExecutionEngine.Xml.StageListBuilder;
 using System.Xml.Serialization;
 
@@ -8,10 +7,10 @@ namespace TestExecutionEngine
 {
     public class Program
     {
-        private static readonly string BASE_PATH = Directory.GetCurrentDirectory();
-        private static readonly string TEST_STEP_PATH = Path.Combine(BASE_PATH, "testStep.xml");
-        private static readonly string TEST_STAGE_PATH = Path.Combine(BASE_PATH, "testStage.xml");
-        private static readonly string TEST_CONFIG_PATH = Path.Combine(BASE_PATH, "WorkflowConfig.xml");
+        private static readonly string BASE_PATH = Path.Combine(Environment.GetFolderPath(folder: Environment.SpecialFolder.Desktop), "test");
+        private static readonly string STEP_PATH = Path.Combine(BASE_PATH, "testStep.xml");
+        private static readonly string STAGE_PATH = Path.Combine(BASE_PATH, "testStage.xml");
+        private static readonly string CONFIG_PATH = Path.Combine(BASE_PATH, "WorkflowConfig.xml");
        
         public static void Main(string[] args)
         {
@@ -27,7 +26,7 @@ namespace TestExecutionEngine
         private static StageList? ReadWorkflowConfig()
         {
 
-            var stageList = StageListBuilder.GetStageList(TEST_CONFIG_PATH);
+            var stageList = StageListBuilder.GetStageList(CONFIG_PATH);
 
             if (stageList != null && stageList.Stages != null)
             {
@@ -79,8 +78,10 @@ namespace TestExecutionEngine
                         foreach (var step in stage.Steps)
                         {
                             //Console.WriteLine("    Step: " + step.Id);
-                            ScriptExecutorService test = new(step);
-                            _ = test.Start();
+                            //ScriptExecutorService test = new(step);
+                            //_ = test.Start();
+                            AbstractExecutor? ex = ExecutorFabrique.Instance.CreateExecutor(step);
+                            ex.Start();
                         }
                     }
                 }
@@ -89,7 +90,7 @@ namespace TestExecutionEngine
 
         private static void ReadStep()
         {
-            using (var fileStream = File.Open(TEST_STEP_PATH, FileMode.Open))
+            using (var fileStream = File.Open(STEP_PATH, FileMode.Open))
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(Step));
                 var myDocument = (Step)serializer.Deserialize(fileStream);
@@ -104,7 +105,7 @@ namespace TestExecutionEngine
 
         private static void ReadStage()
         {
-            using (var fileStream = File.Open(TEST_STAGE_PATH, FileMode.Open))
+            using (var fileStream = File.Open(STAGE_PATH, FileMode.Open))
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(Stage));
                 var myDocument = (Stage)serializer.Deserialize(fileStream);

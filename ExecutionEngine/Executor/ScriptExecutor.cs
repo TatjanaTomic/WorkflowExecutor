@@ -18,29 +18,33 @@ namespace ExecutionEngine.Executor
 
         public override async Task Start()
         {
+            OnExecutionStarted();
             await Task.Run(() => {
 
                 string command = "/C " + step.ExecutablePath + " " + BuildParameters(step.Parameters);
                 Console.WriteLine("      Command: " + command);
 
                 ProcessStartInfo startInfo = new("cmd.exe", command);
-                startInfo.UseShellExecute = false;
-                startInfo.RedirectStandardOutput = true;
-                //startInfo.FileName = executablePath;
-                //startInfo.Arguments = BuildParameters(parameters);
-
                 using Process? process = Process.Start(startInfo);
-                if (process != null)
-                {
-                    using StreamReader reader = process.StandardOutput;
-                    string result = reader.ReadToEnd();
-                    Console.Write(result);
-                }
-
-                //process.WaitForExit();
-                //process.WaitForExitAsync();
+                
             });
         }
+
+        //startInfo.UseShellExecute = false;
+        //startInfo.RedirectStandardOutput = true;
+        //startInfo.FileName = executablePath;
+        //startInfo.Arguments = BuildParameters(parameters);
+
+        /* kako da se procita output ako je RedirectStandardOutput postavljen na true
+            if (process != null)
+            {
+                using StreamReader reader = process.StandardOutput;
+                string result = reader.ReadToEnd();
+            }
+        */
+
+        //process.WaitForExit();
+        //process.WaitForExitAsync();
 
         public override Task Stop()
         {

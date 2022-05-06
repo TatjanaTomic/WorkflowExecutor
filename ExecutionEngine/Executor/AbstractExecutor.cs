@@ -6,13 +6,18 @@ using System.Threading.Tasks;
 
 namespace ExecutionEngine.Executor
 {
-    
+    public delegate void Notify();
+
     public abstract class AbstractExecutor
     {
-        //dodati event execution finished koji prosljedjuje status
-        //kroz runove envoke/ati event
+        public event Notify ExecutionStarted;
+        public event Notify ExecutionCompleted;
 
-        //u step statusu staviti event handler za taj event
+        protected virtual void OnExecutionStarted()
+        {
+            ExecutionStarted?.Invoke();
+        }
+
         public abstract Task Start();
         public abstract Task Stop();
     }
