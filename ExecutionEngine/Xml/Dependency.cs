@@ -9,10 +9,17 @@ using System.Xml.Serialization;
 namespace ExecutionEngine.Xml
 {
     [XmlRoot("Dependency")]
-    public class Dependency : IDependency
+    public class Dependency
     {
+        private string dependencyStep = string.Empty;
+
+        public Dependency()
+        {
+
+        }
+
         [XmlAttribute("Id")]
-        public string DependencyStep { get; set; }
+        public string DependencyStep { get => dependencyStep; set => dependencyStep = value; }
 
     }
 }

@@ -9,13 +9,21 @@ using System.Xml.Serialization;
 namespace ExecutionEngine.Xml
 {
     [XmlRoot("Parameter")]
-    public class Parameter : IParameter
+    public class Parameter
     {
+        private string keyWord = string.Empty;
+        private string value = string.Empty;
+
+        public Parameter()
+        {
+                
+        }
+
         [XmlAttribute("KeyWord")]
-        public string KeyWord { get; set; }
+        public string KeyWord { get => keyWord; set => keyWord = value; }
 
         [XmlAttribute("Value")]
-        public string Value { get; set; }
+        public string Value { get => value; set => this.value = value; }
 
     }
 }
