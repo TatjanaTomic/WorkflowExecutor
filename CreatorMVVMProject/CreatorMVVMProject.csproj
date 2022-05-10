@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Model\Interface\Main\**" />
+    <EmbeddedResource Remove="Model\Interface\Main\**" />
+    <None Remove="Model\Interface\Main\**" />
+    <Page Remove="Model\Interface\Main\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\source\repos\TatjanaTomic\WorkflowExecutor\ExecutionEngine\ExecutionEngine.csproj" />
+    <ProjectReference Include="..\ExecutionEngine\ExecutionEngine.csproj" />
+  </ItemGroup>
+
+</Project>
