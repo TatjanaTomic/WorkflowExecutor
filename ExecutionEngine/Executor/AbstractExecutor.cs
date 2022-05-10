@@ -10,8 +10,8 @@ namespace ExecutionEngine.Executor
 
     public abstract class AbstractExecutor
     {
-        public event Notify ExecutionStarted;
-        public event Notify ExecutionCompleted;
+        public event Notify? ExecutionStarted;
+        public event Notify? ExecutionCompleted;
 
         protected virtual void OnExecutionStarted()
         {

@@ -1,4 +1,5 @@
-﻿using ExecutionEngine.Step;
+﻿using ExecutionEngine.Exceptions;
+using ExecutionEngine.Step;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,22 +31,13 @@ namespace ExecutionEngine.Executor
 
         public AbstractExecutor? CreateExecutor(Xml.Step step)
         {
-            AbstractExecutor? executor = null;
-            switch (step.Type)
+            return step.Type switch
             {
-                case Step.Type.Executable:
-                    executor = new ScriptExecutor(step);
-                    break;
-
-                case Step.Type.Upload:
-                    executor = new UploadExecutor();
-                    break;
-
-                case Step.Type.Download:
-                    executor = new DownloadExecutor();
-                    break;
-            }
-            return executor;
+                Step.Type.Executable => new ScriptExecutor(step),
+                Step.Type.Upload => new UploadExecutor(),
+                Step.Type.Download => new DownloadExecutor(),
+                _ => throw new WrongDefinitionException("Step type must be defined.")
+            };
         }
     }
 }

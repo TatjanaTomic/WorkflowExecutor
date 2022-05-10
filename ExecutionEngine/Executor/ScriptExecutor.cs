@@ -19,6 +19,7 @@ namespace ExecutionEngine.Executor
         public override async Task Start()
         {
             OnExecutionStarted();
+
             await Task.Run(() => {
 
                 string command = "/C " + step.ExecutablePath + " " + BuildParameters(step.Parameters);
