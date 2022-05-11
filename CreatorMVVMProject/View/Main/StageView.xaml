@@ -6,21 +6,13 @@
              xmlns:step="clr-namespace:CreatorMVVMProject.View.Main"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="0.7*"></RowDefinition>
-            <RowDefinition Height="0.3*"></RowDefinition>
-        </Grid.RowDefinitions>
-        <!-- Ovdje ide prikaz stepova-->
-
-        <ListView ItemsSource="{Binding StepViewModels}">
+    <Border>
+        <ListView ItemsSource="{Binding StepViewModels}" HorizontalContentAlignment="Stretch">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <ContentControl>
-                        <step:StepView/>
-                    </ContentControl>
+                    <step:StepView/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-    </Grid>
+    </Border>
 </UserControl>

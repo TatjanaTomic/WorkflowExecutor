@@ -6,20 +6,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using System.Windows.Media;
 
 namespace CreatorMVVMProject.Model.Class.Converters
 {
-    [ValueConversion(typeof(Status), typeof(string))]
-    public class StatusToColorConverter : IValueConverter
+    [ValueConversion(typeof(Status), typeof(bool))]
+    public class StatusToEnabledConverter : IValueConverter
     {
-        private readonly Dictionary<Status, string> dictionary = new()
+        private readonly Dictionary<Status, bool> dictionary = new()
         {
-            { Status.InProgress, "LightGreen" },
-            { Status.Disabled, "Red" },
-            { Status.Success, "Green" },
-            { Status.Failed, "Red" },
-            { Status.NotStarted, "Silver" }
+            { Status.InProgress, false },
+            { Status.Disabled, false },
+            { Status.Success, false },
+            { Status.Failed, false },
+            { Status.NotStarted, true }
         };
         public object Convert(object value, System.Type targetType, object parameter, CultureInfo culture)
         {
@@ -28,7 +27,7 @@ namespace CreatorMVVMProject.Model.Class.Converters
                 return dictionary[status];
             }
             else
-                return "Red";
+                return false;
         }
 
         public object ConvertBack(object value, System.Type targetType, object parameter, CultureInfo culture)

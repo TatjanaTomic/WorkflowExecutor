@@ -6,25 +6,45 @@
              xmlns:local="clr-namespace:CreatorMVVMProject.View.Main"
              xmlns:converters="clr-namespace:CreatorMVVMProject.Model.Class.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+            >
     <UserControl.Resources>
         <converters:StatusToColorConverter x:Key="statusToColorConverter"/>
+        <converters:StatusToEnabledConverter x:Key="statusToEnabledConverter"/>
     </UserControl.Resources>
-    
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="0.7*"></RowDefinition>
-            <RowDefinition Height="0.3*"></RowDefinition>
-            <RowDefinition Height="0.3*"></RowDefinition>
-            <RowDefinition Height="0.3*"></RowDefinition>
-        </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Text="{Binding StepId}" 
-                   Background="{Binding Status, Converter={StaticResource statusToColorConverter}, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
-        <TextBlock Grid.Row="1" Text="{Binding Status}" ></TextBlock>
-        <TextBlock Grid.Row="2" Text="{Binding StepDescription}"></TextBlock>
-        <Button Grid.Row="3" Content="Start Step" Command="{Binding StartStepCommand}" ></Button>
-        <!-- <TextBlock Background="{Binding Status}" Grid.Row="0" Text="{Binding StepId}"></TextBlock> -->
-        <!-- <TextBlock Grid.Row="1" Text="{Binding StepDescription}}"></TextBlock> -->
+    <Grid>
+        <Expander>
+            <Expander.Header>
+                <DockPanel>
+                    <TextBlock Margin="20,0,0,0" Text="{Binding StepId}"></TextBlock>
+                </DockPanel>
+            </Expander.Header>
+            <Expander.Content>
+                <Grid Margin="30,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" ></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Status}" Background="{Binding Status, Converter={StaticResource statusToColorConverter}, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding StepDescription}" TextWrapping="Wrap" ></TextBlock>
+                    <!-- Kako da uticem na maksimalnu sirinu ? -->
+                    
+                    <!--<ScrollViewer >
+                        <TextBlock  Grid.Column="0" Text="{Binding StepDescription}" TextWrapping="Wrap" ></TextBlock>
+                    </ScrollViewer>-->
+                    
+                    <CheckBox Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" HorizontalAlignment="Right" Margin="15,15,15,15"
+                              IsEnabled="{Binding Status, Converter={StaticResource statusToEnabledConverter}, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+
+                    <Button Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Content="Execute till this step" Margin="15,15,15,15" VerticalAlignment="Top"></Button>
+                </Grid>
+            </Expander.Content>
+        </Expander>
     </Grid>
 </UserControl>
