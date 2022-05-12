@@ -15,7 +15,10 @@ namespace CreatorMVVMProject.ViewModel.Main
     public class StepViewModel : INotifyPropertyChanged
     {
         protected readonly StepStatus stepStatus;
-        
+
+        private bool isSelected = true;
+        private bool isExpanded = true;
+
         private ICommand? startStepCommand;
 
         public StepViewModel(StepStatus stepStatus)
@@ -40,9 +43,29 @@ namespace CreatorMVVMProject.ViewModel.Main
             }
         }
 
+        public bool IsSelected
+        {
+            get { return this.isSelected; }
+            set
+            {
+                this.isSelected = value;
+                //Property changed
+            }
+        }
+        public bool IsExpanded
+        {
+            get { return this.isExpanded; }
+            set { this.isExpanded = value; }
+        }
+
         public Status Status
         {
             get => stepStatus.Status;
+        }
+
+        public StepStatus StepStatus
+        {
+            get => this.stepStatus;
         }
 
         public ICommand StartStepCommand
@@ -56,7 +79,6 @@ namespace CreatorMVVMProject.ViewModel.Main
                 return this.startStepCommand;
             }
         }
-
         public void StartStepCommandHandler()
         {
             if(stepStatus.Executor != null)

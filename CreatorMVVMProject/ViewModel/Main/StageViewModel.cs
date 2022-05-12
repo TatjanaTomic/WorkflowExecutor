@@ -2,6 +2,7 @@
 using CreatorMVVMProject.Model.Class.StatusReportService;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
 
@@ -11,6 +12,9 @@ namespace CreatorMVVMProject.ViewModel.Main
     {
         private StageStatus stage;
         private readonly List<StepViewModel> stepViewModels = new();
+
+        //private ObservableCollection<StepViewModel> selectedSteps = new();
+        //private ICommand? startStageCommand;
         
         public StageViewModel(StageStatus stage)
         {
@@ -30,7 +34,7 @@ namespace CreatorMVVMProject.ViewModel.Main
             set => this.stage = value;
         }
         
-        public string Header
+        public string StageId
         {
             get => this.stage.Id;
         }
@@ -40,6 +44,28 @@ namespace CreatorMVVMProject.ViewModel.Main
             get => this.stepViewModels;
         }
         
+        /*
+        public ICommand? StartStageCommand
+        {
+            get
+            {
+                if(this.startStageCommand == null)
+                {
+                    this.startStageCommand = new DelegateCommand(StartStageCommandHandler);
+                }
+                return this.startStageCommand;
+            }
+        }
+        public void StartStageCommandHandler()
+        {
+            foreach (StepViewModel stepViewModel in this.stepViewModels)
+            {
+                if (stepViewModel.IsSelected == true)
+                //TODO : Dodati u listu selektovane stepove i zapoceti izvrsavanje
+            }
+        }
+        */
+
 
         protected virtual void NotifyPropertyChange(string propertyName)
         {

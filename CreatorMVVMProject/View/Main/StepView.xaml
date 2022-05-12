@@ -13,7 +13,7 @@
     </UserControl.Resources>
 
     <Grid>
-        <Expander>
+        <Expander IsExpanded="{Binding IsExpanded}">
             <Expander.Header>
                 <DockPanel>
                     <TextBlock Margin="20,0,0,0" Text="{Binding StepId}"></TextBlock>
@@ -23,26 +23,38 @@
                 <Grid Margin="30,10,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" ></ColumnDefinition>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
-                    </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Status}" Background="{Binding Status, Converter={StaticResource statusToColorConverter}, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
-                    <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding StepDescription}" TextWrapping="Wrap" ></TextBlock>
-                    <!-- Kako da uticem na maksimalnu sirinu ? -->
-                    
-                    <!--<ScrollViewer >
-                        <TextBlock  Grid.Column="0" Text="{Binding StepDescription}" TextWrapping="Wrap" ></TextBlock>
-                    </ScrollViewer>-->
-                    
-                    <CheckBox Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" HorizontalAlignment="Right" Margin="15,15,15,15"
-                              IsEnabled="{Binding Status, Converter={StaticResource statusToEnabledConverter}, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*" ></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
 
-                    <Button Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Content="Execute till this step" Margin="15,15,15,15" VerticalAlignment="Top"></Button>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Status}" Background="{Binding Status, Converter={StaticResource statusToColorConverter}, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding StepDescription}" TextWrapping="Wrap" ></TextBlock>
+
+                        <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" ></ColumnDefinition>
+                                <ColumnDefinition Width="2*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                        
+                            <Button Grid.Column="1" Content="Execute till this step" Command="{Binding StartStepCommand}" VerticalAlignment="Top"></Button>
+                        <!-- U kojim slucajevima Button treba biti disable-ovan? -->     
+                        </Grid>
+                    </Grid>
+                    <CheckBox Grid.Column="2" HorizontalAlignment="Right"
+                              IsEnabled="{Binding Status, Converter={StaticResource statusToEnabledConverter}, UpdateSourceTrigger=PropertyChanged}"
+                              IsChecked="{Binding IsSelected}"
+                              ></CheckBox>
+
                 </Grid>
             </Expander.Content>
         </Expander>

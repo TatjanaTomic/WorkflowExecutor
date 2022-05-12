@@ -15,11 +15,12 @@ namespace CreatorMVVMProject.Model.Class.Converters
     {
         private readonly Dictionary<Status, string> dictionary = new()
         {
+            { Status.NotStarted, "Silver" },
             { Status.InProgress, "LightGreen" },
-            { Status.Disabled, "Red" },
             { Status.Success, "Green" },
+            { Status.Disabled, "Red" },
             { Status.Failed, "Red" },
-            { Status.NotStarted, "Silver" }
+            { Status.Obsolete, "Red" }
         };
         public object Convert(object value, System.Type targetType, object parameter, CultureInfo culture)
         {
