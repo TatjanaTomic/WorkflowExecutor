@@ -31,6 +31,17 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
             }
         }
 
+        public IList<Step> GetFirstLevelDependencySteps(Step step)
+        {
+            return this.workflowService.GetFirstLevelDependencySteps(step);
+        }
+
+        public IList<Step> GetAllDependencySteps(Step step)
+        {
+            var test = this.workflowService.GetAllDependencySteps(step);
+            return test;
+        }
+
         public void SetStatusToStep(StepStatus stepStatus, Status status) 
         {
             stepStatus.Status = status;

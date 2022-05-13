@@ -11,7 +11,7 @@ namespace ExecutionEngine.Xml
     [XmlRoot("Dependency")]
     public class Dependency
     {
-        private string dependencyStep = string.Empty;
+        private string dependencyStepId = string.Empty;
 
         public Dependency()
         {
@@ -19,7 +19,7 @@ namespace ExecutionEngine.Xml
         }
 
         [XmlAttribute("Id")]
-        public string DependencyStep { get => dependencyStep; set => dependencyStep = value; }
+        public string DependencyStepId { get => dependencyStepId; set => dependencyStepId = value; }
 
     }
 }

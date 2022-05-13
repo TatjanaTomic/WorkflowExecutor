@@ -16,7 +16,7 @@ namespace CreatorMVVMProject.ViewModel.Main
     {
         protected readonly StepStatus stepStatus;
 
-        private bool isSelected = true;
+        private bool isSelected = false;
         private bool isExpanded = true;
 
         private ICommand? startStepCommand;

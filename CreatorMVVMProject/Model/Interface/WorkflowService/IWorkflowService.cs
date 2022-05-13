@@ -11,6 +11,7 @@ namespace CreatorMVVMProject.Model.Interface.WorkflowService
             get;
         }
 
-        IList<Step> GetAllDependencySteps(Step step);
+        List<Step> GetFirstLevelDependencySteps(Step step);
+        List<Step> GetAllDependencySteps(Step step);
     }
 }

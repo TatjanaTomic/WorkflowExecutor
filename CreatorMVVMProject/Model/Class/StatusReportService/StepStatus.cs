@@ -15,20 +15,24 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
         private readonly Step step;
         private Status status;
         private readonly AbstractExecutor? executor;
+        private readonly IList<Step> firstLevelDependencySteps;
+        private readonly IList<Step> allDependencySteps;
 
         private readonly IStatusReportService statusReportService;
 
         public StepStatus(Step step, IStatusReportService statusReportService)
         {
             this.step = step;
-            
-            executor = ExecutorFabrique.Instance.CreateExecutor(step);
+            this.statusReportService = statusReportService;
+
+            this.executor = ExecutorFabrique.Instance.CreateExecutor(step);
             if(executor != null)
                 executor.ExecutionStarted += StepExecutionStarted;
 
-            SetInitialStatus();
+            this.firstLevelDependencySteps = statusReportService.GetFirstLevelDependencySteps(Step);
+            this.allDependencySteps = statusReportService.GetAllDependencySteps(Step);
 
-            this.statusReportService = statusReportService;
+            SetInitialStatus();
         }
 
         public Step Step
@@ -54,15 +58,11 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
         
         private void SetInitialStatus()
         {
-            if(step != null && step.Dependencies != null)
-            {
-                if (step.Dependencies.Count > 0)
-                    status = Status.Disabled;
-                else
-                    status = Status.NotStarted;
-            }
+            if(firstLevelDependencySteps.Count > 0)
+                status = Status.Disabled;
+            else
+                status = Status.NotStarted;
         }
-
 
         public void StepExecutionStarted()
         {

@@ -11,16 +11,47 @@ namespace TestExecutionEngine
         private static readonly string STEP_PATH = Path.Combine(BASE_PATH, "testStep.xml");
         private static readonly string STAGE_PATH = Path.Combine(BASE_PATH, "testStage.xml");
         private static readonly string CONFIG_PATH = Path.Combine(BASE_PATH, "WorkflowConfig.xml");
-       
+
+
+        private static IList<Stage>? stages;
+        private static List<Step> allSteps = new();
+
         public static void Main(string[] args)
         {
-            Console.WriteLine("Hello");
+            stages = StageListBuilder.GetStageList(CONFIG_PATH).Stages;
+            ReadAllSteps();
+
+            foreach(var step in allSteps)
+            {
+                Console.WriteLine(step.Id);
+
+                Console.WriteLine("FL dep: ");
+                var dependencies = GetFirstLevelDependencySteps(step);
+                foreach(var dependency in dependencies)
+                {
+                    Console.WriteLine("    " + dependency.Id);
+                }
+
+                Console.WriteLine("ALL dep: ");
+                var allDependencies = GetAllDependencySteps(step);
+                foreach (var dependency in allDependencies)
+                {
+                    Console.WriteLine("    " + dependency.Id);
+                }
+
+                Console.WriteLine("");
+            }
+
+            /*
             var stageList = ReadWorkflowConfig();
             Console.WriteLine();
             
             ExecuteAllSteps(stageList);
 
             Thread.Sleep(5000);
+            */
+
+            Console.WriteLine("");
         }
 
         private static StageList? ReadWorkflowConfig()
@@ -47,7 +78,7 @@ namespace TestExecutionEngine
                             {
                                 foreach (var dependency in step.Dependencies)
                                 {
-                                    Console.WriteLine("    Dependency: " + dependency.DependencyStep);
+                                    Console.WriteLine("    Dependency: " + dependency.DependencyStepId);
                                 }
                             }
                             if (step.Parameters != null)
@@ -98,7 +129,7 @@ namespace TestExecutionEngine
                 Console.WriteLine($"Type: {myDocument.Type}");
                 foreach (var item in myDocument.Dependencies)
                 {
-                    Console.WriteLine(item.DependencyStep);
+                    Console.WriteLine(item.DependencyStepId);
                 }
             }
         }
@@ -120,7 +151,7 @@ namespace TestExecutionEngine
                     Console.WriteLine("    Description: " + item.Description);
                     foreach(var dependency in item.Dependencies)
                     {
-                        Console.WriteLine("    Dependency: " + dependency.DependencyStep);
+                        Console.WriteLine("    Dependency: " + dependency.DependencyStepId);
                     }
                     foreach(var parameter in item.Parameters)
                     {
@@ -130,6 +161,46 @@ namespace TestExecutionEngine
             }
         }
 
-        
+        public static List<Step> GetAllDependencySteps(Step step)
+        {
+            List<Step> firstLevelDependencySteps = GetFirstLevelDependencySteps(step);
+
+            List<Step> allDependencySteps = new();
+            allDependencySteps.AddRange(firstLevelDependencySteps);
+
+            foreach (Step dependencyStep in firstLevelDependencySteps)
+            {
+                allDependencySteps.AddRange(GetAllDependencySteps(dependencyStep).Except(allDependencySteps));
+            }
+
+            return allDependencySteps;
+        }
+
+        public static List<Step> GetFirstLevelDependencySteps(Step step)
+        {
+            List<Step> dependencySteps = new List<Step>();
+
+            foreach (var dependency in step.Dependencies)
+            {
+                Step? dependencyStep = allSteps.Find(s => s.Id == dependency.DependencyStepId);
+                if (dependencyStep != null)
+                    dependencySteps.Add(dependencyStep);
+            }
+
+            return dependencySteps;
+        }
+
+        private static void ReadAllSteps()
+        {
+            if (stages != null)
+            {
+                foreach (var stage in stages)
+                {
+                    foreach (var step in stage.Steps)
+                        allSteps.Add(step);
+                }
+            }
+
+        }
     }
 }

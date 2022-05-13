@@ -21,10 +21,5 @@ namespace CreatorMVVMProject.Model.Class.Main
         {
             get => this.statusReportService.Stages;
         }
-
-        public IList<Step> DependencySteps(Step step)
-        {
-            return this.workflowService.GetAllDependencySteps(step);
-        }
     }
 }

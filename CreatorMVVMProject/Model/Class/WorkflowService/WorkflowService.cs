@@ -1,13 +1,14 @@
 ﻿using CreatorMVVMProject.Model.Interface.WorkflowService;
 using ExecutionEngine.Xml;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CreatorMVVMProject.Model.Class.WorkflowService
 {
     public class WorkflowService : IWorkflowService
     {
         private readonly IList<Stage> stages;
-        private readonly List<Step> steps = new();
+        private readonly List<Step> allSteps = new();
 
         private readonly IWorkflowRepository workflowRepository;
 
@@ -23,18 +24,33 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService
             get => this.stages;
         }
 
-        public IList<Step> GetAllDependencySteps(Step step)
+        public List<Step> GetFirstLevelDependencySteps(Step step)
         {
-            IList<Step> dependencySteps = new List<Step>();
+            List<Step> dependencySteps = new List<Step>();
 
-            foreach(var dependency in step.Dependencies)
+            foreach (var dependency in step.Dependencies)
             {
-                Step? dependencyStep = steps.Find(s => s.Id == dependency.DependencyStep);
-                if(dependencyStep != null)
+                Step? dependencyStep = allSteps.Find(s => s.Id == dependency.DependencyStepId);
+                if (dependencyStep != null)
                     dependencySteps.Add(dependencyStep);
             }
 
             return dependencySteps;
+        }
+
+        public List<Step> GetAllDependencySteps(Step step)
+        {
+            List<Step> firstLevelDependencySteps = GetFirstLevelDependencySteps(step);
+
+            List<Step> allDependencySteps = new();
+            allDependencySteps.AddRange(firstLevelDependencySteps);
+
+            foreach (Step dependencyStep in firstLevelDependencySteps)
+            {
+                allDependencySteps.AddRange(GetAllDependencySteps(dependencyStep).Except(allDependencySteps));
+            }
+
+            return allDependencySteps;
         }
 
         private void ReadAllSteps()
@@ -44,10 +60,9 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService
                 foreach(var stage in this.stages)
                 {
                     foreach (var step in stage.Steps)
-                        this.steps.Add(step);
+                        this.allSteps.Add(step);
                 }
             }
-
         }
     }
 }

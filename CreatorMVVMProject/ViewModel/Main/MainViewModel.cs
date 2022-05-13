@@ -73,7 +73,8 @@ namespace CreatorMVVMProject.ViewModel.Main
                 if(stepViewModel.StepStatus.Executor != null) 
                 { 
                     stepViewModel.StepStatus.Executor.Start();
-                    mainModel.DependencySteps(stepViewModel.StepStatus.Step);
+                    // I STA CEMO SAD ?
+
                 }
                     
             }

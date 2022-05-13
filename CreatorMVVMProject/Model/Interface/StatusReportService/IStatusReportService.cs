@@ -1,5 +1,6 @@
 ﻿using CreatorMVVMProject.Model.Class.StatusReportService;
 using ExecutionEngine.Step;
+using ExecutionEngine.Xml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,7 @@ namespace CreatorMVVMProject.Model.Interface.StatusReportService
             get;
         }
         void SetStatusToStep(StepStatus stepStatus, Status status);
+        IList<Step> GetFirstLevelDependencySteps(Step step);
+        IList<Step> GetAllDependencySteps(Step step);
     }
 }
