@@ -38,44 +38,27 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
 
         public IList<Step> GetAllDependencySteps(Step step)
         {
-            var test = this.workflowService.GetAllDependencySteps(step);
-            return test;
+            return this.workflowService.GetAllDependencySteps(step);
         }
 
         public void SetStatusToStep(StepStatus stepStatus, Status status) 
         {
             stepStatus.Status = status;
 
-            StageStatus? stageStatus = this.Stages.SingleOrDefault(st => st.Steps.Contains(stepStatus));
-            int indexOfStage = this.Stages.IndexOf(stageStatus); 
-            int indexOfStep = stageStatus.Steps.IndexOf(stepStatus);
+            
 
-            stepStatus = stageStatus.Steps[indexOfStep];
-            StepStatus dependencyStepStatus;
-            foreach (Dependency dependencyStep in stepStatus.Step.Dependencies)
-            {
-                dependencyStepStatus = stageStatus.Steps.SingleOrDefault(st => st.Step.Dependencies.Contains(dependencyStep));
-                dependencyStepStatus.Status = Status.Obsolete;
-            }
+            //StageStatus? stageStatus = this.Stages.SingleOrDefault(st => st.Steps.Contains(stepStatus));
+            //int indexOfStage = this.Stages.IndexOf(stageStatus); 
+            //int indexOfStep = stageStatus.Steps.IndexOf(stepStatus);
+
+            //stepStatus = stageStatus.Steps[indexOfStep];
+            //StepStatus dependencyStepStatus;
+            //foreach (Dependency dependencyStep in stepStatus.Step.Dependencies)
+            //{
+            //    dependencyStepStatus = stageStatus.Steps.SingleOrDefault(st => st.Step.Dependencies.Contains(dependencyStep));
+            //    dependencyStepStatus.Status = Status.Obsolete;
+            //}
 
         }
-
-        /*
-        public void SetStatusToProcess(ProcessStatus process, Status status)
-        {
-            process.Status = Status.InProgress;
-            StageStatus? stage = this.stages.SingleOrDefault(st => st.Processes.Contains(process));
-            int indexOfProcess = stage.Processes.IndexOf(process);
-            int indexOfStage = this.stages.IndexOf(stage);
-            int j = indexOfProcess + 1;
-            for (int i = indexOfStage; i < this.stages.Count; i++)
-            {
-                for (; j<this.stages[i].Processes.Count; j++)
-                {
-                    this.stages[i].Processes[j].Status = Status.Obsolete;
-                }
-                j=0;
-            }
-        }*/
     }
 }

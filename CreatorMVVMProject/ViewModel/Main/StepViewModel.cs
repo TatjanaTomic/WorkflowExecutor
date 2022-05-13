@@ -49,7 +49,6 @@ namespace CreatorMVVMProject.ViewModel.Main
             set
             {
                 this.isSelected = value;
-                //Property changed
             }
         }
         public bool IsExpanded
@@ -72,17 +71,13 @@ namespace CreatorMVVMProject.ViewModel.Main
         {
             get
             {
-                if (this.startStepCommand == null)
-                {
-                    this.startStepCommand = new DelegateCommand(StartStepCommandHandler);
-                }
-                return this.startStepCommand;
+                return this.startStepCommand ??= new DelegateCommand(StartStepCommandHandler);
             }
         }
         public void StartStepCommandHandler()
         {
-            if(stepStatus.Executor != null)
-                stepStatus.Executor.Start();
+            //if(stepStatus.Executor != null)
+            //    stepStatus.Executor.Start();
         }
 
 

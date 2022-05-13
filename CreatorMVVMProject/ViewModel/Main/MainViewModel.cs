@@ -3,6 +3,7 @@ using CreatorMVVMProject.Model.Class.Main;
 using System.Collections.Generic;
 using System.Windows.Input;
 using CreatorMVVMProject.Model.Class.Commands;
+using System.Linq;
 
 namespace CreatorMVVMProject.ViewModel.Main
 {
@@ -40,11 +41,11 @@ namespace CreatorMVVMProject.ViewModel.Main
         {
             get
             {
-                if(this.startExecutionCommand == null)
-                {
-                    this.startExecutionCommand = new DelegateCommand(StartExecutionCommandHandler);
-                }
-                return this.startExecutionCommand;
+                //if(this.startExecutionCommand == null)
+                //{
+                //    this.startExecutionCommand = new DelegateCommand(StartExecutionCommandHandler);
+                //}
+                return this.startExecutionCommand ??= new DelegateCommand(StartExecutionCommandHandler);
             }
         }
 
@@ -55,15 +56,18 @@ namespace CreatorMVVMProject.ViewModel.Main
 
         private IList<StepViewModel> GetSelectedStepViewModels()
         {
-            IList<StepViewModel> selectedSteps = new List<StepViewModel>();
-            foreach (StageViewModel stageViewModel in this.stageViewModels)
-            {
-                foreach (StepViewModel stepViewModel in stageViewModel.StepViewModels)
-                    if(stepViewModel.IsSelected == true)
-                        //TODO : Dodati provjeru da li je Enabled
-                        selectedSteps.Add(stepViewModel);
-            }
-            return selectedSteps;
+            //IList<StepViewModel> selectedSteps = new List<StepViewModel>();
+            //foreach (StageViewModel stageViewModel in this.stageViewModels)
+            //{
+            //    foreach (StepViewModel stepViewModel in stageViewModel.StepViewModels)
+            //        if(stepViewModel.IsSelected == true)
+            //            //TODO : Dodati provjeru da li je Enabled
+            //            selectedSteps.Add(stepViewModel);
+            //}
+            //return selectedSteps;
+            //var test = this.stageViewModels.Select(x => x.Stage);
+            //var test = from stage in this.mainModel.Stages where 
+            return this.stageViewModels.SelectMany(stage => stage.StepViewModels).Where(step => step.IsSelected).ToList();
         }
 
         private void Test(IList<StepViewModel> selectedSteps)
@@ -73,8 +77,6 @@ namespace CreatorMVVMProject.ViewModel.Main
                 if(stepViewModel.StepStatus.Executor != null) 
                 { 
                     stepViewModel.StepStatus.Executor.Start();
-                    // I STA CEMO SAD ?
-
                 }
                     
             }

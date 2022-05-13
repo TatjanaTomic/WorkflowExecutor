@@ -12,9 +12,6 @@ namespace CreatorMVVMProject.ViewModel.Main
     {
         private StageStatus stage;
         private readonly List<StepViewModel> stepViewModels = new();
-
-        //private ObservableCollection<StepViewModel> selectedSteps = new();
-        //private ICommand? startStageCommand;
         
         public StageViewModel(StageStatus stage)
         {
@@ -44,35 +41,12 @@ namespace CreatorMVVMProject.ViewModel.Main
             get => this.stepViewModels;
         }
         
-        /*
-        public ICommand? StartStageCommand
-        {
-            get
-            {
-                if(this.startStageCommand == null)
-                {
-                    this.startStageCommand = new DelegateCommand(StartStageCommandHandler);
-                }
-                return this.startStageCommand;
-            }
-        }
-        public void StartStageCommandHandler()
-        {
-            foreach (StepViewModel stepViewModel in this.stepViewModels)
-            {
-                if (stepViewModel.IsSelected == true)
-                //TODO : Dodati u listu selektovane stepove i zapoceti izvrsavanje
-            }
-        }
-        */
-
-
+        public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void NotifyPropertyChange(string propertyName)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
     }
     
 }

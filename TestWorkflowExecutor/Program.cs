@@ -182,7 +182,9 @@ namespace TestExecutionEngine
 
             foreach (var dependency in step.Dependencies)
             {
-                Step? dependencyStep = allSteps.Find(s => s.Id == dependency.DependencyStepId);
+                Step? dependencyStep = stages.SelectMany(stage => stage.Steps).Where(s => s.Id == dependency.DependencyStepId).First();
+
+                //Step? dependencyStep = allSteps.Find(s => s.Id == dependency.DependencyStepId);
                 if (dependencyStep != null)
                     dependencySteps.Add(dependencyStep);
             }

@@ -8,7 +8,6 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService
     public class WorkflowService : IWorkflowService
     {
         private readonly IList<Stage> stages;
-        private readonly List<Step> allSteps = new();
 
         private readonly IWorkflowRepository workflowRepository;
 
@@ -16,7 +15,6 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService
         {
             this.workflowRepository = workflowRepository;
             this.stages = this.workflowRepository.GetAllStages();
-            ReadAllSteps();
         }
 
         public IList<Stage> Stages
@@ -30,9 +28,9 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService
 
             foreach (var dependency in step.Dependencies)
             {
-                Step? dependencyStep = allSteps.Find(s => s.Id == dependency.DependencyStepId);
-                if (dependencyStep != null)
-                    dependencySteps.Add(dependencyStep);
+                Step dependencyStep = stages.SelectMany(stage => stage.Steps).Where(s => s.Id == dependency.DependencyStepId).First();
+
+                dependencySteps.Add(dependencyStep);
             }
 
             return dependencySteps;
@@ -53,16 +51,5 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService
             return allDependencySteps;
         }
 
-        private void ReadAllSteps()
-        {
-            if(this.stages != null)
-            {
-                foreach(var stage in this.stages)
-                {
-                    foreach (var step in stage.Steps)
-                        this.allSteps.Add(step);
-                }
-            }
-        }
     }
 }
