@@ -15,6 +15,7 @@ namespace CreatorMVVMProject.ViewModel.Main
 
         private ICommand? startExecutionCommand;
 
+        //ovdje trebam imati inject-ovan neki executor kom cu proslijediti listu STEP STATUSA koji idu na izvrsavanje !
         public MainViewModel(MainModel model)
         {
             this.mainModel = model;
@@ -51,7 +52,8 @@ namespace CreatorMVVMProject.ViewModel.Main
 
         public void StartExecutionCommandHandler()
         {
-            Test(GetSelectedStepViewModels());
+            //Odavde saljem stepove koji se "pripremaju" za izvrsavanje
+            //Test(GetSelectedStepViewModels());
         }
 
         private IList<StepViewModel> GetSelectedStepViewModels()
@@ -68,18 +70,6 @@ namespace CreatorMVVMProject.ViewModel.Main
             //var test = this.stageViewModels.Select(x => x.Stage);
             //var test = from stage in this.mainModel.Stages where 
             return this.stageViewModels.SelectMany(stage => stage.StepViewModels).Where(step => step.IsSelected).ToList();
-        }
-
-        private void Test(IList<StepViewModel> selectedSteps)
-        {
-            foreach (StepViewModel stepViewModel in selectedSteps)
-            {
-                if(stepViewModel.StepStatus.Executor != null) 
-                { 
-                    stepViewModel.StepStatus.Executor.Start();
-                }
-                    
-            }
         }
     }
 }

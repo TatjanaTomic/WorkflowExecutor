@@ -45,19 +45,9 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
         {
             stepStatus.Status = status;
 
-            
+            // TODO : Pisi ponovo
 
-            //StageStatus? stageStatus = this.Stages.SingleOrDefault(st => st.Steps.Contains(stepStatus));
-            //int indexOfStage = this.Stages.IndexOf(stageStatus); 
-            //int indexOfStep = stageStatus.Steps.IndexOf(stepStatus);
-
-            //stepStatus = stageStatus.Steps[indexOfStep];
-            //StepStatus dependencyStepStatus;
-            //foreach (Dependency dependencyStep in stepStatus.Step.Dependencies)
-            //{
-            //    dependencyStepStatus = stageStatus.Steps.SingleOrDefault(st => st.Step.Dependencies.Contains(dependencyStep));
-            //    dependencyStepStatus.Status = Status.Obsolete;
-            //}
+        
 
         }
     }

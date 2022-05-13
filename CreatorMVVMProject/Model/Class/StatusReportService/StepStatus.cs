@@ -15,6 +15,10 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
         private readonly Step step;
         private Status status;
         private readonly AbstractExecutor? executor;
+        //ovaj dio izbaci
+        //step status ne treba da zna o dependency stepovima
+        //to sve radi servis
+        //servis setuje inicijalni status, mijenja status tokom rada i mijenja statuse zavisnim stepovima po potrebi
         private readonly IList<Step> firstLevelDependencySteps;
         private readonly IList<Step> allDependencySteps;
 
@@ -55,7 +59,7 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
                 StatusChanged?.Invoke(this, new StatusChangedEventArgs(status, step.Id));
             }
         }
-        
+        //ide u status report servis
         private void SetInitialStatus()
         {
             if(firstLevelDependencySteps.Count > 0)
