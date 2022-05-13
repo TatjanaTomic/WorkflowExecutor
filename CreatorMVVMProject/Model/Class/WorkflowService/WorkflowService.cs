@@ -26,7 +26,7 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService
 
         public List<Step> GetFirstLevelDependencySteps(Step step)
         {
-            List<Step> dependencySteps = new List<Step>();
+            List<Step> dependencySteps = new();
 
             foreach (var dependency in step.Dependencies)
             {
