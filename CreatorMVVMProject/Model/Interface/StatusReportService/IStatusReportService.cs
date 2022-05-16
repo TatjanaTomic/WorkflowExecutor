@@ -16,7 +16,6 @@ namespace CreatorMVVMProject.Model.Interface.StatusReportService
             get;
         }
         void SetStatusToStep(StepStatus stepStatus, Status status);
-        IList<Step> GetFirstLevelDependencySteps(Step step);
-        IList<Step> GetAllDependencySteps(Step step);
+        Status GetInitialStatus(Step step);
     }
 }

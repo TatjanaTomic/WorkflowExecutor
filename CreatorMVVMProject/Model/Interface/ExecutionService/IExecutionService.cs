@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CreatorMVVMProject.Model.Class.StatusReportService;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,6 @@ namespace CreatorMVVMProject.Model.Interface.ExecutionService
 {
     public interface IExecutionService
     {
+        void EnqueueSteps(List<StepStatus> stepsToExecute);
     }
 }

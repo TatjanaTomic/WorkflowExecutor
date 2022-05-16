@@ -13,5 +13,7 @@ namespace CreatorMVVMProject.Model.Interface.WorkflowService
 
         List<Step> GetFirstLevelDependencySteps(Step step);
         List<Step> GetAllDependencySteps(Step step);
+        bool HasDependencySteps(Step step);
+        List<Step> GetReverseDependencySteps(Step step);
     }
 }

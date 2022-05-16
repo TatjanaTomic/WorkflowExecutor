@@ -11,7 +11,7 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
     public class StatusReportService : IStatusReportService
     {
         private readonly IWorkflowService workflowService;
-        private IList<StageStatus> stages = new List<StageStatus>();
+        private readonly IList<StageStatus> stages = new List<StageStatus>();
 
         public StatusReportService(IWorkflowService workflowService)
         {
@@ -31,21 +31,36 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
             }
         }
 
-        public IList<Step> GetFirstLevelDependencySteps(Step step)
+        public Status GetInitialStatus(Step step)
         {
-            return this.workflowService.GetFirstLevelDependencySteps(step);
-        }
-
-        public IList<Step> GetAllDependencySteps(Step step)
-        {
-            return this.workflowService.GetAllDependencySteps(step);
+            if (workflowService.HasDependencySteps(step))
+                return Status.Disabled;
+            else
+                return Status.NotStarted;
         }
 
         public void SetStatusToStep(StepStatus stepStatus, Status status) 
         {
-            stepStatus.Status = status;
+            Status oldStatus = stepStatus.Status;
+            stepStatus.Status = status; //promijeni odmah status na novi
 
-            // TODO : Pisi ponovo
+            if(status == Status.Success)
+            {
+                List<Step> notStartedSteps = workflowService.GetReverseDependencySteps(stepStatus.Step);
+                foreach (Step step in notStartedSteps)
+                {
+                    StepStatus stepStatus2 = stages.SelectMany(stage => stage.Steps).Where(s => s.Step.Id == step.Id).First();
+                    if (stepStatus2.Status == Status.Disabled)
+                        stepStatus2.Status = Status.NotStarted;
+                }
+            }
+
+            if (oldStatus.Equals(Status.Success) && status.Equals(Status.InProgress))
+            {
+                //TODO : Obsoleted
+            }
+
+            // TODO : Dovrsi
 
         
 

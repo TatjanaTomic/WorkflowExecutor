@@ -14,29 +14,29 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
     {
         private readonly Step step;
         private Status status;
+        //ne treba ni executor u sebi imati
         private readonly AbstractExecutor? executor;
         //ovaj dio izbaci
         //step status ne treba da zna o dependency stepovima
         //to sve radi servis
         //servis setuje inicijalni status, mijenja status tokom rada i mijenja statuse zavisnim stepovima po potrebi
-        private readonly IList<Step> firstLevelDependencySteps;
-        private readonly IList<Step> allDependencySteps;
+        //private readonly IList<Step> firstLevelDependencySteps;
+        //private readonly IList<Step> allDependencySteps;
 
         private readonly IStatusReportService statusReportService;
 
-        public StepStatus(Step step, IStatusReportService statusReportService)
+        public StepStatus(Step step, Status initialStatus, IStatusReportService statusReportService)
         {
             this.step = step;
+            this.status = initialStatus;
             this.statusReportService = statusReportService;
 
             this.executor = ExecutorFabrique.Instance.CreateExecutor(step);
-            if(executor != null)
+            if (executor != null)
+            {
                 executor.ExecutionStarted += StepExecutionStarted;
-
-            this.firstLevelDependencySteps = statusReportService.GetFirstLevelDependencySteps(Step);
-            this.allDependencySteps = statusReportService.GetAllDependencySteps(Step);
-
-            SetInitialStatus();
+                executor.ExecutionCompleted += StepExecutionCompleted;
+            }
         }
 
         public Step Step
@@ -59,18 +59,16 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
                 StatusChanged?.Invoke(this, new StatusChangedEventArgs(status, step.Id));
             }
         }
-        //ide u status report servis
-        private void SetInitialStatus()
-        {
-            if(firstLevelDependencySteps.Count > 0)
-                status = Status.Disabled;
-            else
-                status = Status.NotStarted;
-        }
 
         public void StepExecutionStarted()
         {
-            statusReportService.SetStatusToStep(this, Status.InProgress);
+            statusReportService.SetStatusToStep(this, Status.InProgress); 
+        }
+
+        // zasad su svi uspjesni
+        public void StepExecutionCompleted()
+        {
+            statusReportService.SetStatusToStep(this, Status.Success);
         }
     }
 }

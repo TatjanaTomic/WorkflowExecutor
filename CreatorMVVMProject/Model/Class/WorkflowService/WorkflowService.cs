@@ -36,6 +36,7 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService
             return dependencySteps;
         }
 
+        //vraca sve stepove od kojih zavisi proslijedjeni step
         public List<Step> GetAllDependencySteps(Step step)
         {
             List<Step> firstLevelDependencySteps = GetFirstLevelDependencySteps(step);
@@ -51,5 +52,24 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService
             return allDependencySteps;
         }
 
+        public bool HasDependencySteps(Step step)
+        {
+            return step.Dependencies.Count > 0;
+        }
+
+        //vraca sve stepove koji zavise od proslijedjenog stepa
+        // TODO : nadji srecniji naziv
+        public List<Step> GetReverseDependencySteps(Step step)
+        {
+            List<Step> reverseDependencySteps = new();
+                
+            foreach(Step s in stages.SelectMany(stage => stage.Steps))
+            {
+                if(s.Dependencies.Any(d => d.DependencyStepId == step.Id))
+                    reverseDependencySteps.Add(s);
+            }
+
+            return reverseDependencySteps;
+        }
     }
 }

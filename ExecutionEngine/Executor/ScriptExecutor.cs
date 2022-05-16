@@ -28,7 +28,10 @@ namespace ExecutionEngine.Executor
                 ProcessStartInfo startInfo = new("cmd.exe", command);
                 using Process? process = Process.Start(startInfo);
                 
+                Thread.Sleep(5000);
             });
+
+            OnExecutionCompleted();
         }
 
         //startInfo.UseShellExecute = false;

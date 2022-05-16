@@ -21,11 +21,7 @@ namespace ExecutionEngine.Executor
         {
             get
             {
-                if(instance == null)
-                {
-                    instance = new ExecutorFabrique();
-                }
-                return instance;
+                return instance ??= new ExecutorFabrique();
             }
         }
 

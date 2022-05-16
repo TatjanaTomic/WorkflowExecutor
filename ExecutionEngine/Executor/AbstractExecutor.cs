@@ -18,6 +18,11 @@ namespace ExecutionEngine.Executor
             ExecutionStarted?.Invoke();
         }
 
+        protected virtual void OnExecutionCompleted()
+        {
+            ExecutionCompleted?.Invoke();
+        }
+
         public abstract Task Start();
         public abstract Task Stop();
     }

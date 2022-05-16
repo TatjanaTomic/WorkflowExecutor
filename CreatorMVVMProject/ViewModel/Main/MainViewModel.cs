@@ -53,7 +53,12 @@ namespace CreatorMVVMProject.ViewModel.Main
         public void StartExecutionCommandHandler()
         {
             //Odavde saljem stepove koji se "pripremaju" za izvrsavanje
-            //Test(GetSelectedStepViewModels());
+
+            List<StepStatus> steps = new();
+            foreach(StepViewModel stepViewModel in GetSelectedStepViewModels())
+                steps.Add(stepViewModel.StepStatus);
+
+            mainModel.AddStepsToExecution(steps);
         }
 
         private IList<StepViewModel> GetSelectedStepViewModels()

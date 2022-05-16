@@ -24,7 +24,7 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
             {
                 foreach (var step in stage.Steps)
                 {
-                    steps.Add(new(step, this.statusReportService));
+                    steps.Add(new(step, statusReportService.GetInitialStatus(step), this.statusReportService));
                 }
             }
         }
