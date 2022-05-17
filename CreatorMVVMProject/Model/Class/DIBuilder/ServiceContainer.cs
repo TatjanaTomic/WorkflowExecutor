@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using CreatorMVVMProject.Model.Class.Main;
+using CreatorMVVMProject.Model.Interface.ExecutionService;
 using CreatorMVVMProject.Model.Interface.StatusReportService;
 using CreatorMVVMProject.Model.Interface.WorkflowService;
 
@@ -16,6 +17,7 @@ namespace CreatorMVVMProject.Model.Class.DIBuilder
             builder.RegisterType<WorkflowService.WorkflowService>().As<IWorkflowService>().SingleInstance();
             builder.RegisterType<WorkflowService.WorkflowRepository>().As<WorkflowService.IWorkflowRepository>().SingleInstance();
             builder.RegisterType<StatusReportService.StatusReportService>().As<IStatusReportService>().SingleInstance();
+            builder.RegisterType<ExecutionService.ExecutionService>().As<IExecutionService>().SingleInstance();
             builder.RegisterType<MainModel>().SingleInstance();
             this.containerBuilder = builder.Build();
             this.scope = this.containerBuilder.BeginLifetimeScope();

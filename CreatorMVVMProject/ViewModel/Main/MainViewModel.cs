@@ -59,22 +59,21 @@ namespace CreatorMVVMProject.ViewModel.Main
                 steps.Add(stepViewModel.StepStatus);
 
             mainModel.AddStepsToExecution(steps);
+            ResetCheckBoxes();
+
+            //ResetCheckBoxes();
         }
 
         private IList<StepViewModel> GetSelectedStepViewModels()
         {
-            //IList<StepViewModel> selectedSteps = new List<StepViewModel>();
-            //foreach (StageViewModel stageViewModel in this.stageViewModels)
-            //{
-            //    foreach (StepViewModel stepViewModel in stageViewModel.StepViewModels)
-            //        if(stepViewModel.IsSelected == true)
-            //            //TODO : Dodati provjeru da li je Enabled
-            //            selectedSteps.Add(stepViewModel);
-            //}
-            //return selectedSteps;
-            //var test = this.stageViewModels.Select(x => x.Stage);
-            //var test = from stage in this.mainModel.Stages where 
-            return this.stageViewModels.SelectMany(stage => stage.StepViewModels).Where(step => step.IsSelected).ToList();
+            return this.stageViewModels.SelectMany(stageViewModel => stageViewModel.StepViewModels).Where(stepViewModel => stepViewModel.IsSelected).ToList();
         }
+
+        private void ResetCheckBoxes()
+        {
+            foreach (StepViewModel stepViewModel in stageViewModels.SelectMany(stageViewModel => stageViewModel.StepViewModels).ToList())
+                stepViewModel.IsSelected = false;
+        }
+
     }
 }

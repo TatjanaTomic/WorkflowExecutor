@@ -16,8 +16,8 @@ namespace CreatorMVVMProject.Model.Class.Converters
         {
             { Status.InProgress, false },
             { Status.Disabled, false },
-            { Status.Success, false },
-            { Status.Failed, false },
+            { Status.Success, true },
+            { Status.Failed, true },
             { Status.NotStarted, true }
         };
         public object Convert(object value, System.Type targetType, object parameter, CultureInfo culture)

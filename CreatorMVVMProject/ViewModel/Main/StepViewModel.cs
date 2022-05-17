@@ -49,12 +49,16 @@ namespace CreatorMVVMProject.ViewModel.Main
             set
             {
                 this.isSelected = value;
+                NotifyPropertyChange(nameof(IsSelected));
             }
         }
         public bool IsExpanded
         {
             get { return this.isExpanded; }
-            set { this.isExpanded = value; }
+            set { 
+                this.isExpanded = value;
+                NotifyPropertyChange(nameof(IsExpanded));
+            }
         }
 
         public Status Status
@@ -79,8 +83,8 @@ namespace CreatorMVVMProject.ViewModel.Main
         }
         public void StartStepCommandHandler()
         {
-            if(stepStatus.Executor != null)
-                stepStatus.Executor.Start();
+            //if(stepStatus.Executor != null)
+            //    stepStatus.Executor.Start();
         }
 
 

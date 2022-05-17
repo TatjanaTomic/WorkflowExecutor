@@ -39,6 +39,12 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
                 return Status.NotStarted;
         }
 
+        public void SetStatusToStep(Step step, Status status)
+        {
+            StepStatus stepStatus = stages.SelectMany(stage => stage.Steps).Where(s => s.Step.Id == step.Id).First();
+            SetStatusToStep(stepStatus, status);
+        }
+
         public void SetStatusToStep(StepStatus stepStatus, Status status) 
         {
             Status oldStatus = stepStatus.Status;

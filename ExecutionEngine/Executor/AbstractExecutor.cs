@@ -6,21 +6,22 @@ using System.Threading.Tasks;
 
 namespace ExecutionEngine.Executor
 {
-    public delegate void Notify();
+    //public delegate void Notify(Xml.Step step);
+    
 
     public abstract class AbstractExecutor
     {
-        public event Notify? ExecutionStarted;
-        public event Notify? ExecutionCompleted;
+        public event EventHandler<Xml.Step>? ExecutionStarted;
+        public event EventHandler<ExecutionCompletedEventArgs>? ExecutionCompleted;
 
-        protected virtual void OnExecutionStarted()
+        protected virtual void OnExecutionStarted(Xml.Step e)
         {
-            ExecutionStarted?.Invoke();
+            ExecutionStarted?.Invoke(this, e);
         }
 
-        protected virtual void OnExecutionCompleted()
+        protected virtual void OnExecutionCompleted(ExecutionCompletedEventArgs e)
         {
-            ExecutionCompleted?.Invoke();
+            ExecutionCompleted?.Invoke(this, e);
         }
 
         public abstract Task Start();

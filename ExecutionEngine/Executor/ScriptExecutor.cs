@@ -10,28 +10,53 @@ namespace ExecutionEngine.Executor
 {
     public class ScriptExecutor : AbstractExecutor
     {
-        private Xml.Step step;
+        private readonly Xml.Step step;
         public ScriptExecutor(Xml.Step step)
         {
             this.step = step;
         }
 
-        public override async Task Start()
+        public async override Task Start()
         {
-            OnExecutionStarted();
+            OnExecutionStarted(step);
 
-            await Task.Run(() => {
+            Random random = new();
+            int time = random.Next(10) * 1000;
+
+            await Task.Run(() =>
+            {
 
                 string command = "/C " + step.ExecutablePath + " " + BuildParameters(step.Parameters);
-                Console.WriteLine("      Command: " + command);
 
                 ProcessStartInfo startInfo = new("cmd.exe", command);
                 using Process? process = Process.Start(startInfo);
-                
-                Thread.Sleep(5000);
+
+                //TODO : obrisi sleep
+                Thread.Sleep(time);
             });
 
-            OnExecutionCompleted();
+            OnExecutionCompleted(new ExecutionCompletedEventArgs(step, true));
+        }
+
+        public override Task Stop()
+        {
+            throw new NotImplementedException();
+        }
+
+        private static string BuildParameters(List<Parameter>? parameters)
+        {
+            StringBuilder sb = new();
+            if (parameters != null)
+            {
+                foreach (var p in parameters)
+                {
+                    sb.Append(p.KeyWord);
+                    sb.Append(' ');
+                    sb.Append(p.Value);
+                }
+            }
+
+            return sb.ToString();
         }
 
         //startInfo.UseShellExecute = false;
@@ -49,27 +74,5 @@ namespace ExecutionEngine.Executor
 
         //process.WaitForExit();
         //process.WaitForExitAsync();
-
-        public override Task Stop()
-        {
-            throw new NotImplementedException();
-        }
-
-
-        private static string BuildParameters(List<Parameter>? parameters)
-        {
-            StringBuilder sb = new();
-            if (parameters != null)
-            {
-                foreach (var p in parameters)
-                {
-                    sb.Append(p.KeyWord);
-                    sb.Append(' ');
-                    sb.Append(p.Value);
-                }
-            }
-
-            return sb.ToString();
-        }
     }
 }

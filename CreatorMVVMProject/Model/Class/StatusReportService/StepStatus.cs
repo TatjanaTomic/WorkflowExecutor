@@ -15,7 +15,7 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
         private readonly Step step;
         private Status status;
         //ne treba ni executor u sebi imati
-        private readonly AbstractExecutor? executor;
+        //private readonly AbstractExecutor? executor;
         //ovaj dio izbaci
         //step status ne treba da zna o dependency stepovima
         //to sve radi servis
@@ -31,12 +31,12 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
             this.status = initialStatus;
             this.statusReportService = statusReportService;
 
-            this.executor = ExecutorFabrique.Instance.CreateExecutor(step);
-            if (executor != null)
-            {
-                executor.ExecutionStarted += StepExecutionStarted;
-                executor.ExecutionCompleted += StepExecutionCompleted;
-            }
+            //this.executor = ExecutorFabrique.Instance.CreateExecutor(step);
+            //if (executor != null)
+            //{
+            //    executor.ExecutionStarted += StepExecutionStarted;
+            //    executor.ExecutionCompleted += StepExecutionCompleted;
+            //}
         }
 
         public Step Step
@@ -44,10 +44,10 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
             get { return this.step; }
         }
 
-        public AbstractExecutor? Executor 
-        {
-            get { return this.executor; }
-        }
+        //public AbstractExecutor? Executor 
+        //{
+        //    get { return this.executor; }
+        //}
 
         public event EventHandler<StatusChangedEventArgs>? StatusChanged;
         public Status Status
