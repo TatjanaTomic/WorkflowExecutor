@@ -32,7 +32,7 @@ namespace ExecutionEngine.Executor
                 using Process? process = Process.Start(startInfo);
 
                 //TODO : obrisi sleep
-                Thread.Sleep(time);
+                Thread.Sleep(3000);
             });
 
             OnExecutionCompleted(new ExecutionCompletedEventArgs(step, true));

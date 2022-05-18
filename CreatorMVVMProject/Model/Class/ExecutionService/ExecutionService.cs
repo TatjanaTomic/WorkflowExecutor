@@ -10,6 +10,7 @@ using CreatorMVVMProject.Model.Interface.StatusReportService;
 using CreatorMVVMProject.Model.Class.StatusReportService;
 using ExecutionEngine.Executor;
 using ExecutionEngine.Step;
+using System.Threading;
 
 namespace CreatorMVVMProject.Model.Class.ExecutionService
 {
@@ -20,46 +21,63 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
         //stepovi koji se izvrsavaju paralelno idu u jednu listu
         //za svaki step koji se izvrsava sekvencijalno pravi se lista koja ima jedan element
         //odavde se koristi step executor
-        //queue prima step statuse
+        //queue prima step status
+
+        //private static SemaphoreSlim semaphore;
+
+        //public event EventHandler? StepsAdded;
+
+        //private readonly ConcurrentQueue<List<StepStatus>> stepsQueue = new();
+
+        private readonly BlockingCollection<StepStatus> stepsQueue = new();
+        private readonly BlockingCollection<StepStatus> stepsQueueParallel = new();
+
+        private readonly CancellationTokenSource cancellationTokenSource = new();
+        private readonly AutoResetEvent autoResetEvent = new(false);
 
         private readonly IStatusReportService statusReportService;
 
-        //private readonly ConcurrentQueue<List<StepStatus>> stepsQueue = new();
-        private readonly BlockingCollection<List<StepStatus>> stepsQueue = new();
-
         public ExecutionService(IStatusReportService statusReportService)
         {
-            this.statusReportService = statusReportService; StartExecution();
+            this.statusReportService = statusReportService;
+            //semaphore = new SemaphoreSlim(1);
+            _ = StartExecution(() => ExecuteOneStepList());
         }
 
-        private BlockingCollection<List<StepStatus>> StepsQueue
+        private BlockingCollection<StepStatus> StepsQueue
         {
             get { return stepsQueue; }
+        }
+
+        private BlockingCollection<StepStatus> StepsQueueParallel
+        {
+            get { return stepsQueueParallel; }
         }
         
         public void EnqueueSteps(List<StepStatus> stepsToExecute)
         {
+
             Task addingSteps = Task.Run(() =>
             {
-                List<StepStatus> parallelSteps = new();
 
                 foreach (StepStatus stepStatus in stepsToExecute)
                 {
                     if (stepStatus.Step.CanBeExecutedInParallel)
-                        parallelSteps.Add(stepStatus);
+                        StepsQueueParallel.Add(stepStatus);
                     else
-                        StepsQueue.Add(new List<StepStatus> { stepStatus });
+                        StepsQueue.Add(stepStatus );
                 }
-                StepsQueue.Add(parallelSteps);
 
             });
 
             addingSteps.Wait();
 
-            
+            autoResetEvent.Set();
+
+            //StepsAdded?.Invoke(this, EventArgs.Empty);
         }
 
-        public async Task StartExecution()
+        public async Task StartExecution(Action action)
         {
             Task executingSteps = Task.Run(() =>
             {
@@ -67,7 +85,10 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                 {
                     while (true)
                     {
-                        ExecuteOneStepList(stepsQueue.Take());
+                        if (cancellationTokenSource.IsCancellationRequested)
+                            throw new OperationCanceledException();
+                        action();
+                        autoResetEvent.WaitOne();
                     }
                 }
                 catch (InvalidOperationException ex)
@@ -80,12 +101,31 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
         }
         
 
-        public void ExecuteOneStepList(List<StepStatus> stepsToExecute)
+        public void ExecuteOneStepList()
         {
-            List<Task> steps = new();
-
-            foreach (StepStatus stepStatus in stepsToExecute)
+            while (StepsQueue.Any())
             {
+                try
+                {
+                    StepStatus stepStatus = StepsQueue.Take();
+                    AbstractExecutor? stepExecutor = ExecutorFabrique.Instance.CreateExecutor(stepStatus.Step);
+                    if (stepExecutor != null)
+                    {
+                        stepExecutor.ExecutionStarted += StepExecutionStarted;
+                        stepExecutor.ExecutionCompleted += StepExecutionCompleted;
+                        stepExecutor.Start().Wait();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    //TODO : Sta se desava ako se ne izvrsi ?
+                }
+            }
+
+            List<Task> steps = new();
+            while (StepsQueueParallel.Any())
+            {
+                StepStatus stepStatus = StepsQueueParallel.Take();
                 try
                 {
                     AbstractExecutor? stepExecutor = ExecutorFabrique.Instance.CreateExecutor(stepStatus.Step);
@@ -94,14 +134,13 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                         stepExecutor.ExecutionStarted += StepExecutionStarted;
                         stepExecutor.ExecutionCompleted += StepExecutionCompleted;
                         steps.Add(stepExecutor.Start());
-                     }
+                    }
                 }
                 catch (Exception ex)
                 {
                     //TODO : Sta se desava ako se ne izvrsi ?
                 }
             }
-
             Task.WaitAll(steps.ToArray());
         }
 
