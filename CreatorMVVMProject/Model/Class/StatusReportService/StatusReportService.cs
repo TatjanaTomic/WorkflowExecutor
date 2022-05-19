@@ -71,5 +71,10 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
         
 
         }
+
+        public StepStatus GetStepStatus(Step step)
+        {
+            return stages.SelectMany(stage => stage.Steps).Where(s => s.Step.Id == step.Id).First();
+        }
     }
 }

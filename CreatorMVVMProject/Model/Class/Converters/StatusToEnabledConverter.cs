@@ -14,11 +14,13 @@ namespace CreatorMVVMProject.Model.Class.Converters
     {
         private readonly Dictionary<Status, bool> dictionary = new()
         {
-            { Status.InProgress, false },
             { Status.Disabled, false },
+            { Status.NotStarted, true },
+            { Status.Waiting, false},
+            { Status.InProgress, false },
             { Status.Success, true },
             { Status.Failed, true },
-            { Status.NotStarted, true }
+            { Status.Obsolete, false } //TODO : Provjeri da li je true ili false
         };
         public object Convert(object value, System.Type targetType, object parameter, CultureInfo culture)
         {

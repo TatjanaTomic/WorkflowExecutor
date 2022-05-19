@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace ExecutionEngine.Executor
 {
+    //TODO : Da li ovdje zaista trebam Singleton ?
     public class ExecutorFabrique
     {
         private static ExecutorFabrique? instance;
@@ -25,7 +26,7 @@ namespace ExecutionEngine.Executor
             }
         }
 
-        public AbstractExecutor? CreateExecutor(Xml.Step step)
+        public AbstractExecutor CreateExecutor(Xml.Step step)
         {
             return step.Type switch
             {

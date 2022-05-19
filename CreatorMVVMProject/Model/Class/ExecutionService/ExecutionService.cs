@@ -11,6 +11,7 @@ using CreatorMVVMProject.Model.Class.StatusReportService;
 using ExecutionEngine.Executor;
 using ExecutionEngine.Step;
 using System.Threading;
+using CreatorMVVMProject.Model.Interface.WorkflowService;
 
 namespace CreatorMVVMProject.Model.Class.ExecutionService
 {
@@ -25,23 +26,23 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 
         //private static SemaphoreSlim semaphore;
 
-        //public event EventHandler? StepsAdded;
-
-        //private readonly ConcurrentQueue<List<StepStatus>> stepsQueue = new();
-
         private readonly BlockingCollection<StepStatus> stepsQueue = new();
         private readonly BlockingCollection<StepStatus> stepsQueueParallel = new();
 
+        //CancellationTokenSource moze se iskoristiti za zaustavljanje
         private readonly CancellationTokenSource cancellationTokenSource = new();
+        //Represents a thread synchronization event that, when signaled, resets automatically after releasing a single waiting thread. 
         private readonly AutoResetEvent autoResetEvent = new(false);
 
         private readonly IStatusReportService statusReportService;
+        private readonly IWorkflowService workflowService;
 
-        public ExecutionService(IStatusReportService statusReportService)
+        public ExecutionService(IStatusReportService statusReportService, IWorkflowService workflowService)
         {
             this.statusReportService = statusReportService;
-            //semaphore = new SemaphoreSlim(1);
-            _ = StartExecution(() => ExecuteOneStepList());
+            this.workflowService = workflowService;
+
+            _ = StartExecution();
         }
 
         private BlockingCollection<StepStatus> StepsQueue
@@ -56,28 +57,24 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
         
         public void EnqueueSteps(List<StepStatus> stepsToExecute)
         {
-
-            Task addingSteps = Task.Run(() =>
+            Task.Run(() =>
             {
-
                 foreach (StepStatus stepStatus in stepsToExecute)
                 {
                     if (stepStatus.Step.CanBeExecutedInParallel)
                         StepsQueueParallel.Add(stepStatus);
                     else
                         StepsQueue.Add(stepStatus );
+
+                    statusReportService.SetStatusToStep(stepStatus, Status.Waiting);
                 }
 
-            });
-
-            addingSteps.Wait();
+            }).Wait();
 
             autoResetEvent.Set();
-
-            //StepsAdded?.Invoke(this, EventArgs.Empty);
         }
 
-        public async Task StartExecution(Action action)
+        public async Task StartExecution()
         {
             Task executingSteps = Task.Run(() =>
             {
@@ -85,13 +82,14 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                 {
                     while (true)
                     {
-                        if (cancellationTokenSource.IsCancellationRequested)
-                            throw new OperationCanceledException();
-                        action();
+                        //if (cancellationTokenSource.IsCancellationRequested)
+                        //    throw new OperationCanceledException();
+                        //TODO : Ovo se moze iskoristiti za neki Cancel
+                        ExecuteAll();
                         autoResetEvent.WaitOne();
                     }
                 }
-                catch (InvalidOperationException ex)
+                catch (InvalidOperationException)
                 {
                     // An InvalidOperationException means that Take() was called on a completed collection
                 }
@@ -99,24 +97,24 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 
             await executingSteps;
         }
-        
 
-        public void ExecuteOneStepList()
+        //TODO : Preimenuj metodu
+        //TODO : Valjalo bi refaktorisati kod
+        public void ExecuteAll()
         {
+            ExecuteParallelSteps(StepsQueueParallel);
+            ExecuteSerialSteps(StepsQueue);
+            
+            /*
             while (StepsQueue.Any())
             {
                 try
                 {
                     StepStatus stepStatus = StepsQueue.Take();
-                    AbstractExecutor? stepExecutor = ExecutorFabrique.Instance.CreateExecutor(stepStatus.Step);
-                    if (stepExecutor != null)
-                    {
-                        stepExecutor.ExecutionStarted += StepExecutionStarted;
-                        stepExecutor.ExecutionCompleted += StepExecutionCompleted;
-                        stepExecutor.Start().Wait();
-                    }
+                    AbstractExecutor stepExecutor = CreateStepExecutor(stepStatus.Step);
+                    stepExecutor.Start().Wait();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     //TODO : Sta se desava ako se ne izvrsi ?
                 }
@@ -127,21 +125,182 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
             {
                 StepStatus stepStatus = StepsQueueParallel.Take();
                 try
-                {
-                    AbstractExecutor? stepExecutor = ExecutorFabrique.Instance.CreateExecutor(stepStatus.Step);
-                    if (stepExecutor != null)
-                    {
-                        stepExecutor.ExecutionStarted += StepExecutionStarted;
-                        stepExecutor.ExecutionCompleted += StepExecutionCompleted;
-                        steps.Add(stepExecutor.Start());
-                    }
+                { 
+                    AbstractExecutor stepExecutor = CreateStepExecutor(stepStatus.Step);
+                    steps.Add(stepExecutor.Start());
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     //TODO : Sta se desava ako se ne izvrsi ?
                 }
             }
             Task.WaitAll(steps.ToArray());
+            */
+        }
+
+        private void ExecuteSerialSteps(BlockingCollection<StepStatus> serialSteps)
+        {
+            while (serialSteps.Any())
+            {
+                try
+                {
+                    StepStatus stepStatus = serialSteps.Take();
+                    AbstractExecutor stepExecutor = CreateStepExecutor(stepStatus.Step);
+                    stepExecutor.Start().Wait();
+                }
+                catch (Exception)
+                {
+                    //TODO : Sta se desava ako se ne izvrsi ?
+                }
+            }
+        }
+
+        private void ExecuteParallelSteps(BlockingCollection<StepStatus> parallelSteps)
+        {
+            List<Task> tasks = new();
+            while (parallelSteps.Any())
+            {
+                StepStatus stepStatus = parallelSteps.Take();
+                try
+                {
+                    AbstractExecutor stepExecutor = CreateStepExecutor(stepStatus.Step);
+                    tasks.Add(stepExecutor.Start());
+                }
+                catch (Exception)
+                {
+                    //TODO : Sta se desava ako se ne izvrsi ?
+                }
+            }
+            Task.WaitAll(tasks.ToArray());
+        }
+        /*
+        private void Test(StepStatus stepStatus)
+        {
+            BlockingCollection<StepStatus> serialSteps = new();
+            BlockingCollection<StepStatus> parallelSteps = new();
+
+            List<Step> allDependencySteps = workflowService.GetAllDependencySteps(stepStatus.Step);
+
+            foreach (Step step in allDependencySteps)
+            {
+                StepStatus stepStatus2 = statusReportService.GetStepStatus(step);
+                if (stepStatus2.Status == Status.NotStarted)
+                {
+                    if (step.CanBeExecutedInParallel == true)
+                        parallelSteps.Add(stepStatus2);
+                    else
+                        serialSteps.Add(stepStatus2);
+                }
+                else
+                {
+                    Test(stepStatus2);
+                }
+            }
+
+            ExecuteParallelSteps(parallelSteps);
+            ExecuteSerialSteps(serialSteps);
+        }
+        */
+        public async void StartExecuteTillThisStep(StepStatus stepStatus)
+        {
+            Task executingTask = Task.Run(() =>
+            {
+                ExecuteTillThisStep(stepStatus);
+            });
+
+            await executingTask;
+        }
+
+        private void ExecuteTillThisStep(StepStatus stepStatus)
+        {
+            /*
+            if(stepStatus.Status == Status.NotStarted)
+            {
+                ExecuteOneStep(stepStatus);
+            }
+            else
+            {
+                List<Step> allDependencySteps = workflowService.GetAllDependencySteps(stepStatus.Step);
+
+                foreach (Step step in allDependencySteps)
+                {
+                    StepStatus stepStatus2 = statusReportService.GetStepStatus(step);
+                    ExecuteTillThisStep(stepStatus2);
+                }
+            }
+            */
+
+            List<Step> allSteps = workflowService.GetAllDependencySteps(stepStatus.Step);
+            allSteps.Add(stepStatus.Step);
+
+            foreach (Step step in allSteps)
+            {
+                StepStatus stepStatus2 = statusReportService.GetStepStatus(step);
+                if (stepStatus2.Status == Status.NotStarted)
+                {
+                    ExecuteOneStep(stepStatus2);
+                }
+                else
+                {
+                    ExecuteTillThisStep(stepStatus2);
+                }
+            }
+
+
+        }
+
+        //TODO : Mozda je bespotrebno razdvojeno u posebnu metodu
+        private void ExecuteOneStep(StepStatus stepStatus)
+        {
+            AbstractExecutor stepExecutor = CreateStepExecutor(stepStatus.Step);
+            stepExecutor.Start().Wait();
+        }
+        /*
+        private List<List<Step>> GenerateList(Step step)
+        {
+            List<List<Step>> allSteps = new();
+            List<Step> parallelSteps = new();
+
+            List<Step> firstLevelDependencySteps = workflowService.GetFirstLevelDependencySteps(step);
+
+            foreach (Step s in firstLevelDependencySteps)
+            {
+                if (CanBeExecuted(s)) {
+                    if (s.CanBeExecutedInParallel == true)
+                        parallelSteps.Add(s);
+                    else 
+                        allSteps.Add(new List<Step>() { s });
+                }
+                allSteps.Add(parallelSteps);
+            }
+
+            return allSteps;
+
+        }
+        */
+        /*
+        private bool CanBeExecuted(Step step)
+        {
+            if (statusReportService.GetStepStatus(step).Status == Status.NotStarted)
+                return true;
+
+            List<Step> firstLevelDependencySteps = workflowService.GetFirstLevelDependencySteps(step);
+            if(firstLevelDependencySteps.Any(s => statusReportService.GetStepStatus(s).Status != Status.Success))
+            {
+                return false;
+            }
+
+            return true;
+        }
+        */
+        
+        private AbstractExecutor CreateStepExecutor(Step step)
+        {
+            AbstractExecutor stepExecutor = ExecutorFabrique.Instance.CreateExecutor(step);
+            stepExecutor.ExecutionStarted += StepExecutionStarted;
+            stepExecutor.ExecutionCompleted += StepExecutionCompleted;
+
+            return stepExecutor;
         }
 
         private void StepExecutionStarted(object? _, Step e)
@@ -156,6 +315,6 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
             else
                 statusReportService.SetStatusToStep(args.Step, Status.Failed);
         }
-
+  
     }
 }

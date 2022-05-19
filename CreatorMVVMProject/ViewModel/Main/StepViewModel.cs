@@ -1,5 +1,6 @@
 ﻿using CreatorMVVMProject.Model.Class.Commands;
 using CreatorMVVMProject.Model.Class.Converters;
+using CreatorMVVMProject.Model.Class.Main;
 using CreatorMVVMProject.Model.Class.StatusReportService;
 using ExecutionEngine.Step;
 using System;
@@ -16,13 +17,16 @@ namespace CreatorMVVMProject.ViewModel.Main
     {
         protected readonly StepStatus stepStatus;
 
+        private MainModel mainModel;
+
         private bool isSelected = false;
         private bool isExpanded = true;
 
         private ICommand? startStepCommand;
 
-        public StepViewModel(StepStatus stepStatus)
+        public StepViewModel(MainModel mainModel, StepStatus stepStatus)
         {
+            this.mainModel = mainModel;
             this.stepStatus = stepStatus;
             this.stepStatus.StatusChanged += OnStatusChanged;
         }
@@ -75,16 +79,12 @@ namespace CreatorMVVMProject.ViewModel.Main
         {
             get
             {
-                //if(this.startStepCommand == null)
-                //    this.startStepCommand = new DelegateCommand(StartStepCommandHandler);
-                //return this.startStepCommand;
                 return this.startStepCommand ??= new DelegateCommand(StartStepCommandHandler);
             }
         }
         public void StartStepCommandHandler()
         {
-            //if(stepStatus.Executor != null)
-            //    stepStatus.Executor.Start();
+            mainModel.ExecuteTillThisStep(this.stepStatus);
         }
 
 

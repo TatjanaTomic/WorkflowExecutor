@@ -19,9 +19,9 @@ namespace CreatorMVVMProject.ViewModel.Main
         public MainViewModel(MainModel model)
         {
             this.mainModel = model;
-            foreach(StageStatus stage in this.mainModel.Stages)
+            foreach(StageStatus stage in mainModel.Stages)
             {
-                stageViewModels.Add(new(stage));
+                stageViewModels.Add(new(mainModel, stage));
             }
             this.selectedStage = stageViewModels[0];
         }

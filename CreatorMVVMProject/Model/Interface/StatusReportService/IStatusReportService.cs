@@ -18,5 +18,6 @@ namespace CreatorMVVMProject.Model.Interface.StatusReportService
         void SetStatusToStep(StepStatus stepStatus, Status status);
         void SetStatusToStep(Step e, Status inProgress);
         Status GetInitialStatus(Step step);
+        StepStatus GetStepStatus(Step step);
     }
 }

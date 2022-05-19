@@ -29,5 +29,10 @@ namespace CreatorMVVMProject.Model.Class.Main
         {
             executionService.EnqueueSteps(steps);
         }
+
+        public void ExecuteTillThisStep(StepStatus stepStatus)
+        {
+            executionService.StartExecuteTillThisStep(stepStatus);
+        }
     }
 }
