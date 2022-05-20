@@ -23,13 +23,7 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
             }
         }
 
-        public IList<StageStatus> Stages
-        {
-            get
-            {
-                return this.stages;
-            }
-        }
+        public IList<StageStatus> Stages => this.stages;
 
         public Status GetInitialStatus(Step step)
         {
@@ -41,7 +35,7 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
 
         public void SetStatusToStep(Step step, Status status)
         {
-            StepStatus stepStatus = stages.SelectMany(stage => stage.Steps).Where(s => s.Step.Id == step.Id).First();
+            StepStatus stepStatus = GetStepStatus(step);
             SetStatusToStep(stepStatus, status);
         }
 
@@ -52,29 +46,51 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
 
             if(status == Status.Success)
             {
-                List<Step> notStartedSteps = workflowService.GetReverseDependencySteps(stepStatus.Step);
-                foreach (Step step in notStartedSteps)
+                //TODO : Pogresna logika, stepStatus2 prelazi u NotStarted samo ako su svi njegovi zavisni izvrseni !!!
+                List<Step> reverseDependencySteps = workflowService.GetReverseDependencySteps(stepStatus.Step);
+                foreach (Step step in reverseDependencySteps)
                 {
-                    StepStatus stepStatus2 = stages.SelectMany(stage => stage.Steps).Where(s => s.Step.Id == step.Id).First();
-                    if (stepStatus2.Status == Status.Disabled)
+                    //StepStatus stepStatus2 = GetStepStatus(step);
+                    List<StepStatus> firstLevelDependencySteps = GetStepStatuses(workflowService.GetFirstLevelDependencySteps(step));
+                    
+                    //TODO : Dovrsi prelaz u NotStarted status
+                    //if(firstLevelDependencySteps.All(s => s.))
+                    //if (stepStatus2.Status == Status.Disabled)
+                    //    stepStatus2.Status = Status.NotStarted;
+
+                    if(firstLevelDependencySteps.All(s => s.Status == Status.Success))
+                    {
+                        StepStatus stepStatus2 = GetStepStatus(step);
                         stepStatus2.Status = Status.NotStarted;
+                    }
                 }
             }
 
             if (oldStatus.Equals(Status.Success) && status.Equals(Status.InProgress))
             {
-                //TODO : Obsoleted
+                List<Step> obsoletedSteps = workflowService.GetAllDependencySteps(stepStatus.Step);
+                foreach(Step step in obsoletedSteps)
+                {
+                    StepStatus stepStatus2 = GetStepStatus(step);
+                    stepStatus2.Status = Status.Obsolete;
+                }
             }
-
-            // TODO : Dovrsi
-
-        
 
         }
 
         public StepStatus GetStepStatus(Step step)
         {
             return stages.SelectMany(stage => stage.Steps).Where(s => s.Step.Id == step.Id).First();
+        }
+
+        public List<StepStatus> GetStepStatuses(List<Step> steps)
+        {
+            List<StepStatus> stepStatuses = new();
+            foreach (Step step in steps)
+            {
+                stepStatuses.Add(GetStepStatus(step));
+            }
+            return stepStatuses;
         }
     }
 }
