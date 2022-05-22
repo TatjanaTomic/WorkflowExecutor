@@ -1,5 +1,4 @@
-﻿using ExecutionEngine.Exceptions;
-using ExecutionEngine.Xml;
+﻿using CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml;
 using ExecutionEngine.Xml.StageListBuilder;
 using System;
 using System.Collections.Generic;
@@ -9,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace CreatorMVVMProject.Model.Class.WorkflowService
+namespace CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository
 {
     public class WorkflowRepository : IWorkflowRepository
     {

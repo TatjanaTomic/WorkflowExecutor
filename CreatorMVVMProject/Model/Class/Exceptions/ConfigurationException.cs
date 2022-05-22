@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExecutionEngine.Exceptions
+namespace CreatorMVVMProject.Model.Class.Exceptions
 {
     public class ConfigurationException : Exception
     {

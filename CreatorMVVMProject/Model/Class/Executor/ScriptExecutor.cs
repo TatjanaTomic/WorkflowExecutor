@@ -1,17 +1,17 @@
-﻿using ExecutionEngine.Xml;
+﻿using CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace ExecutionEngine.Executor
+namespace CreatorMVVMProject.Model.Class.Executor
 {
     public class ScriptExecutor : AbstractExecutor
     {
-        private readonly Xml.Step step;
-        public ScriptExecutor(Xml.Step step)
+        private readonly Step step;
+        public ScriptExecutor(Step step)
         {
             this.step = step;
         }

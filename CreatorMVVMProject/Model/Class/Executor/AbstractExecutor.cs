@@ -1,20 +1,21 @@
-﻿using System;
+﻿using CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExecutionEngine.Executor
+namespace CreatorMVVMProject.Model.Class.Executor
 {
     //public delegate void Notify(Xml.Step step);
-    
+
 
     public abstract class AbstractExecutor
     {
-        public event EventHandler<Xml.Step>? ExecutionStarted;
+        public event EventHandler<Step>? ExecutionStarted;
         public event EventHandler<ExecutionCompletedEventArgs>? ExecutionCompleted;
 
-        protected virtual void OnExecutionStarted(Xml.Step e)
+        protected virtual void OnExecutionStarted(Step e)
         {
             ExecutionStarted?.Invoke(this, e);
         }

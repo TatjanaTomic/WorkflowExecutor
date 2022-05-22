@@ -4,14 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExecutionEngine.Executor
+namespace CreatorMVVMProject.Model.Class.Executor
 {
-    public class DownloadExecutor : AbstractExecutor
+    public class UploadExecutor : AbstractExecutor
     {
         public override Task Start()
         {
             throw new NotImplementedException();
         }
+
         public override Task Stop()
         {
             throw new NotImplementedException();

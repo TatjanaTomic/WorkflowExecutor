@@ -1,21 +1,21 @@
-﻿using ExecutionEngine.Exceptions;
-using ExecutionEngine.Step;
+﻿using CreatorMVVMProject.Model.Class.Exceptions;
+using CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Type = CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml.Type;
 
-namespace ExecutionEngine.Executor
+namespace CreatorMVVMProject.Model.Class.Executor
 {
-    //TODO : Da li ovdje zaista trebam Singleton ?
     public class ExecutorFabrique
     {
         private static ExecutorFabrique? instance;
 
         private ExecutorFabrique()
         {
-            
+
         }
 
         public static ExecutorFabrique Instance
@@ -26,13 +26,13 @@ namespace ExecutionEngine.Executor
             }
         }
 
-        public AbstractExecutor CreateExecutor(Xml.Step step)
+        public AbstractExecutor CreateExecutor(Step step)
         {
             return step.Type switch
             {
-                Step.Type.Executable => new ScriptExecutor(step),
-                Step.Type.Upload => new UploadExecutor(),
-                Step.Type.Download => new DownloadExecutor(),
+                Type.Executable => new ScriptExecutor(step),
+                Type.Upload => new UploadExecutor(),
+                Type.Download => new DownloadExecutor(step),
                 _ => throw new WrongDefinitionException("Step type must be defined.")
             };
         }

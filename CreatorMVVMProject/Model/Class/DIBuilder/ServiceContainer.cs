@@ -15,7 +15,7 @@ namespace CreatorMVVMProject.Model.Class.DIBuilder
         private ServiceContainer()
         {
             builder.RegisterType<WorkflowService.WorkflowService>().As<IWorkflowService>().SingleInstance();
-            builder.RegisterType<WorkflowService.WorkflowRepository>().As<WorkflowService.IWorkflowRepository>().SingleInstance();
+            builder.RegisterType<WorkflowService.WorkflowRepository.WorkflowRepository>().As<WorkflowService.WorkflowRepository.IWorkflowRepository>().SingleInstance();
             builder.RegisterType<StatusReportService.StatusReportService>().As<IStatusReportService>().SingleInstance();
             builder.RegisterType<ExecutionService.ExecutionService>().As<IExecutionService>().SingleInstance();
             builder.RegisterType<MainModel>().SingleInstance();
