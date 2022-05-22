@@ -17,13 +17,6 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 {
     public class ExecutionService : IExecutionService
     {
-        //ovdje ide logika za queue stepova koji idu na izvrsavanje
-        //zamisljeno je kao lista lista
-        //stepovi koji se izvrsavaju paralelno idu u jednu listu
-        //za svaki step koji se izvrsava sekvencijalno pravi se lista koja ima jedan element
-        //odavde se koristi step executor
-        //queue prima step status
-
         //private static SemaphoreSlim semaphore;
 
         private readonly BlockingCollection<StepStatus> stepsQueue = new();
@@ -167,25 +160,15 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
         {
             Task executingTask = Task.Run(() =>
             {
-                ExecuteTillThisStep(stepStatus);
+                List<Step> allSteps = workflowService.GetAllDependencySteps(stepStatus.Step);
+                allSteps.Add(stepStatus.Step);
+
+                List<StepStatus> stepStatuses = statusReportService.GetStepStatuses(allSteps);
+
+                EnqueueSteps(stepStatuses);
             });
 
             await executingTask;
-        }
-
-        private void ExecuteTillThisStep(StepStatus stepStatus)
-        {
-            List<Step> allSteps = workflowService.GetAllDependencySteps(stepStatus.Step);
-            allSteps.Add(stepStatus.Step);
-
-            List<StepStatus> stepStatuses = new();
-            foreach (Step step in allSteps)
-            {
-                StepStatus stepStatus2 = statusReportService.GetStepStatus(step);
-                stepStatuses.Add(stepStatus2);
-            }
-
-            EnqueueSteps(stepStatuses);
         }
         
         private AbstractExecutor CreateStepExecutor(Step step)
