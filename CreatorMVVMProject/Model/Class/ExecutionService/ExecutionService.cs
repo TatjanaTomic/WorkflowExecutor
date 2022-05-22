@@ -10,7 +10,7 @@ using CreatorMVVMProject.Model.Class.StatusReportService;
 using System.Threading;
 using CreatorMVVMProject.Model.Interface.WorkflowService;
 using CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml;
-using CreatorMVVMProject.Model.Class.Executor;
+using CreatorMVVMProject.Model.Class.StepExecutor;
 
 namespace CreatorMVVMProject.Model.Class.ExecutionService
 {
@@ -172,7 +172,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
         
         private AbstractExecutor CreateStepExecutor(Step step)
         {
-            AbstractExecutor stepExecutor = ExecutorFabrique.Instance.CreateExecutor(step);
+            AbstractExecutor stepExecutor = StepExecutorFabrique.Instance.CreateExecutor(step);
             stepExecutor.ExecutionStarted += StepExecutionStarted;
             stepExecutor.ExecutionCompleted += StepExecutionCompleted;
 

@@ -5,15 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CreatorMVVMProject.Model.Class.Executor
+namespace CreatorMVVMProject.Model.Class.StepExecutor
 {
-    //public delegate void Notify(Xml.Step step);
-
-
     public abstract class AbstractExecutor
     {
         public event EventHandler<Step>? ExecutionStarted;
         public event EventHandler<ExecutionCompletedEventArgs>? ExecutionCompleted;
+
+        public abstract Task Start();
+        public abstract Task Stop();
 
         protected virtual void OnExecutionStarted(Step e)
         {
@@ -24,8 +24,5 @@ namespace CreatorMVVMProject.Model.Class.Executor
         {
             ExecutionCompleted?.Invoke(this, e);
         }
-
-        public abstract Task Start();
-        public abstract Task Stop();
     }
 }

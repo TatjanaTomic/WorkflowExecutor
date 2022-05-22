@@ -7,7 +7,7 @@ using System.Net;
 using System.IO;
 using CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml;
 
-namespace CreatorMVVMProject.Model.Class.Executor
+namespace CreatorMVVMProject.Model.Class.StepExecutor
 {
     public class DownloadExecutor : AbstractExecutor
     {

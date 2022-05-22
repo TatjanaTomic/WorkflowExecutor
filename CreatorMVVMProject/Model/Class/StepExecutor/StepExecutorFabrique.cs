@@ -7,22 +7,22 @@ using System.Text;
 using System.Threading.Tasks;
 using Type = CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml.Type;
 
-namespace CreatorMVVMProject.Model.Class.Executor
+namespace CreatorMVVMProject.Model.Class.StepExecutor
 {
-    public class ExecutorFabrique
+    public class StepExecutorFabrique
     {
-        private static ExecutorFabrique? instance;
+        private static StepExecutorFabrique? instance;
 
-        private ExecutorFabrique()
+        private StepExecutorFabrique()
         {
 
         }
 
-        public static ExecutorFabrique Instance
+        public static StepExecutorFabrique Instance
         {
             get
             {
-                return instance ??= new ExecutorFabrique();
+                return instance ??= new StepExecutorFabrique();
             }
         }
 

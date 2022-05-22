@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CreatorMVVMProject.Model.Class.Executor
+namespace CreatorMVVMProject.Model.Class.StepExecutor
 {
     public class ExecutionCompletedEventArgs
     {
