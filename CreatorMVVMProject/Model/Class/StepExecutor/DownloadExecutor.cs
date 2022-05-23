@@ -30,10 +30,8 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
                 {
                     //TODO : Nadji neki elegantniji nacin, WebClient je depricated !
                     // HttpClient
-                    using (WebClient client = new())
-                    {
-                        client.DownloadFile(step.File, Path.Combine(BASE_PATH, "testic.txt"));
-                    }
+                    using WebClient webClient = new();
+                    webClient.DownloadFile(step.File, Path.Combine(BASE_PATH, "testic.txt"));
                 }
                 catch (Exception ex)
                 {
@@ -42,9 +40,10 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
                 }
             });
 
-            OnExecutionCompleted(new ExecutionCompletedEventArgs(step, isSuccessful));
+            OnExecutionCompleted(new ExecutionCompletedEventArgs(step, isSuccessful, "Uspjesno download-ovan fajl"));
 
         }
+
         public override Task Stop()
         {
             throw new NotImplementedException();

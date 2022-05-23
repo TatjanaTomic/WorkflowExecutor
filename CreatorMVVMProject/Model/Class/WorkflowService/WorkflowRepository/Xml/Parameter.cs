@@ -24,5 +24,9 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml
         [XmlAttribute("Value")]
         public string Value { get => value; set => this.value = value; }
 
+        public override string? ToString()
+        {
+            return keyWord + " " + value + " ";
+        }
     }
 }

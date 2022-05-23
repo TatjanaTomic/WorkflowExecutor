@@ -12,6 +12,8 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
     {
         private readonly Step step;
         private Status status;
+        //TODO : Vidi kako ces ispisivati poruku o izvrsavanju
+        private string statusMessage = string.Empty;
 
         private readonly IStatusReportService statusReportService;
 
@@ -27,7 +29,13 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
             get { return this.step; }
         }
 
-        public event EventHandler<StatusChangedEventArgs>? StatusChanged;
+        public string StatusMessage
+        {
+            get { return statusMessage; }
+            set { statusMessage = value;
+                MessageChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
         public Status Status
         {
             get => this.status;
@@ -37,5 +45,8 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
                 StatusChanged?.Invoke(this, new StatusChangedEventArgs(status, step.Id));
             }
         }
+
+        public event EventHandler? MessageChanged;
+        public event EventHandler<StatusChangedEventArgs>? StatusChanged;
     }
 }

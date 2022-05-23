@@ -34,10 +34,12 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
 
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Status}" Background="{Binding Status, Converter={StaticResource statusToColorConverter}, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding StepDescription}" TextWrapping="Wrap" ></TextBlock>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding Message}" TextWrapping="Wrap" ></TextBlock>
 
                         <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
                             <Grid.ColumnDefinitions>

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,6 +11,8 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
 {
     public class ScriptExecutor : AbstractExecutor
     {
+        private static readonly string BASE_PATH = Path.Combine(Environment.GetFolderPath(folder: Environment.SpecialFolder.Desktop), "test");
+
         private readonly Step step;
         public ScriptExecutor(Step step)
         {
@@ -19,23 +22,47 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
         public async override Task Start()
         {
             OnExecutionStarted(step);
-
-            Random random = new();
-            int time = random.Next(10) * 1000;
-
             await Task.Run(() =>
             {
+                ProcessStartInfo processStartInfo = new();
+                processStartInfo.RedirectStandardOutput = true;
+                processStartInfo.RedirectStandardError = true;
+                processStartInfo.UseShellExecute = false;
 
-                string command = "/C " + step.ExecutablePath + " " + BuildParameters(step.Parameters);
+                processStartInfo.WorkingDirectory = BASE_PATH;
+                processStartInfo.FileName = "cmd.exe";
+                processStartInfo.Arguments = "/C " + step.ExecutablePath + " " + BuildParameters();
+                
+                try
+                {
+                    Process? process = Process.Start(processStartInfo);
+                    if (process != null)
+                    {
+                        process.WaitForExit();
+                        
+                        using StreamReader outputReader = process.StandardOutput;
+                        using StreamReader errorReader = process.StandardError;
 
-                ProcessStartInfo startInfo = new("cmd.exe", command);
-                using Process? process = Process.Start(startInfo);
+                        string output = outputReader.ReadToEnd();
+                        string error = errorReader.ReadToEnd();
 
-                //TODO : obrisi sleep
-                Thread.Sleep(3000);
+                        if (!string.IsNullOrEmpty(output))
+                        {
+                            OnExecutionCompleted(new ExecutionCompletedEventArgs(step, true, output));
+                        }
+                        else if(!string.IsNullOrEmpty(error))
+                        {
+                            OnExecutionCompleted(new ExecutionCompletedEventArgs(step, false, error));
+                        }
+                    }
+                    else
+                        OnExecutionCompleted(new ExecutionCompletedEventArgs(step, false, "Moja neka poruka"));
+                }
+                catch (Exception e)
+                {
+                    OnExecutionCompleted(new ExecutionCompletedEventArgs(step, false, e.Message));
+                }
             });
-
-            OnExecutionCompleted(new ExecutionCompletedEventArgs(step, true));
         }
 
         public override Task Stop()
@@ -43,36 +70,15 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
             throw new NotImplementedException();
         }
 
-        private static string BuildParameters(List<Parameter>? parameters)
+        private string BuildParameters()
         {
-            StringBuilder sb = new();
-            if (parameters != null)
+            StringBuilder stringBuilder = new();
+            foreach (var parameter in step.Parameters)
             {
-                foreach (var p in parameters)
-                {
-                    sb.Append(p.KeyWord);
-                    sb.Append(' ');
-                    sb.Append(p.Value);
-                }
+                stringBuilder.Append(parameter.ToString());
             }
 
-            return sb.ToString();
+            return stringBuilder.ToString();
         }
-
-        //startInfo.UseShellExecute = false;
-        //startInfo.RedirectStandardOutput = true;
-        //startInfo.FileName = executablePath;
-        //startInfo.Arguments = BuildParameters(parameters);
-
-        /* kako da se procita output ako je RedirectStandardOutput postavljen na true
-            if (process != null)
-            {
-                using StreamReader reader = process.StandardOutput;
-                string result = reader.ReadToEnd();
-            }
-        */
-
-        //process.WaitForExit();
-        //process.WaitForExitAsync();
     }
 }

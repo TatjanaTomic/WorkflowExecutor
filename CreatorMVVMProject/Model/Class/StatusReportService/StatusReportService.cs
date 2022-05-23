@@ -46,17 +46,10 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
 
             if(status == Status.Success)
             {
-                //TODO : Pogresna logika, stepStatus2 prelazi u NotStarted samo ako su svi njegovi zavisni izvrseni !!!
                 List<Step> reverseDependencySteps = workflowService.GetReverseDependencySteps(stepStatus.Step);
                 foreach (Step step in reverseDependencySteps)
                 {
-                    //StepStatus stepStatus2 = GetStepStatus(step);
                     List<StepStatus> firstLevelDependencySteps = GetStepStatuses(workflowService.GetFirstLevelDependencySteps(step));
-                    
-                    //TODO : Dovrsi prelaz u NotStarted status
-                    //if(firstLevelDependencySteps.All(s => s.))
-                    //if (stepStatus2.Status == Status.Disabled)
-                    //    stepStatus2.Status = Status.NotStarted;
 
                     if(firstLevelDependencySteps.All(s => s.Status == Status.Success))
                     {
@@ -76,6 +69,12 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
                 }
             }
 
+        }
+
+        public void SetStatusMessageToStep(Step step, string message)
+        {
+            StepStatus stepStatus = GetStepStatus(step);
+            stepStatus.StatusMessage = message;
         }
 
         public StepStatus GetStepStatus(Step step)

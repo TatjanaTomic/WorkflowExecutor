@@ -61,9 +61,9 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                     //statusReportService.SetStatusToStep(stepStatus, Status.Waiting);
                 }
 
-            //}).Wait();
+            //});
 
-            //autoResetEvent.Set();
+            autoResetEvent.Set();
         }
 
         public async Task StartExecution()
@@ -79,11 +79,11 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                         //TODO : Ovo se moze iskoristiti za neki Cancel
 
                         //_ = autoResetEvent.WaitOne();
-
-                        ExecuteSerialSteps(StepsQueue);
-                        ExecuteParallelSteps(StepsQueueParallel);
                         
-                        //autoResetEvent.WaitOne();
+                        ExecuteSerialSteps();
+                        ExecuteParallelSteps();
+                        
+                        autoResetEvent.WaitOne();
                     }
                 }
                 catch (Exception e)
@@ -96,13 +96,13 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
             await executingSteps;
         }
 
-        private void ExecuteSerialSteps(BlockingCollection<StepStatus> serialSteps)
+        private void ExecuteSerialSteps()
         {
-            while (serialSteps.Any() && !serialSteps.All(x=>x.Status==Status.Disabled))
+            while (StepsQueue.Any() && !StepsQueue.All(x=>x.Status==Status.Disabled))
             {
                 try
                 {
-                    StepStatus stepStatus = serialSteps.Take();
+                    StepStatus stepStatus = StepsQueue.Take();
 
                     if (stepStatus.Status == Status.NotStarted || stepStatus.Status == Status.Success)
                     {
@@ -111,7 +111,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                     }
                     else
                     {
-                        serialSteps.Add(stepStatus);
+                        StepsQueue.Add(stepStatus);
                         continue;
                     }
                 }
@@ -121,17 +121,17 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                     //TODO : Sta se desava ako se ne izvrsi ?
                 }
 
-                //autoResetEvent.Set();
+                autoResetEvent.Set();
             }
 
         }
 
-        private void ExecuteParallelSteps(BlockingCollection<StepStatus> parallelSteps)
+        private void ExecuteParallelSteps()
         {
             List<Task> tasks = new();
-            while (parallelSteps.Any())
+            while (StepsQueueParallel.Any() && !StepsQueueParallel.All(x => x.Status == Status.Disabled))
             {
-                StepStatus stepStatus = parallelSteps.Take();
+                StepStatus stepStatus = StepsQueueParallel.Take();
                 try
                 {
                     if (stepStatus.Status == Status.NotStarted || stepStatus.Status == Status.Success)
@@ -141,7 +141,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                     }
                     else
                     {
-                        parallelSteps.Add(stepStatus);
+                        StepsQueueParallel.Add(stepStatus);
                         continue;
                     }
                 }
@@ -152,7 +152,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                 }
             }
             Task.WaitAll(tasks.ToArray());
-            //autoResetEvent.Set();
+            autoResetEvent.Set();
         }
         
         public async void StartExecuteTillThisStep(StepStatus stepStatus)
@@ -190,6 +190,8 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                 statusReportService.SetStatusToStep(args.Step, Status.Success);
             else
                 statusReportService.SetStatusToStep(args.Step, Status.Failed);
+
+            statusReportService.SetStatusMessageToStep(args.Step, args.Message);
         }
   
     }

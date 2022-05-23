@@ -16,7 +16,7 @@ namespace CreatorMVVMProject.ViewModel.Main
     {
         protected readonly StepStatus stepStatus;
 
-        private MainModel mainModel;
+        private readonly MainModel mainModel;
 
         private bool isSelected = false;
         private bool isExpanded = true;
@@ -28,6 +28,7 @@ namespace CreatorMVVMProject.ViewModel.Main
             this.mainModel = mainModel;
             this.stepStatus = stepStatus;
             this.stepStatus.StatusChanged += OnStatusChanged;
+            this.stepStatus.MessageChanged += OnMessageChanged;
         }
 
         public string StepId
@@ -43,6 +44,16 @@ namespace CreatorMVVMProject.ViewModel.Main
             get 
             {
                 return this.stepStatus.Step.Description;
+            }
+        }
+
+        public string Message
+        {
+            get { return this.stepStatus.StatusMessage; }
+            set
+            {
+                this.stepStatus.StatusMessage = value;
+                NotifyPropertyChange(nameof(Message));
             }
         }
 
@@ -96,6 +107,11 @@ namespace CreatorMVVMProject.ViewModel.Main
         private void OnStatusChanged(object? _, StatusChangedEventArgs _2)
         {
             NotifyPropertyChange(nameof(this.Status));
+        }
+
+        private void OnMessageChanged(object? _, StatusChangedEventArgs _2)
+        {
+            NotifyPropertyChange(nameof(this.Message));
         }
     }
 }
