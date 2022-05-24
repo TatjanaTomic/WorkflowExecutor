@@ -46,15 +46,15 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
 
             if(status == Status.Success)
             {
-                List<Step> reverseDependencySteps = workflowService.GetReverseDependencySteps(stepStatus.Step);
-                foreach (Step step in reverseDependencySteps)
-                {
-                    List<StepStatus> firstLevelDependencySteps = GetStepStatuses(workflowService.GetFirstLevelDependencySteps(step));
+                List<StepStatus> reverseDependencySteps = GetStepStatuses(workflowService.GetReverseDependencySteps(stepStatus.Step));
 
-                    if(firstLevelDependencySteps.All(s => s.Status == Status.Success))
+                foreach (StepStatus dependencyStepStatus in reverseDependencySteps)
+                {
+                    List<StepStatus> firstLevelDependencySteps = GetStepStatuses(workflowService.GetFirstLevelDependencySteps(dependencyStepStatus.Step));  
+
+                    if(dependencyStepStatus.Status == Status.Disabled && firstLevelDependencySteps.All(s => s.Status == Status.Success) )
                     {
-                        StepStatus stepStatus2 = GetStepStatus(step);
-                        stepStatus2.Status = Status.NotStarted;
+                        dependencyStepStatus.Status = Status.NotStarted;
                     }
                 }
             }

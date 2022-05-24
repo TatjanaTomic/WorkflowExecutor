@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 using System.Net;
 using System.IO;
 using CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml;
+using System.Net.Http;
 
 namespace CreatorMVVMProject.Model.Class.StepExecutor
 {
     public class DownloadExecutor : AbstractExecutor
     {
         private static readonly string BASE_PATH = Path.Combine(Environment.GetFolderPath(folder: Environment.SpecialFolder.Desktop), "test");
-
+        readonly HttpClient httpClient = new();
+        
         private readonly Step step;
         public DownloadExecutor(Step step)
         {
@@ -21,26 +23,24 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
 
         public async override Task Start()
         {
-            bool isSuccessful = true;
             OnExecutionStarted(step);
 
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
-                try
+                if (!Uri.TryCreate(step.File, UriKind.Absolute, out Uri uriResult))
                 {
-                    //TODO : Nadji neki elegantniji nacin, WebClient je depricated !
-                    // HttpClient
-                    using WebClient webClient = new();
-                    webClient.DownloadFile(step.File, Path.Combine(BASE_PATH, "testic.txt"));
+                    OnExecutionCompleted(new ExecutionCompletedEventArgs(step, false, "URI is invalid."));
+                    return;
                 }
-                catch (Exception ex)
-                {
-                    //TODO : Sta je "pravilno" ponasanje kada se desi Exception? Da li da negdje logujem Exception-e?
-                    isSuccessful = false;
-                }
-            });
+                    
+                byte[] fileBytes = await httpClient.GetByteArrayAsync(step.File);
 
-            OnExecutionCompleted(new ExecutionCompletedEventArgs(step, isSuccessful, "Uspjesno download-ovan fajl"));
+                //TODO : Gdje cuvam preuzete fajlove ?
+                string testPath = Path.Combine(BASE_PATH, "testXXX.txt");
+                File.WriteAllBytes(testPath, fileBytes);
+
+                OnExecutionCompleted(new ExecutionCompletedEventArgs(step, true, "Downloaded"));
+            });
 
         }
 

@@ -49,8 +49,6 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
         
         public void EnqueueSteps(List<StepStatus> stepsToExecute)
         {
-            //Task.Run(() =>
-            //{
                 foreach (StepStatus stepStatus in stepsToExecute)
                 {
                     if (stepStatus.Step.CanBeExecutedInParallel)
@@ -60,8 +58,6 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 
                     //statusReportService.SetStatusToStep(stepStatus, Status.Waiting);
                 }
-
-            //});
 
             autoResetEvent.Set();
         }

@@ -109,7 +109,7 @@ namespace CreatorMVVMProject.ViewModel.Main
             NotifyPropertyChange(nameof(this.Status));
         }
 
-        private void OnMessageChanged(object? _, StatusChangedEventArgs _2)
+        private void OnMessageChanged(object? _, EventArgs _2)
         {
             NotifyPropertyChange(nameof(this.Message));
         }

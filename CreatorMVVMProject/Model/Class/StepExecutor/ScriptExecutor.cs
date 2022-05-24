@@ -12,11 +12,21 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
     public class ScriptExecutor : AbstractExecutor
     {
         private static readonly string BASE_PATH = Path.Combine(Environment.GetFolderPath(folder: Environment.SpecialFolder.Desktop), "test");
+        readonly ProcessStartInfo processStartInfo = new();
 
         private readonly Step step;
         public ScriptExecutor(Step step)
         {
             this.step = step;
+
+            processStartInfo.RedirectStandardOutput = true;
+            processStartInfo.RedirectStandardError = true;
+            processStartInfo.CreateNoWindow = true;
+            //processStartInfo.UseShellExecute
+
+            processStartInfo.WorkingDirectory = BASE_PATH;
+            processStartInfo.FileName = "cmd.exe";
+            processStartInfo.Arguments = "/C " + step.ExecutablePath + " " + BuildParameters();
         }
 
         public async override Task Start()
@@ -24,38 +34,16 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
             OnExecutionStarted(step);
             await Task.Run(() =>
             {
-                ProcessStartInfo processStartInfo = new();
-                processStartInfo.RedirectStandardOutput = true;
-                processStartInfo.RedirectStandardError = true;
-                processStartInfo.UseShellExecute = false;
-
-                processStartInfo.WorkingDirectory = BASE_PATH;
-                processStartInfo.FileName = "cmd.exe";
-                processStartInfo.Arguments = "/C " + step.ExecutablePath + " " + BuildParameters();
-                
                 try
                 {
                     Process? process = Process.Start(processStartInfo);
                     if (process != null)
                     {
-                        process.WaitForExit();
-                        
-                        using StreamReader outputReader = process.StandardOutput;
-                        using StreamReader errorReader = process.StandardError;
-
-                        string output = outputReader.ReadToEnd();
-                        string error = errorReader.ReadToEnd();
-
-                        if (!string.IsNullOrEmpty(output))
-                        {
-                            OnExecutionCompleted(new ExecutionCompletedEventArgs(step, true, output));
-                        }
-                        else if(!string.IsNullOrEmpty(error))
-                        {
-                            OnExecutionCompleted(new ExecutionCompletedEventArgs(step, false, error));
-                        }
+                        process.EnableRaisingEvents = true;
+                        process.Exited += new EventHandler(ProcessExited);
                     }
                     else
+                        //TODO : Promijeni poruku
                         OnExecutionCompleted(new ExecutionCompletedEventArgs(step, false, "Moja neka poruka"));
                 }
                 catch (Exception e)
@@ -79,6 +67,28 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
             }
 
             return stringBuilder.ToString();
+        }
+
+        private void ProcessExited(object? sender, EventArgs e)
+        {
+
+            if(sender is not Process)
+            {
+                return;
+            }
+            
+            Process process = sender as Process;
+
+            if (process.ExitCode != 0)
+            {
+                string error = process.StandardError.ReadToEnd();
+                OnExecutionCompleted(new ExecutionCompletedEventArgs(step, false, error));
+                return;
+            }
+
+            string output = process.StandardOutput.ReadToEnd();
+            OnExecutionCompleted(new ExecutionCompletedEventArgs(step, true, output));
+            
         }
     }
 }

@@ -31,7 +31,7 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
             return step.Type switch
             {
                 Type.Executable => new ScriptExecutor(step),
-                Type.Upload => new UploadExecutor(),
+                Type.Upload => new UploadExecutor(step),
                 Type.Download => new DownloadExecutor(step),
                 _ => throw new WrongDefinitionException("Step type must be defined.")
             };
