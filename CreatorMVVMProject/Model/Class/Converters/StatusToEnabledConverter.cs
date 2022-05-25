@@ -22,7 +22,7 @@ namespace CreatorMVVMProject.Model.Class.Converters
             { Status.Failed, true },
             { Status.Obsolete, false } //TODO : Provjeri da li je true ili false
         };
-        public object Convert(object value, System.Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is Status status && dictionary.ContainsKey(status))
             {

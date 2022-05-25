@@ -4,18 +4,19 @@ using System.Collections.Generic;
 using System.Windows.Input;
 using CreatorMVVMProject.Model.Class.Commands;
 using System.Linq;
+using System.ComponentModel;
 
 namespace CreatorMVVMProject.ViewModel.Main
 {
-    public class MainViewModel
+    public class MainViewModel : INotifyPropertyChanged
     {
         private readonly MainModel mainModel;
         private List<StageViewModel> stageViewModels = new();
         private StageViewModel selectedStage;
 
+        private bool canExecutionStart = true;
         private ICommand? startExecutionCommand;
 
-        //ovdje trebam imati inject-ovan neki executor kom cu proslijediti listu STEP STATUSA koji idu na izvrsavanje !
         public MainViewModel(MainModel model)
         {
             this.mainModel = model;
@@ -38,21 +39,34 @@ namespace CreatorMVVMProject.ViewModel.Main
             set => this.selectedStage = value;
         }
 
+        public bool CanExecutionStart
+        {
+            get => this.canExecutionStart;
+            set
+            {
+                this.canExecutionStart = value;
+                NotifyPropertyChange(nameof(CanExecutionStart));
+            }
+        }
         public ICommand StartExecutionCommand
         {
             get
             {
-                //if(this.startExecutionCommand == null)
-                //{
-                //    this.startExecutionCommand = new DelegateCommand(StartExecutionCommandHandler);
-                //}
                 return this.startExecutionCommand ??= new DelegateCommand(StartExecutionCommandHandler);
             }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected virtual void NotifyPropertyChange(string propertyName)
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public void StartExecutionCommandHandler()
         {
             //Odavde saljem stepove koji se "pripremaju" za izvrsavanje
+
+            CanExecutionStart = false;
 
             List<StepStatus> steps = new();
             foreach(StepViewModel stepViewModel in GetSelectedStepViewModels())
@@ -61,7 +75,6 @@ namespace CreatorMVVMProject.ViewModel.Main
             mainModel.AddStepsToExecution(steps);
             ResetCheckBoxes();
 
-            //ResetCheckBoxes();
         }
 
         private IList<StepViewModel> GetSelectedStepViewModels()

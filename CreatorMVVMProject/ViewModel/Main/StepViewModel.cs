@@ -20,6 +20,7 @@ namespace CreatorMVVMProject.ViewModel.Main
 
         private bool isSelected = false;
         private bool isExpanded = true;
+        private bool canBeSelected;
 
         private ICommand? startStepCommand;
 
@@ -29,6 +30,7 @@ namespace CreatorMVVMProject.ViewModel.Main
             this.stepStatus = stepStatus;
             this.stepStatus.StatusChanged += OnStatusChanged;
             this.stepStatus.MessageChanged += OnMessageChanged;
+
         }
 
         public string StepId
@@ -75,6 +77,16 @@ namespace CreatorMVVMProject.ViewModel.Main
             }
         }
 
+        public bool CanBeSelected
+        {
+            get => canBeSelected;
+            set
+            {
+                canBeSelected = value;
+                NotifyPropertyChange(nameof(CanBeSelected));
+            }
+        }
+
         public Status Status
         {
             get => stepStatus.Status;
@@ -94,6 +106,8 @@ namespace CreatorMVVMProject.ViewModel.Main
         }
         public void StartStepCommandHandler()
         {
+            //TODO : disable sve check box-ove i Start button
+            
             mainModel.ExecuteTillThisStep(this.stepStatus);
         }
 

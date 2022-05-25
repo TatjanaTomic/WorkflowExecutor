@@ -28,6 +28,8 @@
             </TabControl.ContentTemplate>
         </TabControl>
         <Button Grid.Row="1" Content="Start execution" HorizontalAlignment="Right"
-                Command="{Binding StartExecutionCommand}"  Width="150" Height="50" Margin="20,20,20,20"/>
+                Command="{Binding StartExecutionCommand}"
+                IsEnabled="{Binding CanExecutionStart}"
+                Width="150" Height="50" Margin="20,20,20,20"/>
     </Grid>
 </Window>

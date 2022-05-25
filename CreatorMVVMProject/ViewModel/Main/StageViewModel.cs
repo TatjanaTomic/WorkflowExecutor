@@ -14,7 +14,7 @@ namespace CreatorMVVMProject.ViewModel.Main
         private StageStatus stage;
         private readonly List<StepViewModel> stepViewModels = new();
         
-        //Da li je dobro prosljedjivati MainModel ?
+        //TODO : Da li je dobro prosljedjivati MainModel ?
         public StageViewModel(MainModel mainModel, StageStatus stage)
         {
             this.stage = stage;

@@ -47,9 +47,8 @@
                                 <ColumnDefinition Width="2*"></ColumnDefinition>
                                 <ColumnDefinition Width="*"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
-                        
+
                             <Button Grid.Column="1" Content="Execute till this step" Command="{Binding StartStepCommand}" VerticalAlignment="Top"></Button>
-                        <!-- U kojim slucajevima Button treba biti disable-ovan? -->     
                         </Grid>
                     </Grid>
                     <CheckBox Grid.Column="2" HorizontalAlignment="Right"
