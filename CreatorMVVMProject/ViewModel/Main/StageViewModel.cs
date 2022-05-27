@@ -1,6 +1,7 @@
 ﻿using CreatorMVVMProject.Model.Class.Commands;
 using CreatorMVVMProject.Model.Class.Main;
 using CreatorMVVMProject.Model.Class.StatusReportService;
+using CreatorMVVMProject.Model.Interface.ExecutionService;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,14 +16,14 @@ namespace CreatorMVVMProject.ViewModel.Main
         private readonly List<StepViewModel> stepViewModels = new();
         
         //TODO : Da li je dobro prosljedjivati MainModel ?
-        public StageViewModel(MainModel mainModel, StageStatus stage)
+        public StageViewModel(StageStatus stage, IExecutionService executionService)
         {
             this.stage = stage;
             StepViewModel stepViewModel;
 
             foreach (StepStatus step in this.stage.Steps)
             {
-                stepViewModel = new StepViewModel(mainModel, step);
+                stepViewModel = new StepViewModel(step, executionService);
                 stepViewModels.Add(stepViewModel);
             }
         }

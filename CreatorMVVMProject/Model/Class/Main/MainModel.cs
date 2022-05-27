@@ -29,9 +29,9 @@ namespace CreatorMVVMProject.Model.Class.Main
             executionService.EnqueueSteps(steps);
         }
 
-        public void ExecuteTillThisStep(StepStatus stepStatus)
+        public IExecutionService ExecutionService
         {
-            executionService.StartExecuteTillThisStep(stepStatus);
+            get => this.executionService;
         }
     }
 }

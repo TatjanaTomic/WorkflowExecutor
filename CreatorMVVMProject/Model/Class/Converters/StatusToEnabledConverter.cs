@@ -16,12 +16,13 @@ namespace CreatorMVVMProject.Model.Class.Converters
         {
             { Status.Disabled, false },
             { Status.NotStarted, true },
-            { Status.Waiting, false},
+            { Status.Waiting, false },
             { Status.InProgress, false },
             { Status.Success, true },
             { Status.Failed, true },
-            { Status.Obsolete, false } //TODO : Provjeri da li je true ili false
+            { Status.Obsolete, true }
         };
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is Status status && dictionary.ContainsKey(status))

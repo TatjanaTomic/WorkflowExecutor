@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CreatorMVVMProject.View.Main"
-             xmlns:converters="clr-namespace:CreatorMVVMProject.Model.Class.Converters"
+             xmlns:converters="clr-namespace:CreatorMVVMProject.Model.Class.Converters" xmlns:main="clr-namespace:CreatorMVVMProject.ViewModel.Main" d:DataContext="{d:DesignInstance Type=main:StepViewModel}"
              mc:Ignorable="d" 
             >
     <UserControl.Resources>
@@ -12,7 +12,7 @@
         <converters:StatusToEnabledConverter x:Key="statusToEnabledConverter"/>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid Margin="10,10,10,10">
         <Expander IsExpanded="{Binding IsExpanded}">
             <Expander.Header>
                 <DockPanel>
@@ -48,14 +48,25 @@
                                 <ColumnDefinition Width="*"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
 
-                            <Button Grid.Column="1" Content="Execute till this step" Command="{Binding StartStepCommand}" VerticalAlignment="Top"></Button>
+                            <Button Grid.Column="1" Content="Execute till this step"
+                                    Command="{Binding StartStepCommand}" VerticalAlignment="Top"
+                                    IsEnabled="{Binding IsButtonEnabled}"
+                                    ></Button>
                         </Grid>
                     </Grid>
+                   
+                    <!--
                     <CheckBox Grid.Column="2" HorizontalAlignment="Right"
                               IsEnabled="{Binding Status, Converter={StaticResource statusToEnabledConverter}, UpdateSourceTrigger=PropertyChanged}"
                               IsChecked="{Binding IsSelected}"
+                              ></CheckBox> 
+                    -->
+                    
+                    <CheckBox Grid.Column="2" HorizontalAlignment="Right"
+                              IsEnabled="{Binding CanBeSelected}"
+                              IsChecked="{Binding IsSelected}"
                               ></CheckBox>
-
+                   
                 </Grid>
             </Expander.Content>
         </Expander>

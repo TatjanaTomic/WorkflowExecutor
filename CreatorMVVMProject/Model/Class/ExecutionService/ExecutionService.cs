@@ -16,13 +16,12 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 {
     public class ExecutionService : IExecutionService
     {
-        //private static SemaphoreSlim semaphore;
-
         private readonly BlockingCollection<StepStatus> stepsQueue = new();
         private readonly BlockingCollection<StepStatus> stepsQueueParallel = new();
 
         //CancellationTokenSource moze se iskoristiti za zaustavljanje
-        private readonly CancellationTokenSource cancellationTokenSource = new();
+        //private readonly CancellationTokenSource cancellationTokenSource = new();
+        
         //Represents a thread synchronization event that, when signaled, resets automatically after releasing a single waiting thread. 
         private readonly AutoResetEvent autoResetEvent = new(true);
 
@@ -36,28 +35,18 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 
             _ = StartExecution();
         }
-
-        private BlockingCollection<StepStatus> StepsQueue
-        {
-            get { return stepsQueue; }
-        }
-
-        private BlockingCollection<StepStatus> StepsQueueParallel
-        {
-            get { return stepsQueueParallel; }
-        }
         
         public void EnqueueSteps(List<StepStatus> stepsToExecute)
         {
-                foreach (StepStatus stepStatus in stepsToExecute)
-                {
-                    if (stepStatus.Step.CanBeExecutedInParallel)
-                        StepsQueueParallel.Add(stepStatus);
-                    else
-                        StepsQueue.Add(stepStatus );
+            foreach (StepStatus stepStatus in stepsToExecute)
+            {
+                if (stepStatus.Step.CanBeExecutedInParallel)
+                    StepsQueueParallel.Add(stepStatus);
+                else
+                    StepsQueue.Add(stepStatus );
 
-                    //statusReportService.SetStatusToStep(stepStatus, Status.Waiting);
-                }
+                //statusReportService.SetStatusToStep(stepStatus, Status.Waiting);
+            }
 
             autoResetEvent.Set();
         }
@@ -73,18 +62,18 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                         //if (cancellationTokenSource.IsCancellationRequested)
                         //    throw new OperationCanceledException();
                         //TODO : Ovo se moze iskoristiti za neki Cancel
-
-                        //_ = autoResetEvent.WaitOne();
                         
                         ExecuteSerialSteps();
                         ExecuteParallelSteps();
-                        
+
                         autoResetEvent.WaitOne();
                     }
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.StackTrace);
+                    //TODO : Sta se desava ako dodje do exceptiona ? Gasim App ?
+                    Console.WriteLine(e.Message);
+
                     // An InvalidOperationException means that Take() was called on a completed collection
                 }
             });
@@ -100,6 +89,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                 {
                     StepStatus stepStatus = StepsQueue.Take();
 
+                    /*
                     if (stepStatus.Status == Status.NotStarted || stepStatus.Status == Status.Success)
                     {
                         AbstractExecutor stepExecutor = CreateStepExecutor(stepStatus.Step);
@@ -110,6 +100,18 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                         StepsQueue.Add(stepStatus);
                         continue;
                     }
+                    */
+
+                    if(stepStatus.Status == Status.Disabled)
+                    {
+                        StepsQueue.Add(stepStatus);
+                        continue;
+                    }
+                    
+                    AbstractExecutor stepExecutor = CreateStepExecutor(stepStatus.Step);
+                    stepExecutor.Start().Wait();
+                    
+
                 }
                 catch (Exception e)
                 {
@@ -130,6 +132,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                 StepStatus stepStatus = StepsQueueParallel.Take();
                 try
                 {
+                    /*
                     if (stepStatus.Status == Status.NotStarted || stepStatus.Status == Status.Success)
                     {
                         AbstractExecutor stepExecutor = CreateStepExecutor(stepStatus.Step);
@@ -140,6 +143,17 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                         StepsQueueParallel.Add(stepStatus);
                         continue;
                     }
+                    */
+
+                    if (stepStatus.Status == Status.Disabled)
+                    {
+                        StepsQueueParallel.Add(stepStatus);
+                        continue;
+                    }
+
+                    AbstractExecutor stepExecutor = CreateStepExecutor(stepStatus.Step);
+                    tasks.Add(stepExecutor.Start());
+
                 }
                 catch (Exception e)
                 {
@@ -151,9 +165,9 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
             autoResetEvent.Set();
         }
         
-        public async void StartExecuteTillThisStep(StepStatus stepStatus)
+        public void StartExecuteTillThisStep(StepStatus stepStatus)
         {
-            Task executingTask = Task.Run(() =>
+            Task.Run(() =>
             {
                 List<Step> allSteps = workflowService.GetAllDependencySteps(stepStatus.Step);
                 allSteps.Add(stepStatus.Step);
@@ -161,13 +175,20 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                 List<StepStatus> stepStatuses = statusReportService.GetStepStatuses(allSteps);
 
                 EnqueueSteps(stepStatuses);
-            });
-
-            await executingTask;
-
+            }).Wait();
 
         }
-        
+
+        private BlockingCollection<StepStatus> StepsQueue
+        {
+            get { return stepsQueue; }
+        }
+
+        private BlockingCollection<StepStatus> StepsQueueParallel
+        {
+            get { return stepsQueueParallel; }
+        }
+
         private AbstractExecutor CreateStepExecutor(Step step)
         {
             AbstractExecutor stepExecutor = StepExecutorFabrique.Instance.CreateExecutor(step);
@@ -185,9 +206,13 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
         private void StepExecutionCompleted(object? _, ExecutionCompletedEventArgs args)
         {
             if(args.IsSuccessful)
+            {
                 statusReportService.SetStatusToStep(args.Step, Status.Success);
+            }
             else
+            {
                 statusReportService.SetStatusToStep(args.Step, Status.Failed);
+            }
 
             statusReportService.SetStatusMessageToStep(args.Step, args.Message);
         }

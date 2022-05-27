@@ -1,13 +1,9 @@
 ﻿using CreatorMVVMProject.Model.Class.Commands;
-using CreatorMVVMProject.Model.Class.Converters;
 using CreatorMVVMProject.Model.Class.Main;
 using CreatorMVVMProject.Model.Class.StatusReportService;
+using CreatorMVVMProject.Model.Interface.ExecutionService;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace CreatorMVVMProject.ViewModel.Main
@@ -16,21 +12,25 @@ namespace CreatorMVVMProject.ViewModel.Main
     {
         protected readonly StepStatus stepStatus;
 
-        private readonly MainModel mainModel;
-
         private bool isSelected = false;
         private bool isExpanded = true;
-        private bool canBeSelected;
+        private bool canBeSelected = true;
+        private bool isButtonEnabled = true;
+
+        private IExecutionService executionService;
 
         private ICommand? startStepCommand;
 
-        public StepViewModel(MainModel mainModel, StepStatus stepStatus)
+        public StepViewModel(StepStatus stepStatus, IExecutionService executionService)
         {
-            this.mainModel = mainModel;
             this.stepStatus = stepStatus;
             this.stepStatus.StatusChanged += OnStatusChanged;
             this.stepStatus.MessageChanged += OnMessageChanged;
 
+            this.executionService = executionService;
+
+            if(stepStatus.Status == Status.Disabled)
+                canBeSelected = false;
         }
 
         public string StepId
@@ -68,6 +68,7 @@ namespace CreatorMVVMProject.ViewModel.Main
                 NotifyPropertyChange(nameof(IsSelected));
             }
         }
+
         public bool IsExpanded
         {
             get { return this.isExpanded; }
@@ -76,7 +77,7 @@ namespace CreatorMVVMProject.ViewModel.Main
                 NotifyPropertyChange(nameof(IsExpanded));
             }
         }
-
+        
         public bool CanBeSelected
         {
             get => canBeSelected;
@@ -84,6 +85,16 @@ namespace CreatorMVVMProject.ViewModel.Main
             {
                 canBeSelected = value;
                 NotifyPropertyChange(nameof(CanBeSelected));
+            }
+        }
+
+        public bool IsButtonEnabled
+        {
+            get { return this.isButtonEnabled; }
+            set
+            {
+                this.isButtonEnabled = value;
+                NotifyPropertyChange(nameof(IsButtonEnabled));
             }
         }
 
@@ -104,28 +115,31 @@ namespace CreatorMVVMProject.ViewModel.Main
                 return this.startStepCommand ??= new DelegateCommand(StartStepCommandHandler);
             }
         }
+
         public void StartStepCommandHandler()
         {
-            //TODO : disable sve check box-ove i Start button
-            
-            mainModel.ExecuteTillThisStep(this.stepStatus);
+            //TODO : Kako odavde da za sve stepViewModele promijenim IsButtonEnabled? Da li da pravim neki event?
+            //TODO : Ovdje treba da disable-ujem sve ExecuteTillThisStep button-e i Start execution button
+            executionService.StartExecuteTillThisStep(StepStatus);
         }
 
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected virtual void NotifyPropertyChange(string propertyName)
+        private void OnStatusChanged(object? _, StatusChangedEventArgs statusChangedEventArgs)
         {
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+            if (statusChangedEventArgs.Status != Status.InProgress)
+                CanBeSelected = true;
 
-        private void OnStatusChanged(object? _, StatusChangedEventArgs _2)
-        {
             NotifyPropertyChange(nameof(this.Status));
         }
 
         private void OnMessageChanged(object? _, EventArgs _2)
         {
             NotifyPropertyChange(nameof(this.Message));
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected virtual void NotifyPropertyChange(string propertyName)
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

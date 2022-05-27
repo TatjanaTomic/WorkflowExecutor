@@ -1,6 +1,7 @@
 ﻿using CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -13,13 +14,13 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
 {
     public class UploadExecutor : AbstractExecutor
     {
-        //TODO : Gdje cuvati adrese, putanje ... ?
+        private readonly Step step;
 
+        private static readonly string httpClientBaseAddress = ConfigurationManager.AppSettings["httpClientBaseAddress"]?.ToString();
         readonly HttpClient httpClient = new()
         {
-            BaseAddress = new("http://localhost:9999/")
+            BaseAddress = new(httpClientBaseAddress)
         };
-        private readonly Step step;
 
         public UploadExecutor(Step step)
         {

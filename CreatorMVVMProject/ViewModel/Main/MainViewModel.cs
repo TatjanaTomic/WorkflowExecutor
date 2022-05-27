@@ -5,6 +5,7 @@ using System.Windows.Input;
 using CreatorMVVMProject.Model.Class.Commands;
 using System.Linq;
 using System.ComponentModel;
+using System.Windows;
 
 namespace CreatorMVVMProject.ViewModel.Main
 {
@@ -22,7 +23,7 @@ namespace CreatorMVVMProject.ViewModel.Main
             this.mainModel = model;
             foreach(StageStatus stage in mainModel.Stages)
             {
-                stageViewModels.Add(new(mainModel, stage));
+                stageViewModels.Add(new(stage, this.mainModel.ExecutionService));
             }
             this.selectedStage = stageViewModels[0];
         }
@@ -64,28 +65,31 @@ namespace CreatorMVVMProject.ViewModel.Main
 
         public void StartExecutionCommandHandler()
         {
-            //Odavde saljem stepove koji se "pripremaju" za izvrsavanje
-
-            CanExecutionStart = false;
+            List<StepViewModel> stepViewModels = GetSelectedStepViewModels().ToList();
+            if(stepViewModels.Count == 0)
+            {
+                _ = MessageBox.Show("Select steps for execution");
+                return;
+            }
 
             List<StepStatus> steps = new();
-            foreach(StepViewModel stepViewModel in GetSelectedStepViewModels())
+            foreach(StepViewModel stepViewModel in stepViewModels)
+            {
                 steps.Add(stepViewModel.StepStatus);
+                stepViewModel.CanBeSelected = false;
+                stepViewModel.IsSelected = false;
+            }
 
             mainModel.AddStepsToExecution(steps);
-            ResetCheckBoxes();
+
+            foreach (StepViewModel stepViewModel in stageViewModels.SelectMany(stageViewModel => stageViewModel.StepViewModels).ToList())
+                stepViewModel.IsButtonEnabled = false;          
 
         }
 
         private IList<StepViewModel> GetSelectedStepViewModels()
         {
             return this.stageViewModels.SelectMany(stageViewModel => stageViewModel.StepViewModels).Where(stepViewModel => stepViewModel.IsSelected).ToList();
-        }
-
-        private void ResetCheckBoxes()
-        {
-            foreach (StepViewModel stepViewModel in stageViewModels.SelectMany(stageViewModel => stageViewModel.StepViewModels).ToList())
-                stepViewModel.IsSelected = false;
         }
 
     }

@@ -12,7 +12,6 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
     {
         private readonly Step step;
         private Status status;
-        //TODO : Vidi kako ces ispisivati poruku o izvrsavanju
         private string statusMessage = string.Empty;
 
         private readonly IStatusReportService statusReportService;

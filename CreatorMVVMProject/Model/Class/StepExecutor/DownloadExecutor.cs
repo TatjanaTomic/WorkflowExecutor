@@ -7,19 +7,21 @@ using System.Net;
 using System.IO;
 using CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml;
 using System.Net.Http;
+using System.Configuration;
 
 namespace CreatorMVVMProject.Model.Class.StepExecutor
 {
     public class DownloadExecutor : AbstractExecutor
     {
-        //TODO : Gdje cuvam preuzete fajlove ?
-        private static readonly string BASE_PATH = Path.Combine(Environment.GetFolderPath(folder: Environment.SpecialFolder.Desktop), "test");
+        private static readonly string? downloadsPath = ConfigurationManager.AppSettings["downloadsPath"]?.ToString();
+
         readonly HttpClient httpClient = new();
         private readonly Step step;
 
         public DownloadExecutor(Step step)
         {
             this.step = step;
+
         }
 
         public async override Task Start()
@@ -34,14 +36,13 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
                     return;
                 }
 
-                string fileName = Path.GetFileName(step.File);
-                string testPath = Path.Combine(BASE_PATH, fileName);
+                string path = Path.Combine(downloadsPath, Path.GetFileName(step.File));
 
                 try
                 {
                     byte[] fileBytes = await httpClient.GetByteArrayAsync(uriResult);
                     
-                    File.WriteAllBytes(testPath, fileBytes);
+                    File.WriteAllBytes(path, fileBytes);
 
                     OnExecutionCompleted(new ExecutionCompletedEventArgs(step, true, "Downloaded"));
                 }

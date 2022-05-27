@@ -1,6 +1,7 @@
 ﻿using CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -11,10 +12,11 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
 {
     public class ScriptExecutor : AbstractExecutor
     {
-        private static readonly string BASE_PATH = Path.Combine(Environment.GetFolderPath(folder: Environment.SpecialFolder.Desktop), "test");
+        private readonly Step step;
         readonly ProcessStartInfo processStartInfo = new();
 
-        private readonly Step step;
+        private static readonly string? basePath = ConfigurationManager.AppSettings["basePath"]?.ToString();
+
         public ScriptExecutor(Step step)
         {
             this.step = step;
@@ -24,7 +26,7 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
             processStartInfo.CreateNoWindow = true;
             //processStartInfo.UseShellExecute
 
-            processStartInfo.WorkingDirectory = BASE_PATH;
+            processStartInfo.WorkingDirectory = basePath;
             processStartInfo.FileName = "cmd.exe";
             processStartInfo.Arguments = "/C " + step.ExecutablePath + " " + BuildParameters();
         }
@@ -37,10 +39,13 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
                 try
                 {
                     Process? process = Process.Start(processStartInfo);
+
                     if (process != null)
                     {
                         process.EnableRaisingEvents = true;
                         process.Exited += new EventHandler(ProcessExited);
+
+                        process.WaitForExit();
                     }
                     else
                         //TODO : Promijeni poruku
@@ -71,7 +76,6 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
 
         private void ProcessExited(object? sender, EventArgs e)
         {
-
             if(sender is not Process)
             {
                 return;
