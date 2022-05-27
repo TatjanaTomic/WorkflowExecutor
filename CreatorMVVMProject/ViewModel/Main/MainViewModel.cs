@@ -9,6 +9,7 @@ using System.Windows;
 
 namespace CreatorMVVMProject.ViewModel.Main
 {
+    //TODO : Prouci Custom Design
     public class MainViewModel : INotifyPropertyChanged
     {
         private readonly MainModel mainModel;

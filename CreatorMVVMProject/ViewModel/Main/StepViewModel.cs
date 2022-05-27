@@ -118,8 +118,8 @@ namespace CreatorMVVMProject.ViewModel.Main
 
         public void StartStepCommandHandler()
         {
-            //TODO : Kako odavde da za sve stepViewModele promijenim IsButtonEnabled? Da li da pravim neki event?
-            //TODO : Ovdje treba da disable-ujem sve ExecuteTillThisStep button-e i Start execution button
+            //TODO : Treba da napravim neki Event da je step zapoceo izvrsavanje
+            // StageViewModel se pretplati na StepViewModel, a MainViewModel se pretplati na StageViewModel
             executionService.StartExecuteTillThisStep(StepStatus);
         }
 

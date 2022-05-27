@@ -15,7 +15,6 @@ namespace CreatorMVVMProject.ViewModel.Main
         private StageStatus stage;
         private readonly List<StepViewModel> stepViewModels = new();
         
-        //TODO : Da li je dobro prosljedjivati MainModel ?
         public StageViewModel(StageStatus stage, IExecutionService executionService)
         {
             this.stage = stage;

@@ -36,6 +36,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
             _ = StartExecution();
         }
         
+        //TODO : Kako da napravim Event OnExecutionFinished, da znam da su se svi proslijedjeni stepovi izvrsili ?
         public void EnqueueSteps(List<StepStatus> stepsToExecute)
         {
             foreach (StepStatus stepStatus in stepsToExecute)
