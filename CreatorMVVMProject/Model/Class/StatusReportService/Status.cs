@@ -10,7 +10,6 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
     {
         Disabled,
         NotStarted,
-        Waiting,
         InProgress,
         Success,
         Failed,
@@ -20,7 +19,7 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
     /*
      * Disabled - ne može se startati jer se njegov zavisni korak nije izvršio
      * NotStarted - može se startati
-     * Waiting - stavljen u red, ceka na izvrsavanje
+     * Waiting - stavljen u red, ceka na izvrsavanje [ izbaceno ]
      * InProgress - trenutno se izvršava
      * Success - uspješno izvršen
      * Failed - neuspješno izvršavanje

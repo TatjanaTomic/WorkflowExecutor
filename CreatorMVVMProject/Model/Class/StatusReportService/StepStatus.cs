@@ -13,13 +13,15 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
         private readonly Step step;
         private Status status;
         private string statusMessage = string.Empty;
+        private bool canBeExecuted;
 
         private readonly IStatusReportService statusReportService;
 
-        public StepStatus(Step step, Status initialStatus, IStatusReportService statusReportService)
+        public StepStatus(Step step, Status initialStatus, bool canBeExecuted, IStatusReportService statusReportService)
         {
             this.step = step;
             this.status = initialStatus;
+            this.canBeExecuted = canBeExecuted;
             this.statusReportService = statusReportService;
         }
 
@@ -31,13 +33,16 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
         public string StatusMessage
         {
             get { return statusMessage; }
-            set { statusMessage = value;
+            set
+            {
+                statusMessage = value;
                 MessageChanged?.Invoke(this, EventArgs.Empty);
             }
         }
+
         public Status Status
         {
-            get => this.status;
+            get { return status; }
             set
             {
                 this.status = value;
@@ -45,7 +50,19 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
             }
         }
 
+        public bool CanBeExecuted
+        {
+            get { return canBeExecuted; }
+            set
+            {
+                canBeExecuted = value;
+                CanBeExecutedChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
         public event EventHandler? MessageChanged;
+        public event EventHandler? CanBeExecutedChanged;
         public event EventHandler<StatusChangedEventArgs>? StatusChanged;
+
     }
 }

@@ -1,8 +1,6 @@
-﻿using CreatorMVVMProject.Model.Class.WorkflowService;
-using CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml;
+﻿using CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml;
 using CreatorMVVMProject.Model.Interface.StatusReportService;
 using CreatorMVVMProject.Model.Interface.WorkflowService;
-using ExecutionEngine.Xml;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -29,14 +27,32 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
         {
             if (workflowService.HasDependencySteps(step))
                 return Status.Disabled;
-            else
-                return Status.NotStarted;
+            
+            return Status.NotStarted;
         }
 
-        public void SetStatusToStep(Step step, Status status)
+        public bool CanStepBeExecutedInitial(Step step)
         {
-            StepStatus stepStatus = GetStepStatus(step);
-            SetStatusToStep(stepStatus, status);
+            if(workflowService.HasDependencySteps(step))
+                return false;
+
+            return true;
+        }
+
+        public bool CanStepBeExecuted(StepStatus stepStatus)
+        {
+            if(stepStatus.Status == Status.Disabled || stepStatus.Status == Status.InProgress)
+                return false;
+
+            //TODO : Provjeri ovaj uslov
+            // Ako je step dosao do stanja obsolete, da li to znaci da su svi njegovi zavisni sigurno zavrseni i ne moze izvrsiti samo ako je neki od njegovih zavisnih Failed ?
+            //if (stepStatus.Status == Status.Obsolete && workflowService.GetAllDependencySteps(stepStatus.Step).Exists(s => GetStepStatus(s).Status == Status.Failed))
+            //    return false;
+            
+            if (stepStatus.Status == Status.Obsolete && workflowService.GetAllDependencySteps(stepStatus.Step).Exists(s => GetStepStatus(s).Status != Status.Success))
+                return false;
+            
+            return true;
         }
 
         public void SetStatusToStep(StepStatus stepStatus, Status status) 
@@ -54,7 +70,9 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
 
                     if(dependencyStepStatus.Status == Status.Disabled && firstLevelDependencySteps.All(s => s.Status == Status.Success) )
                     {
-                        dependencyStepStatus.Status = Status.NotStarted;
+                        SetStatusToStep(dependencyStepStatus, Status.NotStarted);
+                        //dependencyStepStatus.Status = Status.NotStarted;
+                        //dependencyStepStatus.CanBeExecuted = CanStepBeExecuted(dependencyStepStatus);
                     }
                 }
             }
@@ -64,11 +82,21 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
                 List<Step> obsoletedSteps = workflowService.GetAllDependencySteps(stepStatus.Step);
                 foreach(Step step in obsoletedSteps)
                 {
-                    StepStatus stepStatus2 = GetStepStatus(step);
-                    stepStatus2.Status = Status.Obsolete;
+                    SetStatusToStep(step, Status.Obsolete);
+                    //StepStatus stepStatus2 = GetStepStatus(step);
+                    //stepStatus2.Status = Status.Obsolete;
+                    //stepStatus2.CanBeExecuted = CanStepBeExecuted(stepStatus2);
                 }
             }
 
+            // Promijeni property CanBeExecuted
+            stepStatus.CanBeExecuted = CanStepBeExecuted(stepStatus);
+        }
+
+        public void SetStatusToStep(Step step, Status status)
+        {
+            StepStatus stepStatus = GetStepStatus(step);
+            SetStatusToStep(stepStatus, status);
         }
 
         public void SetStatusMessageToStep(Step step, string message)

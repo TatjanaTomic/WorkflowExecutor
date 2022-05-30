@@ -14,23 +14,36 @@ namespace CreatorMVVMProject.ViewModel.Main
 
         private bool isSelected = false;
         private bool isExpanded = true;
-        private bool canBeSelected = true;
         private bool isButtonEnabled = true;
 
-        private IExecutionService executionService;
-
         private ICommand? startStepCommand;
+
+        private readonly IExecutionService executionService;
 
         public StepViewModel(StepStatus stepStatus, IExecutionService executionService)
         {
             this.stepStatus = stepStatus;
             this.stepStatus.StatusChanged += OnStatusChanged;
             this.stepStatus.MessageChanged += OnMessageChanged;
+            this.stepStatus.CanBeExecutedChanged += OnCanBeExecutedChanged;
 
             this.executionService = executionService;
+        }
 
-            if(stepStatus.Status == Status.Disabled)
-                canBeSelected = false;
+        public StepStatus StepStatus
+        {
+            get => this.stepStatus;
+        }
+
+        public Status Status
+        {
+            get => stepStatus.Status;
+        }
+
+        public bool CanBeSelected
+        {
+            get => this.stepStatus.CanBeExecuted;
+
         }
 
         public string StepId
@@ -77,16 +90,6 @@ namespace CreatorMVVMProject.ViewModel.Main
                 NotifyPropertyChange(nameof(IsExpanded));
             }
         }
-        
-        public bool CanBeSelected
-        {
-            get => canBeSelected;
-            set
-            {
-                canBeSelected = value;
-                NotifyPropertyChange(nameof(CanBeSelected));
-            }
-        }
 
         public bool IsButtonEnabled
         {
@@ -96,16 +99,6 @@ namespace CreatorMVVMProject.ViewModel.Main
                 this.isButtonEnabled = value;
                 NotifyPropertyChange(nameof(IsButtonEnabled));
             }
-        }
-
-        public Status Status
-        {
-            get => stepStatus.Status;
-        }
-
-        public StepStatus StepStatus
-        {
-            get => this.stepStatus;
         }
 
         public ICommand StartStepCommand
@@ -125,8 +118,8 @@ namespace CreatorMVVMProject.ViewModel.Main
 
         private void OnStatusChanged(object? _, StatusChangedEventArgs statusChangedEventArgs)
         {
-            if (statusChangedEventArgs.Status != Status.InProgress)
-                CanBeSelected = true;
+            //if (statusChangedEventArgs.Status != Status.InProgress)
+            //    CanBeSelected = true;
 
             NotifyPropertyChange(nameof(this.Status));
         }
@@ -134,6 +127,11 @@ namespace CreatorMVVMProject.ViewModel.Main
         private void OnMessageChanged(object? _, EventArgs _2)
         {
             NotifyPropertyChange(nameof(this.Message));
+        }
+
+        private void OnCanBeExecutedChanged(object? _, EventArgs _2)
+        {
+            NotifyPropertyChange(nameof(this.CanBeSelected));
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

@@ -63,9 +63,9 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                         //if (cancellationTokenSource.IsCancellationRequested)
                         //    throw new OperationCanceledException();
                         //TODO : Ovo se moze iskoristiti za neki Cancel
-                        
-                        ExecuteSerialSteps();
+
                         ExecuteParallelSteps();
+                        ExecuteSerialSteps();
 
                         autoResetEvent.WaitOne();
                     }
@@ -84,7 +84,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 
         private void ExecuteSerialSteps()
         {
-            while (StepsQueue.Any() && !StepsQueue.All(x=>x.Status==Status.Disabled))
+            while (StepsQueue.Any() && !StepsQueue.All(x => x.Status==Status.Disabled))
             {
                 try
                 {

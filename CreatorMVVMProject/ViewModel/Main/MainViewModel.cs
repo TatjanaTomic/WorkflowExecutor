@@ -77,14 +77,17 @@ namespace CreatorMVVMProject.ViewModel.Main
             foreach(StepViewModel stepViewModel in stepViewModels)
             {
                 steps.Add(stepViewModel.StepStatus);
-                stepViewModel.CanBeSelected = false;
+                //TODO : Vidi sta je ovo, da li se smije obrisati
+                //stepViewModel.CanBeSelected = false;
                 stepViewModel.IsSelected = false;
             }
 
             mainModel.AddStepsToExecution(steps);
 
-            foreach (StepViewModel stepViewModel in stageViewModels.SelectMany(stageViewModel => stageViewModel.StepViewModels).ToList())
-                stepViewModel.IsButtonEnabled = false;          
+
+            //TODO : Odkomentarisi ovo
+            //foreach (StepViewModel stepViewModel in stageViewModels.SelectMany(stageViewModel => stageViewModel.StepViewModels).ToList())
+                //stepViewModel.IsButtonEnabled = false;          
 
         }
 

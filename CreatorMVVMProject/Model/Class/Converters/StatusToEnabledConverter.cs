@@ -16,7 +16,6 @@ namespace CreatorMVVMProject.Model.Class.Converters
         {
             { Status.Disabled, false },
             { Status.NotStarted, true },
-            { Status.Waiting, false },
             { Status.InProgress, false },
             { Status.Success, true },
             { Status.Failed, true },
