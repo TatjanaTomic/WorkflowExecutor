@@ -6,6 +6,7 @@ using CreatorMVVMProject.Model.Class.Commands;
 using System.Linq;
 using System.ComponentModel;
 using System.Windows;
+using System;
 
 namespace CreatorMVVMProject.ViewModel.Main
 {
@@ -22,11 +23,31 @@ namespace CreatorMVVMProject.ViewModel.Main
         public MainViewModel(MainModel model)
         {
             this.mainModel = model;
+            this.mainModel.ExecutionCompleted += MainModel_ExecutionCompleted;
+            this.mainModel.ExecutionSelectedStepsStarted += MainModel_ExecutionSelectedStepsStarted;
+            this.mainModel.ExecutionTillThisStepStarted += MainModel_ExecutionTillThisStepStarted;
+
             foreach(StageStatus stage in mainModel.Stages)
             {
                 stageViewModels.Add(new(stage, this.mainModel.ExecutionService));
             }
             this.selectedStage = stageViewModels[0];
+        }
+
+        private void MainModel_ExecutionTillThisStepStarted(object? sender, EventArgs e)
+        {
+            DisableExecuteTillThisButtons();
+            CanExecutionStart = false;
+        }
+
+        private void MainModel_ExecutionCompleted(object? sender, EventArgs e)
+        {
+            EnableButtons();
+        }
+
+        private void MainModel_ExecutionSelectedStepsStarted(object? sender, EventArgs e)
+        {
+            DisableExecuteTillThisButtons();
         }
 
         public List<StageViewModel> StageViewModels
@@ -66,29 +87,36 @@ namespace CreatorMVVMProject.ViewModel.Main
 
         public void StartExecutionCommandHandler()
         {
-            List<StepViewModel> stepViewModels = GetSelectedStepViewModels().ToList();
-            if(stepViewModels.Count == 0)
+            List<StepViewModel> selectedStepViewModels = GetSelectedStepViewModels().ToList();
+            if(selectedStepViewModels.Count == 0)
             {
                 _ = MessageBox.Show("Select steps for execution");
                 return;
             }
 
             List<StepStatus> steps = new();
-            foreach(StepViewModel stepViewModel in stepViewModels)
+            foreach(StepViewModel stepViewModel in selectedStepViewModels)
             {
                 steps.Add(stepViewModel.StepStatus);
-                //TODO : Vidi sta je ovo, da li se smije obrisati
-                //stepViewModel.CanBeSelected = false;
                 stepViewModel.IsSelected = false;
             }
 
             mainModel.AddStepsToExecution(steps);
 
+        }
 
-            //TODO : Odkomentarisi ovo
-            //foreach (StepViewModel stepViewModel in stageViewModels.SelectMany(stageViewModel => stageViewModel.StepViewModels).ToList())
-                //stepViewModel.IsButtonEnabled = false;          
+        private void EnableButtons()
+        {
+            foreach (StepViewModel stepViewModel in stageViewModels.SelectMany(stageViewModel => stageViewModel.StepViewModels).ToList())
+                stepViewModel.IsButtonEnabled = true;
 
+            CanExecutionStart = true;
+        }
+
+        private void DisableExecuteTillThisButtons()
+        {
+            foreach (StepViewModel stepViewModel in stageViewModels.SelectMany(stageViewModel => stageViewModel.StepViewModels).ToList())
+                stepViewModel.IsButtonEnabled = false;
         }
 
         private IList<StepViewModel> GetSelectedStepViewModels()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CreatorMVVMProject.Model.Class.StatusReportService;
 using CreatorMVVMProject.Model.Interface.StatusReportService;
 using CreatorMVVMProject.Model.Interface.ExecutionService;
+using System;
 
 namespace CreatorMVVMProject.Model.Class.Main
 {
@@ -16,8 +17,13 @@ namespace CreatorMVVMProject.Model.Class.Main
         {
             this.statusReportService = statusReportService;
             this.workflowService = workflowService;
+
             this.executionService = executionService;
+            this.executionService.ExecutionCompleted += StepsExecutionCompleted;
+            this.executionService.ExecutionSelectedStepsStarted += SelectedStepsExecutionStarted;
+            this.executionService.ExecutionTillThisStepStarted += ExecutionTillThisStarted;
         }
+
 
         public IList<StageStatus> Stages
         {
@@ -26,12 +32,31 @@ namespace CreatorMVVMProject.Model.Class.Main
 
         public void AddStepsToExecution(List<StepStatus> steps)
         {
-            executionService.EnqueueSteps(steps);
+            executionService.ExecuteSelectedSteps(steps);
+            //executionService.EnqueueSteps(steps);
         }
 
         public IExecutionService ExecutionService
         {
             get => this.executionService;
+        }
+
+        public event EventHandler? ExecutionCompleted;
+        private void StepsExecutionCompleted(object? _, EventArgs e)
+        {
+            ExecutionCompleted?.Invoke(this, e);
+        }
+
+        public event EventHandler? ExecutionSelectedStepsStarted;
+        private void SelectedStepsExecutionStarted(object? _, EventArgs e)
+        {
+            ExecutionSelectedStepsStarted?.Invoke(this, e);
+        }
+
+        public event EventHandler? ExecutionTillThisStepStarted;
+        private void ExecutionTillThisStarted(object? _, EventArgs e)
+        {
+            ExecutionTillThisStepStarted?.Invoke(this, e);
         }
     }
 }

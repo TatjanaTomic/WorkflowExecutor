@@ -9,7 +9,11 @@ namespace CreatorMVVMProject.Model.Interface.ExecutionService
 {
     public interface IExecutionService
     {
-        void EnqueueSteps(List<StepStatus> stepsToExecute);
-        void StartExecuteTillThisStep(StepStatus step);
+        void ExecuteSelectedSteps(List<StepStatus> stepsToExecute);
+        void ExecuteTillThisStep(StepStatus step);
+
+        event EventHandler? ExecutionCompleted;
+        event EventHandler? ExecutionSelectedStepsStarted;
+        event EventHandler? ExecutionTillThisStepStarted;
     }
 }

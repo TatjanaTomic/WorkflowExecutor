@@ -111,16 +111,13 @@ namespace CreatorMVVMProject.ViewModel.Main
 
         public void StartStepCommandHandler()
         {
-            //TODO : Treba da napravim neki Event da je step zapoceo izvrsavanje
-            // StageViewModel se pretplati na StepViewModel, a MainViewModel se pretplati na StageViewModel
-            executionService.StartExecuteTillThisStep(StepStatus);
+            executionService.ExecuteTillThisStep(StepStatus);
+
+            OnExecuteTillThisPressed();
         }
 
         private void OnStatusChanged(object? _, StatusChangedEventArgs statusChangedEventArgs)
         {
-            //if (statusChangedEventArgs.Status != Status.InProgress)
-            //    CanBeSelected = true;
-
             NotifyPropertyChange(nameof(this.Status));
         }
 
@@ -138,6 +135,12 @@ namespace CreatorMVVMProject.ViewModel.Main
         protected virtual void NotifyPropertyChange(string propertyName)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public event EventHandler? ExecuteTillThisPressed;
+        protected virtual void OnExecuteTillThisPressed()
+        {
+            ExecuteTillThisPressed?.Invoke(this, EventArgs.Empty);
         }
     }
 }

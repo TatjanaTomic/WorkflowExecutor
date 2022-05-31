@@ -24,6 +24,7 @@ namespace CreatorMVVMProject.ViewModel.Main
             {
                 stepViewModel = new StepViewModel(step, executionService);
                 stepViewModels.Add(stepViewModel);
+                //stepViewModel += ExecuteTillThisPressed;
             }
         }
 
@@ -49,6 +50,10 @@ namespace CreatorMVVMProject.ViewModel.Main
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        private void ExecuteTillThisPressed()
+        {
+
+        }
     }
     
 }

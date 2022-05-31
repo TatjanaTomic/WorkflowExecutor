@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using CreatorMVVMProject.Model.Interface.StatusReportService;
@@ -36,8 +35,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
             _ = StartExecution();
         }
         
-        //TODO : Kako da napravim Event OnExecutionFinished, da znam da su se svi proslijedjeni stepovi izvrsili ?
-        public void EnqueueSteps(List<StepStatus> stepsToExecute)
+        private void EnqueueSteps(List<StepStatus> stepsToExecute)
         {
             foreach (StepStatus stepStatus in stepsToExecute)
             {
@@ -46,7 +44,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                 else
                     StepsQueue.Add(stepStatus );
 
-                //statusReportService.SetStatusToStep(stepStatus, Status.Waiting);
+                stepStatus.CanBeExecuted = false;
             }
 
             autoResetEvent.Set();
@@ -66,6 +64,9 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 
                         ExecuteParallelSteps();
                         ExecuteSerialSteps();
+
+                        if(StepsQueue.Count == 0 && StepsQueueParallel.Count == 0)
+                            OnExecutionCompleted();
 
                         autoResetEvent.WaitOne();
                     }
@@ -166,7 +167,18 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
             autoResetEvent.Set();
         }
         
-        public void StartExecuteTillThisStep(StepStatus stepStatus)
+        public void ExecuteSelectedSteps(List<StepStatus> selectedSteps)
+        {
+            Task.Run(() =>
+            {
+                EnqueueSteps(selectedSteps);
+
+                OnExecutionSelectedStepsStarted();
+            });
+
+        }
+
+        public void ExecuteTillThisStep(StepStatus stepStatus)
         {
             Task.Run(() =>
             {
@@ -176,7 +188,9 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                 List<StepStatus> stepStatuses = statusReportService.GetStepStatuses(allSteps);
 
                 EnqueueSteps(stepStatuses);
-            }).Wait();
+
+                OnExecutionTillThisStepStarted();
+            });
 
         }
 
@@ -217,6 +231,24 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 
             statusReportService.SetStatusMessageToStep(args.Step, args.Message);
         }
-  
+
+
+        public event EventHandler? ExecutionCompleted;
+        protected virtual void OnExecutionCompleted()
+        {
+            ExecutionCompleted?.Invoke(this, EventArgs.Empty);
+        }
+
+        public event EventHandler? ExecutionSelectedStepsStarted;
+        protected virtual void OnExecutionSelectedStepsStarted()
+        {
+            ExecutionSelectedStepsStarted?.Invoke(this, EventArgs.Empty);
+        }
+
+        public event EventHandler? ExecutionTillThisStepStarted;
+        protected virtual void OnExecutionTillThisStepStarted()
+        {
+            ExecutionTillThisStepStarted?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

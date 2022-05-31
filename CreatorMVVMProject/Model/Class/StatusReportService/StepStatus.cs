@@ -12,22 +12,19 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
     {
         private readonly Step step;
         private Status status;
-        private string statusMessage = string.Empty;
         private bool canBeExecuted;
-
-        private readonly IStatusReportService statusReportService;
-
-        public StepStatus(Step step, Status initialStatus, bool canBeExecuted, IStatusReportService statusReportService)
+        private string statusMessage = string.Empty;
+        
+        public StepStatus(Step step, Status initialStatus, bool canBeExecuted)
         {
             this.step = step;
             this.status = initialStatus;
             this.canBeExecuted = canBeExecuted;
-            this.statusReportService = statusReportService;
         }
 
         public Step Step
         {
-            get { return this.step; }
+            get { return step; }
         }
 
         public string StatusMessage
@@ -63,6 +60,5 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
         public event EventHandler? MessageChanged;
         public event EventHandler? CanBeExecutedChanged;
         public event EventHandler<StatusChangedEventArgs>? StatusChanged;
-
     }
 }
