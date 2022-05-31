@@ -24,11 +24,10 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
             processStartInfo.RedirectStandardOutput = true;
             processStartInfo.RedirectStandardError = true;
             processStartInfo.CreateNoWindow = true;
-            //processStartInfo.UseShellExecute
 
             processStartInfo.WorkingDirectory = basePath;
-            processStartInfo.FileName = "cmd.exe";
-            processStartInfo.Arguments = "/C " + step.ExecutablePath + " " + BuildParameters();
+            processStartInfo.FileName = ConfigurationManager.AppSettings["processStartInfoFileName"]?.ToString();
+            processStartInfo.Arguments = ConfigurationManager.AppSettings["processStartInfoCommand"]?.ToString() + " " + step.ExecutablePath + " " + BuildParameters();
         }
 
         public async override Task Start()
@@ -40,27 +39,22 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
                 {
                     Process? process = Process.Start(processStartInfo);
 
-                    if (process != null)
+                    if (process == null)
                     {
-                        process.EnableRaisingEvents = true;
-                        process.Exited += new EventHandler(ProcessExited);
-
-                        process.WaitForExit();
-                    }
-                    else
-                        //TODO : Promijeni poruku
                         OnExecutionCompleted(new ExecutionCompletedEventArgs(step, false, "Moja neka poruka"));
+                        return;
+                    }
+
+                    process.EnableRaisingEvents = true;
+                    process.Exited += new EventHandler(ProcessExited);
+
+                    process.WaitForExit();
                 }
                 catch (Exception e)
                 {
                     OnExecutionCompleted(new ExecutionCompletedEventArgs(step, false, e.Message));
                 }
             });
-        }
-
-        public override Task Stop()
-        {
-            throw new NotImplementedException();
         }
 
         private string BuildParameters()
@@ -91,8 +85,12 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
             }
 
             string output = process.StandardOutput.ReadToEnd();
-            OnExecutionCompleted(new ExecutionCompletedEventArgs(step, true, output));
-            
+            OnExecutionCompleted(new ExecutionCompletedEventArgs(step, true, output));    
+        }
+
+        public override Task Stop()
+        {
+            throw new NotImplementedException();
         }
     }
 }

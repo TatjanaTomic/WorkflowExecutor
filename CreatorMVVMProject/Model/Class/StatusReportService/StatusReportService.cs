@@ -49,7 +49,7 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
             //if (stepStatus.Status == Status.Obsolete && workflowService.GetAllDependencySteps(stepStatus.Step).Exists(s => GetStepStatus(s).Status == Status.Failed))
             //    return false;
             
-            if (stepStatus.Status == Status.Obsolete && workflowService.GetAllDependencySteps(stepStatus.Step).Exists(s => GetStepStatus(s).Status != Status.Success))
+            if (stepStatus.Status == Status.Obsolete && workflowService.GetAllDependencySteps(stepStatus.Step).ToList().Exists(s => GetStepStatus(s).Status != Status.Success))
                 return false;
             
             return true;
@@ -62,11 +62,11 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
 
             if(status == Status.Success)
             {
-                List<StepStatus> reverseDependencySteps = GetStepStatuses(workflowService.GetReverseDependencySteps(stepStatus.Step));
+                IList<StepStatus> reverseDependencySteps = GetStepStatuses(workflowService.GetReverseDependencySteps(stepStatus.Step).ToList());
 
                 foreach (StepStatus dependencyStepStatus in reverseDependencySteps)
                 {
-                    List<StepStatus> firstLevelDependencySteps = GetStepStatuses(workflowService.GetFirstLevelDependencySteps(dependencyStepStatus.Step));  
+                    IList<StepStatus> firstLevelDependencySteps = GetStepStatuses(workflowService.GetFirstLevelDependencySteps(dependencyStepStatus.Step).ToList());  
 
                     if(dependencyStepStatus.Status == Status.Disabled && firstLevelDependencySteps.All(s => s.Status == Status.Success) )
                     {
@@ -79,7 +79,7 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
 
             if (oldStatus.Equals(Status.Success) && status.Equals(Status.InProgress))
             {
-                List<Step> obsoletedSteps = workflowService.GetAllDependencySteps(stepStatus.Step);
+                IList<Step> obsoletedSteps = workflowService.GetAllDependencySteps(stepStatus.Step);
                 foreach(Step step in obsoletedSteps)
                 {
                     SetStatusToStep(step, Status.Obsolete);
@@ -89,7 +89,6 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
                 }
             }
 
-            // Promijeni property CanBeExecuted
             stepStatus.CanBeExecuted = CanStepBeExecuted(stepStatus);
         }
 
@@ -110,9 +109,9 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
             return stages.SelectMany(stage => stage.Steps).Where(s => s.Step.Id == step.Id).First();
         }
 
-        public List<StepStatus> GetStepStatuses(List<Step> steps)
+        public IList<StepStatus> GetStepStatuses(List<Step> steps)
         {
-            List<StepStatus> stepStatuses = new();
+            IList<StepStatus> stepStatuses = new List<StepStatus>();
             foreach (Step step in steps)
             {
                 stepStatuses.Add(GetStepStatus(step));

@@ -13,6 +13,8 @@ using CreatorMVVMProject.Model.Class.StepExecutor;
 
 namespace CreatorMVVMProject.Model.Class.ExecutionService
 {
+    //TODO : U ExecutionService-u trebam promijeniti uslove, ne porediti da li je Step Status Disabled nego da li se moze izvrsavati
+
     public class ExecutionService : IExecutionService
     {
         private readonly BlockingCollection<StepStatus> stepsQueue = new();
@@ -22,7 +24,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
         //private readonly CancellationTokenSource cancellationTokenSource = new();
         
         //Represents a thread synchronization event that, when signaled, resets automatically after releasing a single waiting thread. 
-        private readonly AutoResetEvent autoResetEvent = new(true);
+        private readonly AutoResetEvent autoResetEvent = new(false);
 
         private readonly IStatusReportService statusReportService;
         private readonly IWorkflowService workflowService;
@@ -58,25 +60,15 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                 {
                     while (true)
                     {
-                        //if (cancellationTokenSource.IsCancellationRequested)
-                        //    throw new OperationCanceledException();
-                        //TODO : Ovo se moze iskoristiti za neki Cancel
-
                         ExecuteParallelSteps();
                         ExecuteSerialSteps();
-
-                        if(StepsQueue.Count == 0 && StepsQueueParallel.Count == 0)
-                            OnExecutionCompleted();
 
                         autoResetEvent.WaitOne();
                     }
                 }
                 catch (Exception e)
                 {
-                    //TODO : Sta se desava ako dodje do exceptiona ? Gasim App ?
                     Console.WriteLine(e.Message);
-
-                    // An InvalidOperationException means that Take() was called on a completed collection
                 }
             });
 
@@ -91,19 +83,6 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                 {
                     StepStatus stepStatus = StepsQueue.Take();
 
-                    /*
-                    if (stepStatus.Status == Status.NotStarted || stepStatus.Status == Status.Success)
-                    {
-                        AbstractExecutor stepExecutor = CreateStepExecutor(stepStatus.Step);
-                        stepExecutor.Start().Wait();
-                    }
-                    else
-                    {
-                        StepsQueue.Add(stepStatus);
-                        continue;
-                    }
-                    */
-
                     if(stepStatus.Status == Status.Disabled)
                     {
                         StepsQueue.Add(stepStatus);
@@ -113,15 +92,16 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                     AbstractExecutor stepExecutor = CreateStepExecutor(stepStatus.Step);
                     stepExecutor.Start().Wait();
                     
-
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e.StackTrace);
-                    //TODO : Sta se desava ako se ne izvrsi ?
                 }
 
-                autoResetEvent.Set();
+                if (StepsQueue.Count == 0 && StepsQueueParallel.Count == 0)
+                    OnExecutionCompleted();
+                else
+                    autoResetEvent.Set();
             }
 
         }
@@ -134,19 +114,6 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                 StepStatus stepStatus = StepsQueueParallel.Take();
                 try
                 {
-                    /*
-                    if (stepStatus.Status == Status.NotStarted || stepStatus.Status == Status.Success)
-                    {
-                        AbstractExecutor stepExecutor = CreateStepExecutor(stepStatus.Step);
-                        tasks.Add(stepExecutor.Start());
-                    }
-                    else
-                    {
-                        StepsQueueParallel.Add(stepStatus);
-                        continue;
-                    }
-                    */
-
                     if (stepStatus.Status == Status.Disabled)
                     {
                         StepsQueueParallel.Add(stepStatus);
@@ -160,16 +127,19 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                 catch (Exception e)
                 {
                     Console.WriteLine(e.StackTrace);
-                    //TODO : Sta se desava ako se ne izvrsi ?
                 }
             }
             Task.WaitAll(tasks.ToArray());
-            autoResetEvent.Set();
+
+            if (StepsQueue.Count == 0 && StepsQueueParallel.Count == 0)
+                OnExecutionCompleted();
+            else
+                autoResetEvent.Set();
         }
         
         public void ExecuteSelectedSteps(List<StepStatus> selectedSteps)
         {
-            Task.Run(() =>
+            Task test = Task.Run(() =>
             {
                 EnqueueSteps(selectedSteps);
 
@@ -180,14 +150,14 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 
         public void ExecuteTillThisStep(StepStatus stepStatus)
         {
-            Task.Run(() =>
+            Task test = Task.Run(() =>
             {
-                List<Step> allSteps = workflowService.GetAllDependencySteps(stepStatus.Step);
+                IList<Step> allSteps = workflowService.GetAllDependencySteps(stepStatus.Step);
                 allSteps.Add(stepStatus.Step);
 
-                List<StepStatus> stepStatuses = statusReportService.GetStepStatuses(allSteps);
+                IList<StepStatus> stepStatuses = statusReportService.GetStepStatuses(allSteps.ToList());
 
-                EnqueueSteps(stepStatuses);
+                EnqueueSteps(stepStatuses.ToList());
 
                 OnExecutionTillThisStepStarted();
             });
@@ -220,18 +190,9 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 
         private void StepExecutionCompleted(object? _, ExecutionCompletedEventArgs args)
         {
-            if(args.IsSuccessful)
-            {
-                statusReportService.SetStatusToStep(args.Step, Status.Success);
-            }
-            else
-            {
-                statusReportService.SetStatusToStep(args.Step, Status.Failed);
-            }
-
+            statusReportService.SetStatusToStep(args.Step, args.IsSuccessful ? Status.Success : Status.Failed);
             statusReportService.SetStatusMessageToStep(args.Step, args.Message);
         }
-
 
         public event EventHandler? ExecutionCompleted;
         protected virtual void OnExecutionCompleted()

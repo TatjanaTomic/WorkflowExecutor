@@ -30,10 +30,7 @@ namespace CreatorMVVMProject.ViewModel.Main
             this.executionService = executionService;
         }
 
-        public StepStatus StepStatus
-        {
-            get => this.stepStatus;
-        }
+        public StepStatus StepStatus { get { return stepStatus; } }
 
         public Status Status
         {
@@ -43,7 +40,6 @@ namespace CreatorMVVMProject.ViewModel.Main
         public bool CanBeSelected
         {
             get => this.stepStatus.CanBeExecuted;
-
         }
 
         public string StepId

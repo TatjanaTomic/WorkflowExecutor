@@ -24,7 +24,7 @@ namespace CreatorMVVMProject.Model.Class.DIBuilder
         }
         public static T Resolve<T>() where T: class
         {
-            return ServiceContainer.Instance.scope.Resolve<T>();
+            return Instance.scope.Resolve<T>();
         }
         public static ServiceContainer Instance
         {

@@ -19,7 +19,7 @@ namespace CreatorMVVMProject.Model.Interface.StatusReportService
         void SetStatusMessageToStep(Step step, string message);
         Status GetInitialStatus(Step step);
         StepStatus GetStepStatus(Step step);
-        List<StepStatus> GetStepStatuses(List<Step> steps);
+        IList<StepStatus> GetStepStatuses(List<Step> steps);
         bool CanStepBeExecuted(StepStatus stepStatus);
         bool CanStepBeExecutedInitial(Step step);
     }

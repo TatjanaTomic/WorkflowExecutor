@@ -23,9 +23,9 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService
             get => this.stages;
         }
 
-        public List<Step> GetFirstLevelDependencySteps(Step step)
+        public IList<Step> GetFirstLevelDependencySteps(Step step)
         {
-            List<Step> dependencySteps = new();
+            IList<Step> dependencySteps = new List<Step>();
 
             foreach (var dependency in step.Dependencies)
             {
@@ -38,9 +38,9 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService
         }
 
         //vraca sve stepove od kojih zavisi proslijedjeni step
-        public List<Step> GetAllDependencySteps(Step step)
+        public IList<Step> GetAllDependencySteps(Step step)
         {
-            List<Step> firstLevelDependencySteps = GetFirstLevelDependencySteps(step);
+            IList<Step> firstLevelDependencySteps = GetFirstLevelDependencySteps(step);
 
             List<Step> allDependencySteps = new();
             allDependencySteps.AddRange(firstLevelDependencySteps);
@@ -59,10 +59,10 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService
         }
 
         //vraca sve stepove koji zavise od proslijedjenog stepa
-        // TODO : nadji srecniji naziv
-        public List<Step> GetReverseDependencySteps(Step step)
+        // TODO : Treba mi neki bolji naziv (mozda)
+        public IList<Step> GetReverseDependencySteps(Step step)
         {
-            List<Step> reverseDependencySteps = new();
+            IList<Step> reverseDependencySteps = new List<Step>();
                 
             foreach(Step s in stages.SelectMany(stage => stage.Steps))
             {
