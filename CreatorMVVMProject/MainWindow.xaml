@@ -3,7 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:main="clr-namespace:CreatorMVVMProject.ViewModel.Main" xmlns:stage="clr-namespace:CreatorMVVMProject.View.Main"
+        xmlns:main="clr-namespace:CreatorMVVMProject.ViewModel.Main"
+        xmlns:stage="clr-namespace:CreatorMVVMProject.View.Main"
+        xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         d:DataContext="{d:DesignInstance Type=main:MainViewModel}"
         mc:Ignorable="d"
         Title="MainWindow" Height="700" Width="1100" MinHeight="450" MinWidth="800" WindowStartupLocation="CenterScreen">
@@ -15,11 +18,12 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
-        
-        <TabControl Grid.Row="0" ItemsSource="{Binding StageViewModels}" SelectedItem="{Binding SelectedStage}" >
+
+        <!-- Style="{StaticResource TabControlInLine}" -->
+        <TabControl Grid.Row="0" ItemsSource="{Binding StageViewModels}" SelectedItem="{Binding SelectedStage}" Margin="20" >
             <TabControl.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Path=StageId}" />
+                    <TextBlock Text="{Binding Path=StageId}" Margin="50,0,50,0"/>
                 </DataTemplate>
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>
