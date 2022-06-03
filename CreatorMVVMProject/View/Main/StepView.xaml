@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CreatorMVVMProject.View.Main"
-             xmlns:converters="clr-namespace:CreatorMVVMProject.Model.Class.Converters" xmlns:main="clr-namespace:CreatorMVVMProject.ViewModel.Main" d:DataContext="{d:DesignInstance Type=main:StepViewModel}"
+             xmlns:converters="clr-namespace:CreatorMVVMProject.Model.Class.Converters" xmlns:main="clr-namespace:CreatorMVVMProject.ViewModel.Main" xmlns:materialDesign="https://handyorg.github.io/handycontrol" d:DataContext="{d:DesignInstance Type=main:StepViewModel}"
              mc:Ignorable="d" 
             >
     <UserControl.Resources>
@@ -12,12 +12,18 @@
         <converters:StatusToEnabledConverter x:Key="statusToEnabledConverter"/>
     </UserControl.Resources>
 
-    <Grid Margin="10,10,10,10">
-        <Expander IsExpanded="{Binding IsExpanded}">
+    <Grid>
+        <Expander IsExpanded="{Binding IsExpanded}" Margin="10,10,10,10" >
+            <Expander.Background>
+                <LinearGradientBrush StartPoint="1,0" EndPoint="0.9,1">
+                    <GradientStop Color="#361d4f" Offset="0"/>
+                    <GradientStop Color="#2a1540" Offset="1"/>
+                </LinearGradientBrush>
+            </Expander.Background>
             <Expander.Header>
-                <DockPanel>
-                    <TextBlock Margin="20,0,0,0" Text="{Binding StepId}"></TextBlock>
-                </DockPanel>
+                <StackPanel>
+                    <TextBlock Margin="20,0,0,0" Text="{Binding StepId}" FontSize="18" Foreground="WhiteSmoke"></TextBlock>
+                </StackPanel>
             </Expander.Header>
             <Expander.Content>
                 <Grid Margin="30,10,0,0">
@@ -38,35 +44,36 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Status}" Background="{Binding Status, Converter={StaticResource statusToColorConverter}, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding StepDescription}" TextWrapping="Wrap" ></TextBlock>
-                        <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding Message}" TextWrapping="Wrap" ></TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding StepDescription}" TextWrapping="Wrap" Foreground="WhiteSmoke"></TextBlock>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding Message}" TextWrapping="Wrap"  Foreground="WhiteSmoke"></TextBlock>
 
                         <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" ></ColumnDefinition>
                                 <ColumnDefinition Width="2*"></ColumnDefinition>
-                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="*" ></ColumnDefinition>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
 
-                            <Button Grid.Column="1" Content="Execute till this step"
-                                    Command="{Binding StartStepCommand}" VerticalAlignment="Top"
+                            <Button Grid.Column="1" 
+                                    Content="Execute till this step"
+                                    Command="{Binding StartStepCommand}"
+                                    VerticalAlignment="Top"
                                     IsEnabled="{Binding IsButtonEnabled}"
-                                    ></Button>
+                                    Style="{StaticResource PurpleButtonStyle}"
+                                    Height="30"
+                                    />
+
+                            <CheckBox Grid.Column="3" HorizontalAlignment="Right"
+                                      IsEnabled="{Binding CanBeSelected}"
+                                      IsChecked="{Binding IsSelected}"
+                                      Content="Select step"
+                                      VerticalAlignment="Top"
+                                      Height="30"
+                                      Foreground="WhiteSmoke"
+                              ></CheckBox>
                         </Grid>
                     </Grid>
-                   
-                    <!--
-                    <CheckBox Grid.Column="2" HorizontalAlignment="Right"
-                              IsEnabled="{Binding Status, Converter={StaticResource statusToEnabledConverter}, UpdateSourceTrigger=PropertyChanged}"
-                              IsChecked="{Binding IsSelected}"
-                              ></CheckBox> 
-                    -->
-                    
-                    <CheckBox Grid.Column="2" HorizontalAlignment="Right"
-                              IsEnabled="{Binding CanBeSelected}"
-                              IsChecked="{Binding IsSelected}"
-                              ></CheckBox>
-                   
                 </Grid>
             </Expander.Content>
         </Expander>

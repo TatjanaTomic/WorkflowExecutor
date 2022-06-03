@@ -6,13 +6,13 @@
              xmlns:step="clr-namespace:CreatorMVVMProject.View.Main" xmlns:main="clr-namespace:CreatorMVVMProject.ViewModel.Main" d:DataContext="{d:DesignInstance Type=main:StageViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+    <Grid Background="#1d0536">
         <!-- <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions> -->
 
-        <ListView ItemsSource="{Binding StepViewModels}" VirtualizingPanel.ScrollUnit="Pixel" ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch">
+        <ListView ItemsSource="{Binding StepViewModels}" Background="#1d0536" VirtualizingPanel.ScrollUnit="Pixel" ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <step:StepView/>
