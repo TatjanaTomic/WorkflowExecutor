@@ -18,9 +18,9 @@ namespace CreatorMVVMProject.Model.Class.Converters
             { Status.NotStarted, "Silver" },
             { Status.InProgress, "LightGreen" },
             { Status.Success, "Green" },
-            { Status.Disabled, "Red" },
-            { Status.Failed, "Red" },
-            { Status.Obsolete, "Red" }
+            { Status.Disabled, "#FF5D5D" },
+            { Status.Failed, "#FF5D5D" },
+            { Status.Obsolete, "#FF5D5D" }
         };
         public object Convert(object value, System.Type targetType, object parameter, CultureInfo culture)
         {
@@ -29,7 +29,7 @@ namespace CreatorMVVMProject.Model.Class.Converters
                 return dictionary[status];
             }
             else
-                return "Red";
+                return "#FF5D5D";
         }
 
         public object ConvertBack(object value, System.Type targetType, object parameter, CultureInfo culture)
