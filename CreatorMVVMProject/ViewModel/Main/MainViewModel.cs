@@ -33,22 +33,6 @@ namespace CreatorMVVMProject.ViewModel.Main
             this.selectedStage = stageViewModels[0];
         }
 
-        private void MainModel_ExecutionTillThisStepStarted(object? sender, EventArgs e)
-        {
-            DisableExecuteTillThisButtons();
-            CanExecutionStart = false;
-        }
-
-        private void MainModel_ExecutionCompleted(object? sender, EventArgs e)
-        {
-            EnableButtons();
-        }
-
-        private void MainModel_ExecutionSelectedStepsStarted(object? sender, EventArgs e)
-        {
-            DisableExecuteTillThisButtons();
-        }
-
         public List<StageViewModel> StageViewModels
         {
             get => this.stageViewModels;
@@ -58,7 +42,10 @@ namespace CreatorMVVMProject.ViewModel.Main
         public StageViewModel SelectedStage
         {
             get => this.selectedStage;
-            set => this.selectedStage = value;
+            set
+            {
+                this.selectedStage = value;
+            }
         }
 
         public bool CanExecutionStart
@@ -123,5 +110,20 @@ namespace CreatorMVVMProject.ViewModel.Main
             return this.stageViewModels.SelectMany(stageViewModel => stageViewModel.StepViewModels).Where(stepViewModel => stepViewModel.IsSelected).ToList();
         }
 
+        private void MainModel_ExecutionTillThisStepStarted(object? sender, EventArgs e)
+        {
+            DisableExecuteTillThisButtons();
+            CanExecutionStart = false;
+        }
+
+        private void MainModel_ExecutionCompleted(object? sender, EventArgs e)
+        {
+            EnableButtons();
+        }
+
+        private void MainModel_ExecutionSelectedStepsStarted(object? sender, EventArgs e)
+        {
+            DisableExecuteTillThisButtons();
+        }
     }
 }
