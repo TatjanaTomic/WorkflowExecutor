@@ -15,7 +15,7 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
         private readonly Step step;
         readonly ProcessStartInfo processStartInfo = new();
 
-        private static readonly string? basePath = ConfigurationManager.AppSettings["basePath"]?.ToString();
+        private readonly string? basePath = ConfigurationManager.AppSettings["basePath"]?.ToString();
 
         public ScriptExecutor(Step step)
         {

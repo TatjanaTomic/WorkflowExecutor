@@ -18,7 +18,7 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml
         }
 
         [XmlAttribute("Id")]
-        public string DependencyStepId { get => dependencyStepId; set => dependencyStepId = value; }
+        public string DependencyStepId { get => this.dependencyStepId; set => this.dependencyStepId = value; }
 
     }
 }

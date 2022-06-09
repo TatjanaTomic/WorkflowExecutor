@@ -15,12 +15,36 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="View\Resources\Icons\down-arrow.png" />
+    <None Remove="View\Resources\Icons\downl.png" />
+    <None Remove="View\Resources\Icons\download.png" />
+    <None Remove="View\Resources\Icons\exe.png" />
+    <None Remove="View\Resources\Icons\execute.png" />
+    <None Remove="View\Resources\Icons\upl.png" />
+    <None Remove="View\Resources\Icons\upload.gif" />
+    <None Remove="View\Resources\Icons\upload.png" />
+    <None Remove="View\Resources\Icons\upload_23968.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Autofac" Version="6.3.0" />
     <PackageReference Include="Dragablz" Version="0.0.3.223" />
     <PackageReference Include="HandyControls" Version="3.3.11" />
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />
     <PackageReference Include="MaterialDesignColors" Version="2.0.6" />
     <PackageReference Include="MaterialDesignThemes" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="View\Resources\Icons\down-arrow.png" />
+    <Resource Include="View\Resources\Icons\downl.png" />
+    <Resource Include="View\Resources\Icons\download.png" />
+    <Resource Include="View\Resources\Icons\exe.png" />
+    <Resource Include="View\Resources\Icons\execute.png" />
+    <Resource Include="View\Resources\Icons\upl.png" />
+    <Resource Include="View\Resources\Icons\upload.gif" />
+    <Resource Include="View\Resources\Icons\upload.png" />
+    <Resource Include="View\Resources\Icons\upload_23968.png" />
   </ItemGroup>
 
 </Project>

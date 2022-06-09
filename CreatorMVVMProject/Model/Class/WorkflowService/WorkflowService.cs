@@ -59,7 +59,6 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService
         }
 
         //vraca sve stepove koji zavise od proslijedjenog stepa
-        // TODO : Treba mi neki bolji naziv (mozda)
         public IList<Step> GetReverseDependencySteps(Step step)
         {
             IList<Step> reverseDependencySteps = new List<Step>();

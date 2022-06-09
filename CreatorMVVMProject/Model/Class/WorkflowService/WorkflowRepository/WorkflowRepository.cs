@@ -1,27 +1,34 @@
 ﻿using CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml;
-using ExecutionEngine.Xml.StageListBuilder;
+using CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml.StageListBuilder;
+using ConfigurationException = CreatorMVVMProject.Model.Class.Exceptions.ConfigurationException;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
+using System.Configuration;
 
 namespace CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository
 {
     public class WorkflowRepository : IWorkflowRepository
     {
-        private static readonly string BASE_PATH = Path.Combine(Environment.GetFolderPath(folder: Environment.SpecialFolder.Desktop), "test");
-        private readonly string CONFIG_PATH = Path.Combine(BASE_PATH, "WorkflowConfig.xml");
+        private readonly string? CONFIG_PATH = ConfigurationManager.AppSettings["configPath"]?.ToString();
 
         IList<Stage> IWorkflowRepository.GetAllStages()
         {
-            var stagesList = StageListBuilder.GetStageList(CONFIG_PATH);
-
             IList<Stage> stages = new List<Stage>();
-            if (stagesList != null && stagesList.Stages != null)
-                stages = stagesList.Stages;
+
+            try
+            {
+                if (CONFIG_PATH == null)
+                    throw new ConfigurationException("Missing configuration path.");
+
+                var stagesList = StageListBuilder.GetStageList(CONFIG_PATH);
+
+                if (stagesList != null && stagesList.Stages != null)
+                    stages = stagesList.Stages;
+
+            } catch(ConfigurationException e)
+            {
+                Console.WriteLine(e.Message);
+            }
 
             return stages;
         }

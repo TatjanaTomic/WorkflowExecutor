@@ -5,11 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:main="clr-namespace:CreatorMVVMProject.ViewModel.Main"
         xmlns:stage="clr-namespace:CreatorMVVMProject.View.Main"
-        xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         d:DataContext="{d:DesignInstance Type=main:MainViewModel}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="1100" MinHeight="700" MinWidth="1100" WindowStartupLocation="CenterScreen">
+        Title="MainWindow" Height="700" Width="1150" MinHeight="700" MinWidth="1150" WindowStartupLocation="CenterScreen">
     <Window.Resources>
 
     </Window.Resources>
@@ -20,38 +18,20 @@
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <!-- Style="{StaticResource TabControlInLine}" -->
-        <TabControl Grid.Row="0" ItemsSource="{Binding StageViewModels}" Background="{StaticResource DeepDarkColorBrush}" BorderThickness="0" SelectedItem="{Binding SelectedStage}">
-
-            <TabControl.Resources>
-                <Style TargetType="TabItem">
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="TabItem">
-                                <Grid Name="Panel">
-                                    <ContentPresenter x:Name="ContentSite"
-                                        VerticalAlignment="Center"
-                                        HorizontalAlignment="Center"
-                                        ContentSource="Header"
-                                        Margin="10,2"/>
-                                </Grid>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsSelected" Value="True">
-                                        <Setter TargetName="Panel" Property="Background" Value="#3F3351" />
-                                    </Trigger>
-                                    <Trigger Property="IsSelected" Value="False">
-                                        <Setter TargetName="Panel" Property="Background" Value="#1F1D36" />
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </TabControl.Resources>
-
+        <TabControl Grid.Row="0"
+                    ItemContainerStyle="{StaticResource TabItemStyle}"
+                    ItemsSource="{Binding StageViewModels}"
+                    Background="{StaticResource DeepDarkColorBrush}"
+                    BorderThickness="0"
+                    SelectedItem="{Binding SelectedStage}">
+            
             <TabControl.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Path=StageId}" Margin="10,5,10,5" FontSize="18"  FontWeight="Bold" Foreground="WhiteSmoke"/>
+                    <TextBlock Text="{Binding Path=StageId}" 
+                               Margin="10,5,10,5" 
+                               FontSize="18" 
+                               FontWeight="Bold" 
+                               Foreground="{StaticResource TextLightColorBrush}"/>
                 </DataTemplate>
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>
@@ -59,6 +39,7 @@
                     <stage:StageView/>
                 </DataTemplate>
             </TabControl.ContentTemplate>
+            
         </TabControl>
 
         <Button Grid.Row="1" Content="Start execution"
@@ -69,8 +50,7 @@
                 VerticalAlignment="Center"
                 Width="150"
                 Height="50"
-                Margin="20,20,20,20"
-                />
+                Margin="20,20,20,20" />
                 
     </Grid>
 </Window>

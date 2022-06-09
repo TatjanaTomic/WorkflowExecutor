@@ -19,10 +19,10 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml
         }
 
         [XmlAttribute("KeyWord")]
-        public string KeyWord { get => keyWord; set => keyWord = value; }
+        public string KeyWord { get => this.keyWord; set => this.keyWord = value; }
 
         [XmlAttribute("Value")]
-        public string Value { get => value; set => this.value = value; }
+        public string Value { get => this.value; set => this.value = value; }
 
         public override string? ToString()
         {

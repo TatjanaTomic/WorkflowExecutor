@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace ExecutionEngine.Xml.StageListBuilder
+namespace CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml.StageListBuilder
 {
     public class StageListBuilder
     {
@@ -35,9 +35,9 @@ namespace ExecutionEngine.Xml.StageListBuilder
             {
                 throw new ConfigurationException("Error reading XML configuration.", ex);
             }
-            
 
-            
+
+
         }
     }
 }

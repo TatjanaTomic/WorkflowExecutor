@@ -20,10 +20,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
         private readonly BlockingCollection<StepStatus> stepsQueue = new();
         private readonly BlockingCollection<StepStatus> stepsQueueParallel = new();
 
-        //CancellationTokenSource moze se iskoristiti za zaustavljanje
-        //private readonly CancellationTokenSource cancellationTokenSource = new();
-        
-        //Represents a thread synchronization event that, when signaled, resets automatically after releasing a single waiting thread. 
+        private  CancellationTokenSource cancellationTokenSource = new();
         private readonly AutoResetEvent autoResetEvent = new(false);
 
         private readonly IStatusReportService statusReportService;
@@ -60,9 +57,18 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                 {
                     while (true)
                     {
+                        if (cancellationTokenSource.IsCancellationRequested)
+                        {
+                            //ClearQueues();
+                            //TODO: Ovaj if se poziva cim jednom cancel-ujem
+                            //Treba vidjeti da li nekako mogu da ga otkazem nakon sto ispraznim Queues
+                            OnExecutionCompleted();
+                            //cancellationTokenSource = new();
+                        }
+
                         ExecuteParallelSteps();
                         ExecuteSerialSteps();
-
+                        
                         autoResetEvent.WaitOne();
                     }
                 }
@@ -73,6 +79,12 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
             });
 
             await executingSteps;
+        }
+
+        private void ClearQueues()
+        {
+            while (StepsQueue.TryTake(out var _)) { }
+            while (StepsQueueParallel.TryTake(out var _)) { }
         }
 
         private void ExecuteSerialSteps()
@@ -192,6 +204,12 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
         {
             statusReportService.SetStatusToStep(args.Step, args.IsSuccessful ? Status.Success : Status.Failed);
             statusReportService.SetStatusMessageToStep(args.Step, args.Message);
+
+            //TODO: Ako bilo koji step padne, zaustavljam izvrsavanje
+            if(!args.IsSuccessful)
+            {
+                cancellationTokenSource.Cancel();
+            }
         }
 
         public event EventHandler? ExecutionCompleted;

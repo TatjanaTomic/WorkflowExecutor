@@ -19,7 +19,7 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml
 
         [XmlArray]
         [XmlArrayItem(ElementName = "Stage")]
-        public List<Stage> Stages { get => stages; set => stages = value; }
+        public List<Stage> Stages { get => this.stages; set => this.stages = value; }
 
     }
 }

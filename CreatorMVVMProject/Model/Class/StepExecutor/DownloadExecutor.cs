@@ -13,7 +13,7 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
 {
     public class DownloadExecutor : AbstractExecutor
     {
-        private static readonly string? downloadsPath = ConfigurationManager.AppSettings["downloadsPath"]?.ToString();
+        private readonly string? downloadsPath = ConfigurationManager.AppSettings["downloadsPath"]?.ToString();
 
         readonly HttpClient httpClient = new();
         private readonly Step step;

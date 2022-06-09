@@ -21,30 +21,30 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml
         }
 
         [XmlAttribute("Id")]
-        public string Id { get => id; set => id = value; }
+        public string Id { get => this.id; set => this.id = value; }
 
         [XmlAttribute("ExecutablePath")]
-        public string ExecutablePath { get => executablePath; set => executablePath = value; }
+        public string ExecutablePath { get => this.executablePath; set => this.executablePath = value; }
 
         [XmlAttribute("File")]
-        public string File { get => file; set => file = value; }
+        public string File { get => this.file; set => this.file = value; }
 
         [XmlAttribute("Type")]
-        public Type Type { get => type; set => type = value; }
+        public Type Type { get => this.type; set => this.type = value; }
 
         [XmlAttribute("CanBeExecutedInParallel")]
-        public bool CanBeExecutedInParallel { get => canBeExecutedInParallel; set => canBeExecutedInParallel = value; }
+        public bool CanBeExecutedInParallel { get => this.canBeExecutedInParallel; set => this.canBeExecutedInParallel = value; }
 
         [XmlElement]
-        public string Description { get => description; set => description = value; }
+        public string Description { get => this.description; set => this.description = value; }
 
         [XmlArray]
         [XmlArrayItem(ElementName = "Dependency")]
-        public List<Dependency> Dependencies { get => dependencies; set => dependencies = value; }
+        public List<Dependency> Dependencies { get => this.dependencies; set => this.dependencies = value; }
 
         [XmlArray]
         [XmlArrayItem(ElementName = "Parameter")]
-        public List<Parameter> Parameters { get => parameters; set => parameters = value; }       
+        public List<Parameter> Parameters { get => this.parameters; set => this.parameters = value; }       
 
     }
 }

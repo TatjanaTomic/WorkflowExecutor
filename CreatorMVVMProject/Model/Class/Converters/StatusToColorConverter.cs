@@ -15,7 +15,7 @@ namespace CreatorMVVMProject.Model.Class.Converters
     {
         private readonly Dictionary<Status, string> dictionary = new()
         {
-            { Status.NotStarted, "Silver" },
+            { Status.NotStarted, "Gray" },
             { Status.InProgress, "LightGreen" },
             { Status.Success, "Green" },
             { Status.Disabled, "#FF5D5D" },

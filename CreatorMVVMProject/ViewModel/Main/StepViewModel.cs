@@ -1,10 +1,10 @@
 ﻿using CreatorMVVMProject.Model.Class.Commands;
-using CreatorMVVMProject.Model.Class.Main;
 using CreatorMVVMProject.Model.Class.StatusReportService;
 using CreatorMVVMProject.Model.Interface.ExecutionService;
 using System;
 using System.ComponentModel;
 using System.Windows.Input;
+using Type = CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml.Type;
 
 namespace CreatorMVVMProject.ViewModel.Main
 {
@@ -15,6 +15,7 @@ namespace CreatorMVVMProject.ViewModel.Main
         private bool isSelected = false;
         private bool isExpanded = true;
         private bool isButtonEnabled = true;
+        private bool isIndeterminate = false;
 
         private ICommand? startStepCommand;
 
@@ -58,6 +59,14 @@ namespace CreatorMVVMProject.ViewModel.Main
             }
         }
 
+        public Type StepType
+        {
+            get
+            {
+                return this.stepStatus.Step.Type;
+            }
+        }
+
         public string Message
         {
             get { return this.stepStatus.StatusMessage; }
@@ -97,6 +106,16 @@ namespace CreatorMVVMProject.ViewModel.Main
             }
         }
 
+        public bool IsIndeterminate
+        {
+            get { return this.isIndeterminate; }
+            set
+            {
+                this.isIndeterminate = value;
+                NotifyPropertyChange(nameof(IsIndeterminate));
+            }
+        }
+
         public ICommand StartStepCommand
         {
             get
@@ -114,6 +133,7 @@ namespace CreatorMVVMProject.ViewModel.Main
 
         private void OnStatusChanged(object? _, StatusChangedEventArgs statusChangedEventArgs)
         {
+            IsIndeterminate = statusChangedEventArgs.Status == Status.InProgress;
             NotifyPropertyChange(nameof(this.Status));
         }
 
