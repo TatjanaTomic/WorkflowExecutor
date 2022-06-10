@@ -215,6 +215,11 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
         public event EventHandler? ExecutionCompleted;
         protected virtual void OnExecutionCompleted()
         {
+            //if(StepsQueue.Count > 0 || stepsQueueParallel.Count > 0)
+            //{
+            //    ClearQueues();
+            //}
+
             ExecutionCompleted?.Invoke(this, EventArgs.Empty);
         }
 

@@ -6,65 +6,64 @@
              xmlns:converters="clr-namespace:CreatorMVVMProject.Model.Class.Converters"
              xmlns:main="clr-namespace:CreatorMVVMProject.ViewModel.Main"
              d:DataContext="{d:DesignInstance Type=main:StepViewModel}"
-             mc:Ignorable="d" 
-            >
+             mc:Ignorable="d">
+    
     <UserControl.Resources>
         <converters:StatusToColorConverter x:Key="statusToColorConverter"/>
         <converters:StatusToEnabledConverter x:Key="statusToEnabledConverter"/>
         <converters:StepTypeToIconConverter x:Key="typeToIconConverter"/>
     </UserControl.Resources>
 
-    <Grid>
-        <Border BorderThickness="0" Margin="10,10,10,10" CornerRadius="18,18,18,18" Background="{StaticResource DarkColorBrush}">
-            <Expander IsExpanded="{Binding IsExpanded}" >
+    <Border BorderThickness="0" Margin="10,10,10,10" CornerRadius="18,18,18,18" Background="{StaticResource DarkColorBrush}">
+        <Expander IsExpanded="{Binding IsExpanded}" >
 
-                <Expander.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <Image Width="40" Height="40" Source="{Binding StepType, Converter={StaticResource typeToIconConverter}}"></Image>
-                        <Label Margin="20,0,0,0" Height="40" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Content="{Binding StepId}" FontSize="18" Foreground="{StaticResource TextLightColorBrush}" FontWeight="Bold"></Label>
-                    </StackPanel>
-                </Expander.Header>
+            <Expander.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Image Width="40" Height="40" Source="{Binding StepType, Converter={StaticResource typeToIconConverter}}"></Image>
+                    <Label Margin="20,0,0,0" Height="40" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Content="{Binding StepId}" FontSize="18" Foreground="{StaticResource TextLightColorBrush}" FontWeight="Bold"></Label>
+                </StackPanel>
+            </Expander.Header>
 
-                <Expander.Content>
-                    <Grid Margin="30,10,10,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto" ></ColumnDefinition>
-                            <ColumnDefinition Width="2*" ></ColumnDefinition>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
-                        </Grid.RowDefinitions>
+            <Expander.Content>
+                <Grid Margin="30,10,10,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" ></ColumnDefinition>
+                        <ColumnDefinition Width="2*" ></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
 
-                        <ProgressBar Orientation="Vertical" Height="10" IsIndeterminate="{Binding IsIndeterminate}" Grid.Column="0" />
+                    <ProgressBar Orientation="Vertical" Height="10" IsIndeterminate="{Binding IsIndeterminate}" Grid.Column="0" />
 
-                        <StackPanel Grid.Column="1" Margin="20,0,0,0">
-                            <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{Binding Status, Converter={StaticResource statusToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
-                                <TextBlock Text="Step status:" Width="100" Foreground="{StaticResource TextDarkColorBrush}"></TextBlock>
-                                <TextBlock Text="{Binding Status}" Foreground="{StaticResource TextDarkColorBrush}"></TextBlock>
-                            </StackPanel>
-                            <DockPanel Grid.Row="2" Margin="0,10,0,10">
-                                <TextBlock Text="Step description:" Foreground="{StaticResource TextLightColorBrush}" Width="100"></TextBlock>
-                                <TextBlock Text="{Binding StepDescription}" Foreground="{StaticResource TextLightColorBrush}" TextWrapping="Wrap" TextAlignment="Justify"></TextBlock>
-                            </DockPanel>
-                            <DockPanel Grid.Row="3" Margin="0,10,0,10">
-                                <TextBlock Text="Output:" Foreground="{StaticResource TextLightColorBrush}" Width="100"></TextBlock>
-                                <TextBlock Text="{Binding Message}" Foreground="{StaticResource TextLightColorBrush}" TextWrapping="Wrap" TextAlignment="Justify"></TextBlock>
-                            </DockPanel>
+                    <StackPanel Grid.Column="1" Margin="20,0,0,0">
+                        <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{Binding Status, Converter={StaticResource statusToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
+                            <TextBlock Text="Step status:" Width="100" Foreground="{StaticResource TextDarkColorBrush}"></TextBlock>
+                            <TextBlock Text="{Binding Status}" Foreground="{StaticResource TextDarkColorBrush}"></TextBlock>
                         </StackPanel>
+                        <DockPanel Grid.Row="2" Margin="0,10,0,10">
+                            <TextBlock Text="Step description:" Foreground="{StaticResource TextLightColorBrush}" Width="100"></TextBlock>
+                            <TextBlock Text="{Binding StepDescription}" Foreground="{StaticResource TextLightColorBrush}" TextWrapping="Wrap" TextAlignment="Justify"></TextBlock>
+                        </DockPanel>
+                        <DockPanel Grid.Row="3" Margin="0,10,0,10">
+                            <TextBlock Text="Output:" Foreground="{StaticResource TextLightColorBrush}" Width="100"></TextBlock>
+                            <TextBlock Text="{Binding Message}" Foreground="{StaticResource TextLightColorBrush}" TextWrapping="Wrap" TextAlignment="Justify"></TextBlock>
+                        </DockPanel>
+                    </StackPanel>
 
-                        <Grid Grid.Row="0" Grid.Column="2" Grid.RowSpan="2">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" ></ColumnDefinition>
-                                <ColumnDefinition Width="4*"></ColumnDefinition>
-                                <ColumnDefinition Width="*" ></ColumnDefinition>
-                                <ColumnDefinition Width="auto"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
+                    <Grid Grid.Row="0" Grid.Column="2" Grid.RowSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" ></ColumnDefinition>
+                            <ColumnDefinition Width="4*"></ColumnDefinition>
+                            <ColumnDefinition Width="*" ></ColumnDefinition>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
 
-                            <Button Grid.Column="1" 
+                        <Button Grid.Column="1" 
                                     Content="Execute till this step"
                                     Command="{Binding StartStepCommand}"
                                     VerticalAlignment="Top"
@@ -75,22 +74,21 @@
                                     Margin="20,0,10,0"
                                     />
 
-                            <CheckBox Grid.Column="3" HorizontalAlignment="Right"
+                        <CheckBox Grid.Column="3" HorizontalAlignment="Right"
                                       Foreground="{StaticResource TextLightColorBrush}"
                                       IsEnabled="{Binding CanBeSelected}"
                                       IsChecked="{Binding IsSelected}"
                                       Content="Select step"
                                       VerticalAlignment="Top"
                                       Height="30"
-                                      Margin="10,0,20,0" >
-                                <!--<ToolTipService.ToolTip>
+                                      Margin="10,0,20,0">
+                            <!--<ToolTipService.ToolTip>
                                     <ToolTip>TEST</ToolTip>
                                 </ToolTipService.ToolTip>-->
-                            </CheckBox>
-                        </Grid>
+                        </CheckBox>
                     </Grid>
-                </Expander.Content>
-            </Expander>
-        </Border>
-    </Grid>
+                </Grid>
+            </Expander.Content>
+        </Expander>
+    </Border>
 </UserControl>

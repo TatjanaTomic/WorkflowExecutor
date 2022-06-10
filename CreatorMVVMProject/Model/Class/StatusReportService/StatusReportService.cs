@@ -71,8 +71,6 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
                     if(dependencyStepStatus.Status == Status.Disabled && firstLevelDependencySteps.All(s => s.Status == Status.Success) )
                     {
                         SetStatusToStep(dependencyStepStatus, Status.NotStarted);
-                        //dependencyStepStatus.Status = Status.NotStarted;
-                        //dependencyStepStatus.CanBeExecuted = CanStepBeExecuted(dependencyStepStatus);
                     }
                 }
             }
@@ -83,9 +81,6 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
                 foreach(Step step in obsoletedSteps)
                 {
                     SetStatusToStep(step, Status.Obsolete);
-                    //StepStatus stepStatus2 = GetStepStatus(step);
-                    //stepStatus2.Status = Status.Obsolete;
-                    //stepStatus2.CanBeExecuted = CanStepBeExecuted(stepStatus2);
                 }
             }
 

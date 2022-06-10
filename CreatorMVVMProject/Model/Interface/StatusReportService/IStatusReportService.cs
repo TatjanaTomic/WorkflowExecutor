@@ -10,10 +10,7 @@ namespace CreatorMVVMProject.Model.Interface.StatusReportService
 {
     public interface IStatusReportService
     {
-        IList<StageStatus> Stages
-        {
-            get;
-        }
+        IList<StageStatus> Stages { get; }
         void SetStatusToStep(StepStatus stepStatus, Status status);
         void SetStatusToStep(Step e, Status inProgress);
         void SetStatusMessageToStep(Step step, string message);

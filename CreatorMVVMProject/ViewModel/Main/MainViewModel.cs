@@ -15,6 +15,7 @@ namespace CreatorMVVMProject.ViewModel.Main
         private readonly MainModel mainModel;
         private List<StageViewModel> stageViewModels = new();
         private StageViewModel selectedStage;
+        private int selectedStageIndex;
 
         private bool canExecutionStart = true;
         private ICommand? startExecutionCommand;
@@ -31,6 +32,8 @@ namespace CreatorMVVMProject.ViewModel.Main
                 stageViewModels.Add(new(stage, this.mainModel.ExecutionService));
             }
             this.selectedStage = stageViewModels[0];
+
+            this.selectedStageIndex = 0;
         }
 
         public List<StageViewModel> StageViewModels
@@ -45,6 +48,17 @@ namespace CreatorMVVMProject.ViewModel.Main
             set
             {
                 this.selectedStage = value;
+                NotifyPropertyChange(nameof(SelectedStage));
+            }
+        }
+
+        public int SelectedStageIndex
+        {
+            get => this.selectedStageIndex;
+            set
+            {
+                this.selectedStageIndex = value;
+                NotifyPropertyChange(nameof(SelectedStageIndex));
             }
         }
 

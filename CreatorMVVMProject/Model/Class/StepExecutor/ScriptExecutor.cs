@@ -27,7 +27,9 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
 
             processStartInfo.WorkingDirectory = basePath;
             processStartInfo.FileName = ConfigurationManager.AppSettings["processStartInfoFileName"]?.ToString();
-            processStartInfo.Arguments = ConfigurationManager.AppSettings["processStartInfoCommand"]?.ToString() + " " + step.ExecutablePath + " " + BuildParameters();
+
+            string command = ConfigurationManager.AppSettings["processStartInfoCommand"]?.ToString() + " " + step.ExecutablePath + " " + BuildParameters();
+            processStartInfo.Arguments = command;
         }
 
         public async override Task Start()
