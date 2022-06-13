@@ -29,7 +29,7 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService
 
             foreach (var dependency in step.Dependencies)
             {
-                Step dependencyStep = stages.SelectMany(stage => stage.Steps).Where(s => s.Id == dependency.DependencyStepId).First();
+                Step dependencyStep = stages.SelectMany(stage => stage.Steps).First(s => s.Id == dependency.DependencyStepId);
 
                 dependencySteps.Add(dependencyStep);
             }

@@ -20,7 +20,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
         private readonly BlockingCollection<StepStatus> stepsQueue = new();
         private readonly BlockingCollection<StepStatus> stepsQueueParallel = new();
 
-        private  CancellationTokenSource cancellationTokenSource = new();
+        private readonly CancellationTokenSource cancellationTokenSource = new();
         private readonly AutoResetEvent autoResetEvent = new(false);
 
         private readonly IStatusReportService statusReportService;

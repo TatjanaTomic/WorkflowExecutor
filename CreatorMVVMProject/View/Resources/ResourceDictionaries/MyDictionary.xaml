@@ -1,10 +1,19 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+    <!-- Plava verzija - gora nego ljubicasta -->
+    <!--<SolidColorBrush x:Key="DeepDarkColorBrush" Color="#293241"/>
+    <SolidColorBrush x:Key="DarkColorBrush" Color="#3d5a80"/>
+    <SolidColorBrush x:Key="ButtonDarkColor" Color="#ee6c4d"/>
+    <SolidColorBrush x:Key="ButtonLightColor" Color="Silver"/>-->
+    
+    <!--Ljubicasta verzija-->
     <SolidColorBrush x:Key="DeepDarkColorBrush" Color="#1F1D36"/>
     <SolidColorBrush x:Key="DarkColorBrush" Color="#47395c"/>
     <SolidColorBrush x:Key="ButtonDarkColor" Color="#864879"/>
     <SolidColorBrush x:Key="ButtonLightColor" Color="Silver"/>
+
+    <!--Testne verzije-->
     <!--<SolidColorBrush x:Key="DeepDarkColorBrush" Color="#1e0233"/>
     <SolidColorBrush x:Key="DarkColorBrush" Color="#895575"/>
     <SolidColorBrush x:Key="DeepDarkColorBrush" Color="#a478b8"/>
@@ -12,9 +21,17 @@
     <SolidColorBrush x:Key="DeepDarkColorBrush" Color="#3e1747"/>
     <SolidColorBrush x:Key="DarkColorBrush" Color="#623b72"/>
     <SolidColorBrush x:Key="DarkColorBrush" Color="#a478b8"/>-->
+
+
+    <!-- Plava verzija - gora nego ljubicasta -->
+    <!--<SolidColorBrush x:Key="TextLightColorBrush" Color="WhiteSmoke"/>
+    <SolidColorBrush x:Key="TextDarkColorBrush" Color="#293241"/>-->
     
+    <!--Ljubicasta verzija-->
     <SolidColorBrush x:Key="TextLightColorBrush" Color="WhiteSmoke"/>
     <SolidColorBrush x:Key="TextDarkColorBrush" Color="#1F1D36"/>
+
+    <!--Testne verzije-->
     <!--<SolidColorBrush x:Key="TextLightColorBrush" Color="#1e0233"/>
     <SolidColorBrush x:Key="TextDarkColorBrush" Color="#e7d3cc"/>
     <SolidColorBrush x:Key="TextLightColorBrush" Color="#e7d3cc"/>
@@ -31,7 +48,6 @@
                         </ContentPresenter>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <!--#864879-->
                         <Trigger Property="IsEnabled" Value="True">
                             <Setter Property="Background" Value="{StaticResource ButtonDarkColor}"/>
                             <Setter Property="Foreground" Value="{StaticResource TextLightColorBrush}"/>
@@ -142,4 +158,49 @@
             </Setter.Value>
         </Setter>
     </Style>-->
+
+
+    <Style TargetType="CheckBox" x:Key="CircleCheckbox">
+        <Setter Property="Cursor" Value="Hand"></Setter>
+        <Setter Property="Content" Value=""></Setter>
+        <Setter Property="OverridesDefaultStyle" Value="true"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type CheckBox}">
+
+                    <BulletDecorator Background="Transparent">
+                        <BulletDecorator.Bullet>
+                            <Border x:Name="Border"  
+                                Width="20" 
+                                Height="20" 
+                                CornerRadius="0" 
+                                Background="Silver"
+                                BorderThickness="1"
+                                BorderBrush="Gray">
+                            <Path 
+                                Width="7" Height="7" 
+                                x:Name="CheckMark"
+                                SnapsToDevicePixels="False" 
+                                Stroke="Purple"
+                                StrokeThickness="1" />
+                            </Border>
+                        </BulletDecorator.Bullet>
+                        <ContentPresenter Margin="0,0,0,0"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Right"
+                                RecognizesAccessKey="True"/>
+                    </BulletDecorator>
+                    
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Cursor" Value="Arrow"></Setter>
+                            <Setter Property="Background" Value="Gray" TargetName="Border"/>
+                            <Setter Property="Foreground" Value="Gray"></Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

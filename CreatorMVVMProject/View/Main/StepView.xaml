@@ -81,10 +81,10 @@
                                       Content="Select step"
                                       VerticalAlignment="Top"
                                       Height="30"
-                                      Margin="10,0,20,0">
-                            <!--<ToolTipService.ToolTip>
-                                    <ToolTip>TEST</ToolTip>
-                                </ToolTipService.ToolTip>-->
+                                      Margin="10,0,20,0"
+                                  Style="{StaticResource CircleCheckbox}"
+                                      
+                                  >
                         </CheckBox>
                     </Grid>
                 </Grid>
