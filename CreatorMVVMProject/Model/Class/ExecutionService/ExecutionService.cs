@@ -13,8 +13,6 @@ using CreatorMVVMProject.Model.Class.StepExecutor;
 
 namespace CreatorMVVMProject.Model.Class.ExecutionService
 {
-    //TODO : U ExecutionService-u trebam promijeniti uslove, ne porediti da li je Step Status Disabled nego da li se moze izvrsavati
-
     public class ExecutionService : IExecutionService
     {
         private readonly BlockingCollection<StepStatus> stepsQueue = new();
@@ -59,11 +57,8 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                     {
                         if (cancellationTokenSource.IsCancellationRequested)
                         {
-                            //ClearQueues();
-                            //TODO: Ovaj if se poziva cim jednom cancel-ujem
-                            //Treba vidjeti da li nekako mogu da ga otkazem nakon sto ispraznim Queues
+
                             OnExecutionCompleted();
-                            //cancellationTokenSource = new();
                         }
 
                         ExecuteParallelSteps();
@@ -81,15 +76,10 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
             await executingSteps;
         }
 
-        private void ClearQueues()
-        {
-            while (StepsQueue.TryTake(out var _)) { }
-            while (StepsQueueParallel.TryTake(out var _)) { }
-        }
 
         private void ExecuteSerialSteps()
         {
-            while (StepsQueue.Any() && !StepsQueue.All(x => x.Status==Status.Disabled))
+            while (StepsQueue.Any() && !StepsQueue.All(x => x.Status == Status.Disabled))
             {
                 try
                 {
@@ -208,6 +198,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
             //TODO: Ako bilo koji step padne, zaustavljam izvrsavanje
             if(!args.IsSuccessful)
             {
+                ClearQueues();
                 cancellationTokenSource.Cancel();
             }
         }
@@ -215,11 +206,6 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
         public event EventHandler? ExecutionCompleted;
         protected virtual void OnExecutionCompleted()
         {
-            //if(StepsQueue.Count > 0 || stepsQueueParallel.Count > 0)
-            //{
-            //    ClearQueues();
-            //}
-
             ExecutionCompleted?.Invoke(this, EventArgs.Empty);
         }
 
@@ -233,6 +219,12 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
         protected virtual void OnExecutionTillThisStepStarted()
         {
             ExecutionTillThisStepStarted?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void ClearQueues()
+        {
+            while (StepsQueue.TryTake(out var _)) { }
+            while (StepsQueueParallel.TryTake(out var _)) { }
         }
     }
 }

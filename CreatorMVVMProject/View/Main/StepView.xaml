@@ -38,7 +38,7 @@
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
 
-                    <ProgressBar Orientation="Vertical" Height="10" IsIndeterminate="{Binding IsIndeterminate}" Grid.Column="0" />
+                    <ProgressBar Orientation="Vertical" Height="10" IsIndeterminate="{Binding IsIndeterminate}" Grid.Column="0" Background="silver" />
 
                     <StackPanel Grid.Column="1" Margin="20,0,0,0">
                         <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{Binding Status, Converter={StaticResource statusToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
@@ -70,19 +70,19 @@
                                     IsEnabled="{Binding IsButtonEnabled}"
                                     Style="{StaticResource PurpleButtonStyle}"
                                     Height="30"
-                                    MinWidth="110"
+                                    MinWidth="120"
                                     Margin="20,0,10,0"
                                     />
 
                         <CheckBox Grid.Column="3" HorizontalAlignment="Right"
-                                      Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}"
+                                      Style="{StaticResource MaterialDesignFilterChipOutlineCheckBox}"
                                       Foreground="{StaticResource TextLightColorBrush}"
                                       IsEnabled="{Binding CanBeSelected}"
                                       IsChecked="{Binding IsSelected}"
                                       Content="Select step"
                                       VerticalAlignment="Top"
                                       Height="30"
-                                      Margin="10,0,20,0">
+                                      Margin="0,0,20,0">
                         </CheckBox>
                     </Grid>
                 </Grid>

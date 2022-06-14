@@ -8,10 +8,15 @@
     <SolidColorBrush x:Key="ButtonLightColor" Color="Silver"/>-->
     
     <!--Ljubicasta verzija-->
-    <SolidColorBrush x:Key="DeepDarkColorBrush" Color="#1F1D36"/>
+    <!--<SolidColorBrush x:Key="DeepDarkColorBrush" Color="#1F1D36"/>
     <SolidColorBrush x:Key="DarkColorBrush" Color="#47395c"/>
     <SolidColorBrush x:Key="ButtonDarkColor" Color="#864879"/>
-    <SolidColorBrush x:Key="ButtonLightColor" Color="Silver"/>
+    <SolidColorBrush x:Key="ButtonLightColor" Color="Silver"/>-->
+
+    <SolidColorBrush x:Key="DeepDarkColorBrush" Color="#303030"/>
+    <SolidColorBrush x:Key="DarkColorBrush" Color="#424242"/>
+    <SolidColorBrush x:Key="ButtonDarkColor" Color="#3E588F"/>
+    <SolidColorBrush x:Key="ButtonLightColor" Color="#E3E8F8"/>
 
     <!--Testne verzije-->
     <!--<SolidColorBrush x:Key="DeepDarkColorBrush" Color="#1e0233"/>
@@ -28,8 +33,11 @@
     <SolidColorBrush x:Key="TextDarkColorBrush" Color="#293241"/>-->
     
     <!--Ljubicasta verzija-->
-    <SolidColorBrush x:Key="TextLightColorBrush" Color="WhiteSmoke"/>
-    <SolidColorBrush x:Key="TextDarkColorBrush" Color="#1F1D36"/>
+    <!--<SolidColorBrush x:Key="TextLightColorBrush" Color="WhiteSmoke"/>
+    <SolidColorBrush x:Key="TextDarkColorBrush" Color="#1F1D36"/>-->
+
+    <SolidColorBrush x:Key="TextLightColorBrush" Color="#c6cdd5"/>
+    <SolidColorBrush x:Key="TextDarkColorBrush" Color="#E3E8F8"/>
 
     <!--Testne verzije-->
     <!--<SolidColorBrush x:Key="TextLightColorBrush" Color="#1e0233"/>
