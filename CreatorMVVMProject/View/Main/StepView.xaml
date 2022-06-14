@@ -14,7 +14,7 @@
         <converters:StepTypeToIconConverter x:Key="typeToIconConverter"/>
     </UserControl.Resources>
 
-    <Border BorderThickness="0" Margin="10,10,10,10" CornerRadius="18,18,18,18" Background="{StaticResource DarkColorBrush}">
+    <Border BorderThickness="0" Margin="10,10,10,10" CornerRadius="12,12,12,12" Background="{StaticResource DarkColorBrush}">
         <Expander IsExpanded="{Binding IsExpanded}" >
 
             <Expander.Header>
@@ -75,16 +75,14 @@
                                     />
 
                         <CheckBox Grid.Column="3" HorizontalAlignment="Right"
+                                      Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}"
                                       Foreground="{StaticResource TextLightColorBrush}"
                                       IsEnabled="{Binding CanBeSelected}"
                                       IsChecked="{Binding IsSelected}"
                                       Content="Select step"
                                       VerticalAlignment="Top"
                                       Height="30"
-                                      Margin="10,0,20,0"
-                                  Style="{StaticResource CircleCheckbox}"
-                                      
-                                  >
+                                      Margin="10,0,20,0">
                         </CheckBox>
                     </Grid>
                 </Grid>
