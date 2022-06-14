@@ -139,11 +139,11 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                 autoResetEvent.Set();
         }
         
-        public void ExecuteSelectedSteps(List<StepStatus> selectedSteps)
+        public void ExecuteSelectedSteps(List<StepStatus> stepsToExecute)
         {
-            Task test = Task.Run(() =>
+            Task.Run(() =>
             {
-                EnqueueSteps(selectedSteps);
+                EnqueueSteps(stepsToExecute);
 
                 OnExecutionSelectedStepsStarted();
             });
@@ -152,7 +152,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 
         public void ExecuteTillThisStep(StepStatus stepStatus)
         {
-            Task test = Task.Run(() =>
+            Task.Run(() =>
             {
                 IList<Step> allSteps = workflowService.GetAllDependencySteps(stepStatus.Step);
                 allSteps.Add(stepStatus.Step);

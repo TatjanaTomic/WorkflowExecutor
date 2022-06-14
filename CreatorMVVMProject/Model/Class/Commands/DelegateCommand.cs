@@ -26,7 +26,6 @@ namespace CreatorMVVMProject.Model.Class.Commands
         public void Execute(object? parameter)
         {
             action((T?)parameter);
-
         }
     }
 

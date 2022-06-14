@@ -10,7 +10,7 @@ namespace CreatorMVVMProject.Model.Interface.ExecutionService
     public interface IExecutionService
     {
         void ExecuteSelectedSteps(List<StepStatus> stepsToExecute);
-        void ExecuteTillThisStep(StepStatus step);
+        void ExecuteTillThisStep(StepStatus stepStatus);
 
         event EventHandler? ExecutionCompleted;
         event EventHandler? ExecutionSelectedStepsStarted;

@@ -13,14 +13,19 @@ namespace CreatorMVVMProject.Model.Class.Converters
     [ValueConversion(typeof(Status), typeof(string))]
     public class StatusToColorConverter : IValueConverter
     {
+        private const string Red = "#D35D6E";
+        private const string Green = "#116530";
+        private const string LightGreen = "#5AA469";
+        private const string Gray = "#AAAAAA";
+
         private readonly Dictionary<Status, string> dictionary = new()
         {
-            { Status.NotStarted, "Gray" },
-            { Status.InProgress, "LightGreen" },
-            { Status.Success, "Green" },
-            { Status.Disabled, "#FF5D5D" },
-            { Status.Failed, "#FF5D5D" },
-            { Status.Obsolete, "#FF5D5D" }
+            { Status.NotStarted, Gray },
+            { Status.InProgress, LightGreen },
+            { Status.Success, Green },
+            { Status.Disabled, Red },
+            { Status.Failed, Red },
+            { Status.Obsolete, Red }
         };
         public object Convert(object value, System.Type targetType, object parameter, CultureInfo culture)
         {

@@ -12,6 +12,7 @@ namespace CreatorMVVMProject.Model.Class.DIBuilder
         private readonly ContainerBuilder builder = new();
         private readonly IContainer containerBuilder;
         private readonly ILifetimeScope scope;
+
         private ServiceContainer()
         {
             builder.RegisterType<WorkflowService.WorkflowService>().As<IWorkflowService>().SingleInstance();
@@ -30,11 +31,7 @@ namespace CreatorMVVMProject.Model.Class.DIBuilder
         {
             get
             {
-                if(instance == null)
-                {
-                    instance = new ServiceContainer();
-                }
-                return instance;
+                return instance ??= new ServiceContainer();
             }
         }
         
