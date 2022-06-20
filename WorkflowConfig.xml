@@ -1,0 +1,144 @@
+<Config>
+	<Stages>
+	
+		<Stage Id="Stage 1">
+			<Steps>
+				<Step Id="Step 11" ExecutablePath="py pythonScript1.py" Type="Executable" CanBeExecutedInParallel="false">
+					<Description>Step 11 executes pythonScript1.py.
+Script takes three arguments: argument1 argument2 argument3.
+This step can't be executed in parallel.
+					</Description>
+					<Parameters>
+						<Parameter KeyWord="" Value="argument1" />
+						<Parameter KeyWord="" Value="argument2" />
+						<Parameter KeyWord="" Value="argument3" />
+					</Parameters>
+				</Step>
+				
+				<Step Id="Step 12" ExecutablePath="py pythonScript2.py" Type="Executable" CanBeExecutedInParallel="false">
+					<Dependencies>
+						<Dependency Id="Step 11" />
+					</Dependencies>
+					<Description>Step 12 executes pythonScript2.py.
+Script takes no arguments.
+This step can't be executed in parallel. 
+Dependency steps: Step 11
+					</Description>
+				</Step>
+				
+				<Step Id="Step 13" ExecutablePath="py pythonScript3.py" Type="Executable" CanBeExecutedInParallel="false">
+					<Description>Step 13 executes pythonScript3.py
+Script takes no arguments.
+This step can't be executed in parallel. 
+Dependency steps: Step 12
+					</Description>
+					<Dependencies>
+						<Dependency Id="Step 12" />
+					</Dependencies>
+				</Step>
+				
+				<Step Id="Step 14" ExecutablePath="py pythonScript4.py" Type="Executable" CanBeExecutedInParallel="true">
+					<Description>Step 14 executes pythonScript4.py.
+Script takes three arguments: argument14 argument24 argument34. 
+This step can be executed in parallel. 
+Dependency steps: Step 11, Step 12, Step 13
+					</Description>
+					<Parameters>
+						<Parameter KeyWord="" Value="argument14" />
+						<Parameter KeyWord="" Value="argument24" />
+						<Parameter KeyWord="" Value="argument34" />
+					</Parameters>
+					<Dependencies>
+						<Dependency Id="Step 11" />
+						<Dependency Id="Step 12" />
+						<Dependency Id="Step 13" />
+					</Dependencies>
+				</Step>
+				
+				<Step Id="Step 15" File="http://localhost:9999/testDownload1.txt" Type="Download" CanBeExecutedInParallel="true">
+					<Description>Step 15 is going to download file testDownload1.txt
+This step can be executed in parallel. 
+					</Description>
+				</Step>
+			</Steps>
+		</Stage>
+		
+		<Stage Id="Stage 2">
+			<Steps>
+				<Step Id="Step 21" File="http://localhost:9999/testDownload1.txt" Type="Download" CanBeExecutedInParallel="true">
+					<Description>Step 21 downloads file testDownload1.txt
+This step can be executed in parallel.
+					</Description>
+				</Step>
+				
+				<Step Id="Step 22" File="http://localhost:9999/testDownload2.txt" Type="Download" CanBeExecutedInParallel="true">
+					<Description>Step 22 downloads file testDownload2.txt
+This step can be executed in parallel.
+					</Description>
+				</Step>
+				
+				<Step Id="Step 23" File="http://localhost:9999/testDownload3.txt" Type="Download" CanBeExecutedInParallel="false">
+					<Dependencies>
+						<Dependency Id="Step 21" />
+						<Dependency Id="Step 22" />
+					</Dependencies>
+					<Description>Step 23 downloads file testDownload3.txt
+This step can't be executed in parallel.
+Dependency steps: Step 21, Step 22
+					</Description>
+				</Step>
+				
+				<Step Id="Step 24" File="C:\Users\tatjanat\Desktop\test\testUpload1.txt" Type="Upload" CanBeExecutedInParallel="false">
+					<Description>Step 24 uploads file testUpload1.txt
+This step can't be executed in parallel.
+					</Description>
+				</Step>
+				
+				<Step Id="Step 25" File="C:\Users\tatjanat\Desktop\test\testUpload2.txt" Type="Upload" CanBeExecutedInParallel="true">
+					<Description>Step 25 uploads file testUpload2.txt
+This step can be executed in parallel.					
+					</Description>
+				</Step>
+				
+				<Step Id="Step 26" File="C:\Users\tatjanat\Desktop\test\testUpload3.txt" Type="Upload" CanBeExecutedInParallel="false">
+					<Description>Step 26 uploads file testUpload3.txt
+This step can't be executed in parallel.
+Dependency steps: Step 24, Step 25
+					</Description>
+					<Dependencies>
+						<Dependency Id="Step 24" />
+						<Dependency Id="Step 25" />
+					</Dependencies>
+				</Step>
+			</Steps>
+		</Stage>
+		
+		<Stage Id="Stage 3">
+			<Steps>
+				<Step Id="Step 31" ExecutablePath="python-3.9.13-amd64.exe" Type="Executable" CanBeExecutedInParallel="false">
+					<Description>This step executes python-3.9.13-amd64.exe</Description>
+				</Step>
+			</Steps>
+		</Stage>
+		
+		<Stage Id="Stage 4">
+			<Steps>
+				<Step Id="Step 41" File="http://localhost:9999/nepostojeci.txt" Type="Download" CanBeExecutedInParallel="false">
+					<Description>Download - valid URL, file does not exist</Description>
+				</Step>
+				
+				<Step Id="Step 42" File="xxx" Type="Download" CanBeExecutedInParallel="false">
+					<Description>Download - invalid File URL</Description>
+				</Step>
+				
+				<Step Id="Step 43" File="nepostojeci.txt" Type="Upload" CanBeExecutedInParallel="false">
+					<Description>Upload - file does not exist</Description>
+				</Step>
+				
+				<Step Id="Step 44" ExecutablePath="py nepostojecaSkripta.py" Type="Executable" CanBeExecutedInParallel="false">
+					<Description>Executes script that does not exist</Description>
+				</Step>
+			</Steps>
+		</Stage>
+	</Stages>
+</Config>
