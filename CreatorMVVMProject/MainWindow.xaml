@@ -7,7 +7,8 @@
         xmlns:stage="clr-namespace:CreatorMVVMProject.View.Main"
         d:DataContext="{d:DesignInstance Type=main:MainViewModel}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="1150" MinHeight="700" MinWidth="1150" WindowStartupLocation="CenterScreen">
+        Title="MainWindow" Height="700" Width="1200" MinHeight="700" MinWidth="1200" WindowStartupLocation="CenterScreen"
+        Style="{StaticResource MainWindowStyle}">
     <Window.Resources>
 
     </Window.Resources>

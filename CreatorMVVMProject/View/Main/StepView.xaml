@@ -38,18 +38,18 @@
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
 
-                    <ProgressBar Orientation="Vertical" Height="10" IsIndeterminate="{Binding IsIndeterminate}" Grid.Column="0" Background="silver" />
+                    <ProgressBar Grid.Column="0" Orientation="Vertical" Height="10" IsIndeterminate="{Binding IsIndeterminate}" Background="silver" />
 
                     <StackPanel Grid.Column="1" Margin="20,0,0,0">
                         <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{Binding Status, Converter={StaticResource statusToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
-                            <TextBlock Text="Step status:" Style="{StaticResource TextBlockStatusStyle}"></TextBlock>
-                            <TextBlock Text="{Binding Status}" Style="{StaticResource TextBlockStatusStyle}"></TextBlock>
+                            <TextBlock Text="Step status:" Margin="0,5,0,5" Style="{StaticResource TextBlockStatusStyle}"></TextBlock>
+                            <TextBlock Text="{Binding Status}" Margin="0,5,0,5"  Style="{StaticResource TextBlockStatusStyle}"></TextBlock>
                         </StackPanel>
-                        <DockPanel Grid.Row="2" Margin="0,10,0,10">
+                        <DockPanel Grid.Row="2" Margin="0,20,0,0">
                             <TextBlock Text="Step description:" Style="{StaticResource TextBlockAsLabelStyle}"></TextBlock>
                             <TextBlock Text="{Binding StepDescription}" Style="{StaticResource TextBlockStyle}"></TextBlock>
                         </DockPanel>
-                        <DockPanel Grid.Row="3" Margin="0,10,0,10">
+                        <DockPanel Grid.Row="3" Margin="0,20,0,10">
                             <TextBlock Text="Output:" Style="{StaticResource TextBlockAsLabelStyle}"></TextBlock>
                             <TextBlock Text="{Binding Message}" Style="{StaticResource TextBlockStyle}"></TextBlock>
                         </DockPanel>
@@ -64,25 +64,25 @@
                         </Grid.ColumnDefinitions>
 
                         <Button Grid.Column="1" 
-                                    Content="Execute till this step"
-                                    Command="{Binding StartStepCommand}"
-                                    IsEnabled="{Binding IsButtonEnabled}"
-                                    Style="{StaticResource PurpleButtonStyle}"
-                                    VerticalAlignment="Top"
-                                    Height="30"
-                                    MinWidth="120"
-                                    Margin="20,0,10,0"
-                                    />
+                                Content="Execute till this step"
+                                Command="{Binding StartStepCommand}"
+                                IsEnabled="{Binding IsButtonEnabled}"
+                                Style="{StaticResource PurpleButtonStyle}"
+                                VerticalAlignment="Top"
+                                Height="31"
+                                MinWidth="150"
+                                MaxWidth="250"
+                                />
 
                         <CheckBox Grid.Column="3" HorizontalAlignment="Right"
-                                      Style="{StaticResource MaterialDesignFilterChipOutlineCheckBox}"
-                                      Foreground="{StaticResource TextLightColorBrush}"
-                                      IsEnabled="{Binding CanBeSelected}"
-                                      IsChecked="{Binding IsSelected}"
-                                      Content="Select step"
-                                      VerticalAlignment="Top"
-                                      Height="30"
-                                      Margin="0,0,20,0">
+                                  Style="{StaticResource MaterialDesignFilterChipOutlineCheckBox}"
+                                  Foreground="{StaticResource TextLightColorBrush}"
+                                  IsEnabled="{Binding CanBeSelected}"
+                                  IsChecked="{Binding IsSelected}"
+                                  Content="Select step"
+                                  VerticalAlignment="Top"
+                                  Height="30"
+                                  Margin="0,0,20,0">
                         </CheckBox>
                     </Grid>
                 </Grid>

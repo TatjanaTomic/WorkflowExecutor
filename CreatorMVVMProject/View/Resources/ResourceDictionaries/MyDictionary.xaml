@@ -1,7 +1,14 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-     <!--Ljubicasta verzija-->
+
+    <Style x:Key="MainWindowStyle" TargetType="{x:Type Window}">
+        <Setter Property="FontFamily" Value="Verdana" />
+        <Setter Property="FontSize" Value="13" />
+    </Style>
+
+    
+    <!--Ljubicasta verzija-->
     <!--<SolidColorBrush x:Key="DeepDarkColorBrush" Color="#1F1D36"/>
     <SolidColorBrush x:Key="DarkColorBrush" Color="#47395c"/>
     <SolidColorBrush x:Key="ButtonDarkColor" Color="#864879"/>
@@ -17,31 +24,37 @@
     <!--<SolidColorBrush x:Key="TextLightColorBrush" Color="WhiteSmoke"/>
     <SolidColorBrush x:Key="TextDarkColorBrush" Color="#293241"/>-->
     
-    <SolidColorBrush x:Key="DeepDarkColorBrush" Color="#303030"/>
+    <!-- Crna(siva) verzija-->
+    <!--<SolidColorBrush x:Key="DeepDarkColorBrush" Color="#303030"/>
     <SolidColorBrush x:Key="DarkColorBrush" Color="#424242"/>
     <SolidColorBrush x:Key="ButtonDarkColor" Color="#3E588F"/>
     <SolidColorBrush x:Key="ButtonLightColor" Color="#c6cdd5"/>
+    <SolidColorBrush x:Key="TextLightColorBrush" Color="#c6cdd5"/>
+    <SolidColorBrush x:Key="TextDarkColorBrush" Color="#303030"/>-->
+    
+    <SolidColorBrush x:Key="DeepDarkColorBrush" Color="#0a192f"/>
+    <SolidColorBrush x:Key="DarkColorBrush" Color="#192949"/>
+    <SolidColorBrush x:Key="ButtonDarkColor" Color="#3E588F"/>
+    <SolidColorBrush x:Key="ButtonLightColor" Color="#c6cdd5"/>
+    <SolidColorBrush x:Key="GreenColorBrush" Color="#0193ab"/>
     <SolidColorBrush x:Key="TextLightColorBrush" Color="#c6cdd5"/>
     <SolidColorBrush x:Key="TextDarkColorBrush" Color="#303030"/>
 
     
     <Style TargetType="TextBlock" x:Key="TextBlockAsLabelStyle">
-        <Setter Property="Width" Value="120"/>
+        <Setter Property="Width" Value="130"/>
         <Setter Property="Foreground" Value="{StaticResource TextLightColorBrush}"/>
-        <Setter Property="FontSize" Value="14"/>
     </Style>
 
     <Style TargetType="TextBlock" x:Key="TextBlockStyle">
         <Setter Property="Foreground" Value="{StaticResource TextLightColorBrush}"/>
-        <Setter Property="FontSize" Value="14"/>
         <Setter Property="TextWrapping" Value="Wrap"/>
         <Setter Property="TextAlignment" Value="Justify"/>
     </Style>
 
     <Style TargetType="TextBlock" x:Key="TextBlockStatusStyle">
-        <Setter Property="Width" Value="120"/>
+        <Setter Property="Width" Value="130"/>
         <Setter Property="Foreground" Value="{StaticResource TextDarkColorBrush}"/>
-        <Setter Property="FontSize" Value="14"/>
     </Style>
     
 
@@ -49,19 +62,22 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border CornerRadius="10" Background="{TemplateBinding Background}" BorderThickness="1">
+                    <!--<Border CornerRadius="10" Background="{TemplateBinding Background}" BorderThickness="1">-->
+                    <Border CornerRadius="10" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" Background="{TemplateBinding Background}">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center">
 
                         </ContentPresenter>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEnabled" Value="True">
-                            <Setter Property="Background" Value="{StaticResource ButtonDarkColor}"/>
-                            <Setter Property="Foreground" Value="{StaticResource TextLightColorBrush}"/>
+                            <Setter Property="Background" Value="{StaticResource GreenColorBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource DeepDarkColorBrush}"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource DeepDarkColorBrush}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Background" Value="{StaticResource ButtonLightColor}"/>
-                            <Setter Property="Foreground" Value="{StaticResource ButtonDarkColor}"/>
+                            <Setter Property="Background" Value="{StaticResource DarkColorBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource GreenColorBrush}"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource GreenColorBrush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -76,7 +92,7 @@
                 <ControlTemplate TargetType="CheckBox">
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEnabled" Value="True">
-                            <Setter Property="Foreground" Value="{StaticResource TextLightColorBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource GreenColorBrush}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Foreground" Value="{StaticResource ButtonDarkColor}"/>
@@ -116,6 +132,6 @@
     <BitmapImage x:Key="UploadIcon" UriSource="../Icons/upload.png" ></BitmapImage>
     <BitmapImage x:Key="DownloadIcon" UriSource="../Icons/download.png" ></BitmapImage>
     <BitmapImage x:Key="ExecuteIcon"  UriSource="../Icons/execute.png" ></BitmapImage>
-    
 
+    
 </ResourceDictionary>
