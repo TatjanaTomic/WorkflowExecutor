@@ -12,35 +12,18 @@ namespace CreatorMVVMProject.ViewModel.Main
 {
     public class StageViewModel: INotifyPropertyChanged
     {
-        private StageStatus stage;
         private readonly List<StepViewModel> stepViewModels = new();
         
         public StageViewModel(StageStatus stage, IExecutionService executionService)
         {
-            this.stage = stage;
+            this.Stage = stage;
             StepViewModel stepViewModel;
 
-            foreach (StepStatus step in this.stage.Steps)
+            foreach (StepStatus step in this.Stage.Steps)
             {
                 stepViewModel = new StepViewModel(step, executionService);
                 stepViewModels.Add(stepViewModel);
             }
-        }
-
-        public StageStatus Stage
-        {
-            get => this.stage; 
-            set => this.stage = value;
-        }
-        
-        public string StageId
-        {
-            get => this.stage.Id;
-        }
-
-        public List<StepViewModel> StepViewModels
-        {
-            get => this.stepViewModels;
         }
         
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -48,6 +31,13 @@ namespace CreatorMVVMProject.ViewModel.Main
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        public StageStatus Stage { get; set; }
+
+        public string StageId => this.Stage.Id;
+
+        public List<StepViewModel> StepViewModels => this.stepViewModels;
+
     }
     
 }

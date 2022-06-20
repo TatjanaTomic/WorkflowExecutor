@@ -37,9 +37,13 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
             foreach (StepStatus stepStatus in stepsToExecute)
             {
                 if (stepStatus.Step.CanBeExecutedInParallel)
+                {
                     StepsQueueParallel.Add(stepStatus);
+                }
                 else
-                    StepsQueue.Add(stepStatus );
+                {
+                    StepsQueue.Add(stepStatus);
+                }
 
                 stepStatus.CanBeExecuted = false;
             }
@@ -99,10 +103,15 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                     Console.WriteLine(e.StackTrace);
                 }
 
+
                 if (StepsQueue.Count == 0 && StepsQueueParallel.Count == 0)
+                {
                     OnExecutionCompleted();
+                }
                 else
+                {
                     autoResetEvent.Set();
+                }
             }
 
         }
@@ -133,9 +142,13 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
             Task.WaitAll(tasks.ToArray());
 
             if (StepsQueue.Count == 0 && StepsQueueParallel.Count == 0)
+            {
                 OnExecutionCompleted();
+            }
             else
+            {
                 autoResetEvent.Set();
+            }
         }
         
         public void ExecuteSelectedSteps(List<StepStatus> stepsToExecute)
@@ -165,15 +178,9 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 
         }
 
-        private BlockingCollection<StepStatus> StepsQueue
-        {
-            get { return stepsQueue; }
-        }
+        private BlockingCollection<StepStatus> StepsQueue => stepsQueue;
 
-        private BlockingCollection<StepStatus> StepsQueueParallel
-        {
-            get { return stepsQueueParallel; }
-        }
+        private BlockingCollection<StepStatus> StepsQueueParallel => stepsQueueParallel;
 
         private AbstractExecutor CreateStepExecutor(Step step)
         {

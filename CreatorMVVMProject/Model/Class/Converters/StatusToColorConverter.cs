@@ -34,7 +34,9 @@ namespace CreatorMVVMProject.Model.Class.Converters
                 return dictionary[status];
             }
             else
+            {
                 return Red;
+            }
         }
 
         public object ConvertBack(object value, System.Type targetType, object parameter, CultureInfo culture)

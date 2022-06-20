@@ -27,7 +27,10 @@ namespace CreatorMVVMProject.Model.Class.Converters
             {
                 return Application.Current.FindResource(dictionary[type]) as BitmapImage;
             }
-            else return "";
+            else 
+            {
+                return "";
+            }
         }
 
         public object ConvertBack(object value, System.Type targetType, object parameter, CultureInfo culture)

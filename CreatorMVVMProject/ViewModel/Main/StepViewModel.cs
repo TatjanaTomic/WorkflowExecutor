@@ -12,14 +12,14 @@ namespace CreatorMVVMProject.ViewModel.Main
     {
         protected readonly StepStatus stepStatus;
 
-        private bool isSelected = false;
+        private readonly IExecutionService executionService;
+        
         private bool isExpanded = true;
         private bool isButtonEnabled = true;
-        private bool isIndeterminate = false;
+        private bool isSelected;
+        private bool isIndeterminate;
 
         private ICommand? startStepCommand;
-
-        private readonly IExecutionService executionService;
 
         public StepViewModel(StepStatus stepStatus, IExecutionService executionService)
         {
@@ -31,45 +31,33 @@ namespace CreatorMVVMProject.ViewModel.Main
             this.executionService = executionService;
         }
 
-        public StepStatus StepStatus { get { return stepStatus; } }
-
-        public Status Status
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected virtual void NotifyPropertyChange(string propertyName)
         {
-            get => stepStatus.Status;
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public bool CanBeSelected
+        public event EventHandler? ExecuteTillThisPressed;
+        protected virtual void OnExecuteTillThisPressed()
         {
-            get => this.stepStatus.CanBeExecuted;
+            ExecuteTillThisPressed?.Invoke(this, EventArgs.Empty);
         }
 
-        public string StepId
-        {
-            get
-            {
-                return this.stepStatus.Step.Id;
-            }
-        }
+        public StepStatus StepStatus => stepStatus;
 
-        public string? StepDescription
-        {
-            get 
-            {
-                return this.stepStatus.Step.Description;
-            }
-        }
+        public Status Status => stepStatus.Status;
 
-        public Type StepType
-        {
-            get
-            {
-                return this.stepStatus.Step.Type;
-            }
-        }
+        public bool CanBeSelected => this.stepStatus.CanBeExecuted;
+
+        public string StepId => this.stepStatus.Step.Id;
+
+        public string? StepDescription => this.stepStatus.Step.Description;
+
+        public Type StepType => this.stepStatus.Step.Type;
 
         public string Message
         {
-            get { return this.stepStatus.StatusMessage; }
+            get => this.stepStatus.StatusMessage;
             set
             {
                 this.stepStatus.StatusMessage = value;
@@ -79,7 +67,7 @@ namespace CreatorMVVMProject.ViewModel.Main
 
         public bool IsSelected
         {
-            get { return this.isSelected; }
+            get => this.isSelected;
             set
             {
                 this.isSelected = value;
@@ -89,8 +77,9 @@ namespace CreatorMVVMProject.ViewModel.Main
 
         public bool IsExpanded
         {
-            get { return this.isExpanded; }
-            set { 
+            get => this.isExpanded;
+            set
+            {
                 this.isExpanded = value;
                 NotifyPropertyChange(nameof(IsExpanded));
             }
@@ -98,7 +87,7 @@ namespace CreatorMVVMProject.ViewModel.Main
 
         public bool IsButtonEnabled
         {
-            get { return this.isButtonEnabled; }
+            get => this.isButtonEnabled;
             set
             {
                 this.isButtonEnabled = value;
@@ -108,7 +97,7 @@ namespace CreatorMVVMProject.ViewModel.Main
 
         public bool IsIndeterminate
         {
-            get { return this.isIndeterminate; }
+            get => this.isIndeterminate;
             set
             {
                 this.isIndeterminate = value;
@@ -116,13 +105,7 @@ namespace CreatorMVVMProject.ViewModel.Main
             }
         }
 
-        public ICommand StartStepCommand
-        {
-            get
-            {
-                return this.startStepCommand ??= new DelegateCommand(StartStepCommandHandler);
-            }
-        }
+        public ICommand StartStepCommand => this.startStepCommand ??= new DelegateCommand(StartStepCommandHandler);
 
         public void StartStepCommandHandler()
         {
@@ -145,18 +128,6 @@ namespace CreatorMVVMProject.ViewModel.Main
         private void OnCanBeExecutedChanged(object? _, EventArgs _2)
         {
             NotifyPropertyChange(nameof(this.CanBeSelected));
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected virtual void NotifyPropertyChange(string propertyName)
-        {
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public event EventHandler? ExecuteTillThisPressed;
-        protected virtual void OnExecuteTillThisPressed()
-        {
-            ExecuteTillThisPressed?.Invoke(this, EventArgs.Empty);
         }
     }
 }

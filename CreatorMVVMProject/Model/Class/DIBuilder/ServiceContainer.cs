@@ -20,20 +20,14 @@ namespace CreatorMVVMProject.Model.Class.DIBuilder
             builder.RegisterType<StatusReportService.StatusReportService>().As<IStatusReportService>().SingleInstance();
             builder.RegisterType<ExecutionService.ExecutionService>().As<IExecutionService>().SingleInstance();
             builder.RegisterType<MainModel>().SingleInstance();
-            this.containerBuilder = builder.Build();
-            this.scope = this.containerBuilder.BeginLifetimeScope();
+            containerBuilder = builder.Build();
+            scope = containerBuilder.BeginLifetimeScope();
         }
         public static T Resolve<T>() where T: class
         {
             return Instance.scope.Resolve<T>();
         }
-        public static ServiceContainer Instance
-        {
-            get
-            {
-                return instance ??= new ServiceContainer();
-            }
-        }
-        
+        public static ServiceContainer Instance => instance ??= new ServiceContainer();
+
     }
 }

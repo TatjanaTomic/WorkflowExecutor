@@ -47,4 +47,12 @@
     <Resource Include="View\Resources\Icons\upload_23968.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\Users\tatjanat\source\repos\TatjanaTomic\WorkflowExecutor\CreatorMVVMProject\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="C:\Users\tatjanat\source\repos\TatjanaTomic\WorkflowExecutor\CreatorMVVMProject\.editorconfig" />
+  </ItemGroup>
+
 </Project>

@@ -33,26 +33,22 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
 
         public bool CanStepBeExecutedInitial(Step step)
         {
-            if(workflowService.HasDependencySteps(step))
-                return false;
-
-            return true;
+            return !workflowService.HasDependencySteps(step);
         }
 
         public void SetCanStepBeExecuted(StepStatus stepStatus)
         {
             bool canStepBeExecuted = true;
 
-            if(stepStatus.Status == Status.Disabled || stepStatus.Status == Status.InProgress)
+            if (stepStatus.Status == Status.Disabled || stepStatus.Status == Status.InProgress)
+            {
                 canStepBeExecuted = false;
+            }
 
-            //TODO : Provjeri ovaj uslov
-            // Ako je step dosao do stanja obsolete, da li to znaci da su svi njegovi zavisni sigurno zavrseni i ne moze izvrsiti samo ako je neki od njegovih zavisnih Failed ?
-            //if (stepStatus.Status == Status.Obsolete && workflowService.GetAllDependencySteps(stepStatus.Step).Exists(s => GetStepStatus(s).Status == Status.Failed))
-            //    return false;
-            
             if (stepStatus.Status == Status.Obsolete && workflowService.GetAllDependencySteps(stepStatus.Step).ToList().Exists(s => GetStepStatus(s).Status != Status.Success))
+            {
                 canStepBeExecuted = false;
+            }
 
             stepStatus.CanBeExecuted = canStepBeExecuted;
         }
