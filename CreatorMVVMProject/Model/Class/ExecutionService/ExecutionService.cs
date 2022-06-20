@@ -57,7 +57,6 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                     {
                         if (cancellationTokenSource.IsCancellationRequested)
                         {
-
                             OnExecutionCompleted();
                         }
 
@@ -195,10 +194,9 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
             statusReportService.SetStatusToStep(args.Step, args.IsSuccessful ? Status.Success : Status.Failed);
             statusReportService.SetStatusMessageToStep(args.Step, args.Message);
 
-            //TODO: Ako bilo koji step padne, zaustavljam izvrsavanje
+            //Ako bilo koji step padne, zaustavljam izvrsavanje
             if(!args.IsSuccessful)
             {
-                //TODO: Bug - za svaki step koji ce se 'ocistiti' treba promijeniti parametar canBeExecuted
                 ClearQueues();
                 cancellationTokenSource.Cancel();
             }
