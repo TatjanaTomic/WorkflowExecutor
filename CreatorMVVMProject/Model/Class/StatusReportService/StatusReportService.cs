@@ -39,10 +39,12 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
             return true;
         }
 
-        public bool CanStepBeExecuted(StepStatus stepStatus)
+        public void SetCanStepBeExecuted(StepStatus stepStatus)
         {
+            bool canStepBeExecuted = true;
+
             if(stepStatus.Status == Status.Disabled || stepStatus.Status == Status.InProgress)
-                return false;
+                canStepBeExecuted = false;
 
             //TODO : Provjeri ovaj uslov
             // Ako je step dosao do stanja obsolete, da li to znaci da su svi njegovi zavisni sigurno zavrseni i ne moze izvrsiti samo ako je neki od njegovih zavisnih Failed ?
@@ -50,9 +52,9 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
             //    return false;
             
             if (stepStatus.Status == Status.Obsolete && workflowService.GetAllDependencySteps(stepStatus.Step).ToList().Exists(s => GetStepStatus(s).Status != Status.Success))
-                return false;
-            
-            return true;
+                canStepBeExecuted = false;
+
+            stepStatus.CanBeExecuted = canStepBeExecuted;
         }
 
         public void SetStatusToStep(StepStatus stepStatus, Status status) 
@@ -84,7 +86,7 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
                 }
             }
 
-            stepStatus.CanBeExecuted = CanStepBeExecuted(stepStatus);
+            SetCanStepBeExecuted(stepStatus);
         }
 
         public void SetStatusToStep(Step step, Status status)
@@ -101,7 +103,7 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
 
         public StepStatus GetStepStatus(Step step)
         {
-            return stages.SelectMany(stage => stage.Steps).Where(s => s.Step.Id == step.Id).First();
+            return stages.SelectMany(stage => stage.Steps).First(s => s.Step.Id == step.Id);
         }
 
         public IList<StepStatus> GetStepStatuses(List<Step> steps)

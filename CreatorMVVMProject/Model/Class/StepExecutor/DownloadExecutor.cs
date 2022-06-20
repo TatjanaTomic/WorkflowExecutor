@@ -21,7 +21,6 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
         public DownloadExecutor(Step step)
         {
             this.step = step;
-
         }
 
         public async override Task Start()

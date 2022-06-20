@@ -198,6 +198,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
             //TODO: Ako bilo koji step padne, zaustavljam izvrsavanje
             if(!args.IsSuccessful)
             {
+                //TODO: Bug - za svaki step koji ce se 'ocistiti' treba promijeniti parametar canBeExecuted
                 ClearQueues();
                 cancellationTokenSource.Cancel();
             }
@@ -223,8 +224,15 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 
         private void ClearQueues()
         {
-            while (StepsQueue.TryTake(out var _)) { }
-            while (StepsQueueParallel.TryTake(out var _)) { }
+            while (StepsQueue.TryTake(out var stepStatus))
+            {
+                statusReportService.SetCanStepBeExecuted(stepStatus);
+            }
+
+            while (StepsQueueParallel.TryTake(out var stepStatus))
+            {
+                statusReportService.SetCanStepBeExecuted(stepStatus);
+            }
         }
     }
 }

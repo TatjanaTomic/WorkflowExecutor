@@ -16,7 +16,7 @@ namespace CreatorMVVMProject.Model.Class.Converters
         private const string Red = "#D35D6E";
         private const string Green = "#116530";
         private const string LightGreen = "#5AA469";
-        private const string Gray = "#AAAAAA";
+        private const string Gray = "#A9A9A9";
 
         private readonly Dictionary<Status, string> dictionary = new()
         {
@@ -34,7 +34,7 @@ namespace CreatorMVVMProject.Model.Class.Converters
                 return dictionary[status];
             }
             else
-                return "#FF5D5D";
+                return Red;
         }
 
         public object ConvertBack(object value, System.Type targetType, object parameter, CultureInfo culture)
