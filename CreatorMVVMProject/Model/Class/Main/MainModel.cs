@@ -7,6 +7,13 @@ using System;
 
 namespace CreatorMVVMProject.Model.Class.Main
 {
+
+    // TODO: Promijeni apsolutne putanje u workflow fajlu (Dodaj upload path u App.config)
+    // TODO: Precisti kod, obrisi nekoristene using-e i slicno
+    // TODO: Provjeri da li ima binding errora
+    // TODO: Napisi dokumentaciju za komplikovanije metode
+    // TODO: Sredi izgled Select steps Dialog Box-a
+
     public class MainModel
     {
         private readonly IStatusReportService statusReportService;
@@ -33,7 +40,6 @@ namespace CreatorMVVMProject.Model.Class.Main
         public void AddStepsToExecution(List<StepStatus> steps)
         {
             executionService.ExecuteSelectedSteps(steps);
-            //executionService.EnqueueSteps(steps);
         }
 
         public IExecutionService ExecutionService
