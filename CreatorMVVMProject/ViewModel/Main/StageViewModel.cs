@@ -1,12 +1,7 @@
-﻿using CreatorMVVMProject.Model.Class.Commands;
-using CreatorMVVMProject.Model.Class.Main;
-using CreatorMVVMProject.Model.Class.StatusReportService;
+﻿using CreatorMVVMProject.Model.Class.StatusReportService;
 using CreatorMVVMProject.Model.Interface.ExecutionService;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Windows.Input;
 
 namespace CreatorMVVMProject.ViewModel.Main
 {

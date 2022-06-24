@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CreatorMVVMProject.Model.Class.StatusReportService
+﻿namespace CreatorMVVMProject.Model.Class.StatusReportService
 {
     public enum Status
     {
