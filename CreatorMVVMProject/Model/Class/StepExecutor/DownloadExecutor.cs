@@ -19,7 +19,7 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
             this.step = step;
         }
 
-        public async override Task Start()
+        public override async Task Start()
         {
             OnExecutionStarted(step);
 

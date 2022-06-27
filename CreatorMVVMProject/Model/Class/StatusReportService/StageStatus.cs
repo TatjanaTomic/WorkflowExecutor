@@ -12,7 +12,7 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
 
         public StageStatus(Stage stage, IStatusReportService statusReportService)
         {
-            this.id = stage.Id;
+            id = stage.Id;
             this.statusReportService = statusReportService;
 
             if (stage.Steps != null)
@@ -26,10 +26,7 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
 
         public string Id { get; set; }
 
-        public List<StepStatus> Steps
-        {
-            get => this.steps;
-        }
+        public List<StepStatus> Steps => steps;
 
     }
 }

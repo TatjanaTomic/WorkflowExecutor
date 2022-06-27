@@ -87,25 +87,25 @@ namespace CreatorMVVMProject.ViewModel.Main
 
         public bool IsButtonEnabled
         {
-            get => this.isButtonEnabled;
+            get => isButtonEnabled;
             set
             {
-                this.isButtonEnabled = value;
+                isButtonEnabled = value;
                 NotifyPropertyChange(nameof(IsButtonEnabled));
             }
         }
 
         public bool IsIndeterminate
         {
-            get => this.isIndeterminate;
+            get => isIndeterminate;
             set
             {
-                this.isIndeterminate = value;
+                isIndeterminate = value;
                 NotifyPropertyChange(nameof(IsIndeterminate));
             }
         }
 
-        public ICommand StartStepCommand => this.startStepCommand ??= new DelegateCommand(StartStepCommandHandler);
+        public ICommand StartStepCommand => startStepCommand ??= new DelegateCommand(StartStepCommandHandler);
 
         public void StartStepCommandHandler()
         {
@@ -117,17 +117,17 @@ namespace CreatorMVVMProject.ViewModel.Main
         private void OnStatusChanged(object? _, StatusChangedEventArgs statusChangedEventArgs)
         {
             IsIndeterminate = statusChangedEventArgs.Status == Status.InProgress;
-            NotifyPropertyChange(nameof(this.Status));
+            NotifyPropertyChange(nameof(Status));
         }
 
         private void OnMessageChanged(object? _, EventArgs _2)
         {
-            NotifyPropertyChange(nameof(this.Message));
+            NotifyPropertyChange(nameof(Message));
         }
 
         private void OnCanBeExecutedChanged(object? _, EventArgs _2)
         {
-            NotifyPropertyChange(nameof(this.CanBeSelected));
+            NotifyPropertyChange(nameof(CanBeSelected));
         }
     }
 }

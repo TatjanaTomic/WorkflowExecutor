@@ -22,10 +22,10 @@ namespace CreatorMVVMProject.ViewModel.Main
 
         public MainViewModel(MainModel model)
         {
-            this.mainModel = model;
-            this.mainModel.ExecutionCompleted += MainModel_ExecutionCompleted;
-            this.mainModel.ExecutionSelectedStepsStarted += MainModel_ExecutionSelectedStepsStarted;
-            this.mainModel.ExecutionTillThisStepStarted += MainModel_ExecutionTillThisStepStarted;
+            mainModel = model;
+            mainModel.ExecutionCompleted += MainModel_ExecutionCompleted;
+            mainModel.ExecutionSelectedStepsStarted += MainModel_ExecutionSelectedStepsStarted;
+            mainModel.ExecutionTillThisStepStarted += MainModel_ExecutionTillThisStepStarted;
 
             foreach(StageStatus stage in mainModel.Stages)
             {

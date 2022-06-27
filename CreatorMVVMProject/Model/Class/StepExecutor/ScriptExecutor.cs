@@ -29,7 +29,7 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
             processStartInfo.Arguments = command;
         }
 
-        public async override Task Start()
+        public override async Task Start()
         {
             OnExecutionStarted(step);
             await Task.Run(() =>

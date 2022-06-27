@@ -17,14 +17,11 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
             this.canBeExecuted = canBeExecuted;
         }
 
-        public Step Step
-        {
-            get { return step; }
-        }
+        public Step Step => step;
 
         public string StatusMessage
         {
-            get { return statusMessage; }
+            get => statusMessage;
             set
             {
                 statusMessage = value;
@@ -34,7 +31,7 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
 
         public Status Status
         {
-            get { return status; }
+            get => status;
             set
             {
                 this.status = value;
@@ -44,7 +41,7 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
 
         public bool CanBeExecuted
         {
-            get { return canBeExecuted; }
+            get => canBeExecuted;
             set
             {
                 canBeExecuted = value;
