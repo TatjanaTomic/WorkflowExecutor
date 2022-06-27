@@ -6,8 +6,6 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml
     [XmlRoot("Config")]
     public class StageList
     {
-        private List<Stage> stages = new();
-
         public StageList()
         {
            
@@ -15,7 +13,7 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml
 
         [XmlArray]
         [XmlArrayItem(ElementName = "Stage")]
-        public List<Stage> Stages { get => this.stages; set => this.stages = value; }
+        public List<Stage> Stages { get; set; } = new();
 
     }
 }

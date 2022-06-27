@@ -10,18 +10,12 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService
     {
         private readonly IList<Stage> stages;
 
-        private readonly IWorkflowRepository workflowRepository;
-
         public WorkflowService(IWorkflowRepository workflowRepository)
         {
-            this.workflowRepository = workflowRepository;
-            this.stages = this.workflowRepository.GetAllStages();
+            stages = workflowRepository.GetAllStages();
         }
 
-        public IList<Stage> Stages
-        {
-            get => this.stages;
-        }
+        public IList<Stage> Stages => stages;
 
         public IList<Step> GetFirstLevelDependencySteps(Step step)
         {
@@ -62,11 +56,10 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService
         public IList<Step> GetReverseDependencySteps(Step step)
         {
             IList<Step> reverseDependencySteps = new List<Step>();
-                
-            foreach(Step s in stages.SelectMany(stage => stage.Steps))
+
+            foreach (Step s in stages.SelectMany(stage => stage.Steps).Where(s => s.Dependencies.Any(d => d.DependencyStepId == step.Id)))
             {
-                if(s.Dependencies.Any(d => d.DependencyStepId == step.Id))
-                    reverseDependencySteps.Add(s);
+                reverseDependencySteps.Add(s);
             }
 
             return reverseDependencySteps;

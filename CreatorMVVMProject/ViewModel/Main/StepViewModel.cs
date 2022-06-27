@@ -34,7 +34,7 @@ namespace CreatorMVVMProject.ViewModel.Main
         public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void NotifyPropertyChange(string propertyName)
         {
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public event EventHandler? ExecuteTillThisPressed;
@@ -47,40 +47,40 @@ namespace CreatorMVVMProject.ViewModel.Main
 
         public Status Status => stepStatus.Status;
 
-        public bool CanBeSelected => this.stepStatus.CanBeExecuted;
+        public bool CanBeSelected => stepStatus.CanBeExecuted;
 
-        public string StepId => this.stepStatus.Step.Id;
+        public string StepId => stepStatus.Step.Id;
 
-        public string? StepDescription => this.stepStatus.Step.Description;
+        public string? StepDescription => stepStatus.Step.Description;
 
-        public Type StepType => this.stepStatus.Step.Type;
+        public Type StepType => stepStatus.Step.Type;
 
         public string Message
         {
-            get => this.stepStatus.StatusMessage;
+            get => stepStatus.StatusMessage;
             set
             {
-                this.stepStatus.StatusMessage = value;
+                stepStatus.StatusMessage = value;
                 NotifyPropertyChange(nameof(Message));
             }
         }
 
         public bool IsSelected
         {
-            get => this.isSelected;
+            get => isSelected;
             set
             {
-                this.isSelected = value;
+                isSelected = value;
                 NotifyPropertyChange(nameof(IsSelected));
             }
         }
 
         public bool IsExpanded
         {
-            get => this.isExpanded;
+            get => isExpanded;
             set
             {
-                this.isExpanded = value;
+                isExpanded = value;
                 NotifyPropertyChange(nameof(IsExpanded));
             }
         }

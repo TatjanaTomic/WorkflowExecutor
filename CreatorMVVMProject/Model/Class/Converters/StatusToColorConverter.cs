@@ -13,7 +13,6 @@ namespace CreatorMVVMProject.Model.Class.Converters
         private const string Green = "#116530";
         private const string LightGreen = "#5AA469";
         private const string Gray = "#A9A9A9";
-
         private readonly Dictionary<Status, string> dictionary = new()
         {
             { Status.NotStarted, Gray },
@@ -23,7 +22,8 @@ namespace CreatorMVVMProject.Model.Class.Converters
             { Status.Failed, Red },
             { Status.Obsolete, Red }
         };
-        public object Convert(object value, System.Type targetType, object parameter, CultureInfo culture)
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is Status status && dictionary.ContainsKey(status))
             {
@@ -35,7 +35,7 @@ namespace CreatorMVVMProject.Model.Class.Converters
             }
         }
 
-        public object ConvertBack(object value, System.Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }

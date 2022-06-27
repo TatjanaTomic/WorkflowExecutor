@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace CreatorMVVMProject.Model.Class.Exceptions
 {
+    [Serializable]
     public class ConfigurationException : Exception
     {
         public ConfigurationException()
@@ -15,6 +17,11 @@ namespace CreatorMVVMProject.Model.Class.Exceptions
 
         public ConfigurationException(string message, Exception inner)
             : base(message, inner)
+        {
+        }
+
+        protected ConfigurationException(SerializationInfo serializationInfo, StreamingContext context)
+            : base(serializationInfo, context)
         {
         }
     }

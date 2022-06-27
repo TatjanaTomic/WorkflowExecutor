@@ -10,7 +10,6 @@ namespace CreatorMVVMProject.Model.Class.DIBuilder
     {
         private static ServiceContainer? instance;
         private readonly ContainerBuilder builder = new();
-        private readonly IContainer containerBuilder;
         private readonly ILifetimeScope scope;
 
         private ServiceContainer()
@@ -20,7 +19,7 @@ namespace CreatorMVVMProject.Model.Class.DIBuilder
             builder.RegisterType<StatusReportService.StatusReportService>().As<IStatusReportService>().SingleInstance();
             builder.RegisterType<ExecutionService.ExecutionService>().As<IExecutionService>().SingleInstance();
             builder.RegisterType<MainModel>().SingleInstance();
-            containerBuilder = builder.Build();
+            IContainer containerBuilder = builder.Build();
             scope = containerBuilder.BeginLifetimeScope();
         }
         public static T Resolve<T>() where T: class

@@ -6,7 +6,7 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
 {
     public class StageStatus
     {
-        private string id = string.Empty;
+        private readonly string id;
         private readonly List<StepStatus> steps = new();
         private readonly IStatusReportService statusReportService;
 
@@ -24,11 +24,7 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
             }
         }
 
-        public string Id
-        {
-            get { return this.id; }
-            set { this.id = value; }
-        }
+        public string Id { get; set; }
 
         public List<StepStatus> Steps
         {

@@ -6,45 +6,36 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml
     [XmlRoot("Step")]
     public class Step
     {
-        private string id = string.Empty;
-        private string executablePath = string.Empty;
-        private string file = string.Empty;
-        private Type type;
-        private bool canBeExecutedInParallel;
-        private string description = string.Empty;
-        private List<Dependency> dependencies = new();
-        private List<Parameter> parameters = new();
-
         public Step()
         {
 
         }
 
         [XmlAttribute("Id")]
-        public string Id { get => this.id; set => this.id = value; }
+        public string Id { get; set; } = string.Empty;
 
         [XmlAttribute("ExecutablePath")]
-        public string ExecutablePath { get => this.executablePath; set => this.executablePath = value; }
+        public string ExecutablePath { get; set; } = string.Empty;
 
         [XmlAttribute("File")]
-        public string File { get => this.file; set => this.file = value; }
+        public string File { get; set; } = string.Empty;
 
         [XmlAttribute("Type")]
-        public Type Type { get => this.type; set => this.type = value; }
+        public Type Type { get; set; }
 
         [XmlAttribute("CanBeExecutedInParallel")]
-        public bool CanBeExecutedInParallel { get => this.canBeExecutedInParallel; set => this.canBeExecutedInParallel = value; }
+        public bool CanBeExecutedInParallel { get; set; }
 
         [XmlElement]
-        public string Description { get => this.description; set => this.description = value; }
+        public string Description { get; set; } = string.Empty;
 
         [XmlArray]
         [XmlArrayItem(ElementName = "Dependency")]
-        public List<Dependency> Dependencies { get => this.dependencies; set => this.dependencies = value; }
+        public List<Dependency> Dependencies { get; set; } = new();
 
         [XmlArray]
         [XmlArrayItem(ElementName = "Parameter")]
-        public List<Parameter> Parameters { get => this.parameters; set => this.parameters = value; }       
+        public List<Parameter> Parameters { get; set; } = new();
 
     }
 }
