@@ -8,18 +8,9 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
     {
         private static StepExecutorFabrique? instance;
 
-        private StepExecutorFabrique()
-        {
+        private StepExecutorFabrique() { }
 
-        }
-
-        public static StepExecutorFabrique Instance
-        {
-            get
-            {
-                return instance ??= new StepExecutorFabrique();
-            }
-        }
+        public static StepExecutorFabrique Instance => instance ??= new StepExecutorFabrique();
 
         public AbstractExecutor CreateExecutor(Step step)
         {

@@ -8,7 +8,6 @@ using System;
 namespace CreatorMVVMProject.Model.Class.Main
 {
 
-    // TODO: Promijeni apsolutne putanje u workflow fajlu (Dodaj upload path u App.config)
     // TODO: Precisti kod, obrisi nekoristene using-e i slicno
     // TODO: Provjeri da li ima binding errora
     // TODO: Napisi dokumentaciju za komplikovanije metode
@@ -32,20 +31,14 @@ namespace CreatorMVVMProject.Model.Class.Main
         }
 
 
-        public IList<StageStatus> Stages
-        {
-            get => this.statusReportService.Stages;
-        }
+        public IList<StageStatus> Stages => statusReportService.Stages;
 
         public void AddStepsToExecution(List<StepStatus> steps)
         {
             executionService.ExecuteSelectedSteps(steps);
         }
 
-        public IExecutionService ExecutionService
-        {
-            get => this.executionService;
-        }
+        public IExecutionService ExecutionService => executionService;
 
         public event EventHandler? ExecutionCompleted;
         private void StepsExecutionCompleted(object? _, EventArgs e)

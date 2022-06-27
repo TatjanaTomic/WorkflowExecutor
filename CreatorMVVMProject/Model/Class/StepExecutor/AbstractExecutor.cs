@@ -10,7 +10,6 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
         public event EventHandler<ExecutionCompletedEventArgs>? ExecutionCompleted;
 
         public abstract Task Start();
-        public abstract Task Stop();
 
         protected virtual void OnExecutionStarted(Step e)
         {

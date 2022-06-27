@@ -9,13 +9,14 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
 {
     public class UploadExecutor : AbstractExecutor
     {
-        private readonly Step step;
-
-        private static readonly string httpClientBaseAddress = ConfigurationManager.AppSettings["httpClientBaseAddress"]?.ToString();
-        readonly HttpClient httpClient = new()
+        private static readonly string? httpClientBaseAddress = ConfigurationManager.AppSettings["httpClientBaseAddress"]?.ToString();
+        private static readonly string? uploadPath = ConfigurationManager.AppSettings["uploadPath"]?.ToString();
+        private static readonly HttpClient httpClient = new()
         {
             BaseAddress = new(httpClientBaseAddress)
         };
+
+        private readonly Step step;
 
         public UploadExecutor(Step step)
         {
@@ -26,19 +27,26 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
         {
             OnExecutionStarted(step);
 
+            if(uploadPath == null)
+            {
+                OnExecutionCompleted(new ExecutionCompletedEventArgs(step, false, "Uploads path is not defined."));
+                return;
+            }
+
+            string fileName = Path.GetFileName(step.File);
+            string filePath = Path.Combine(uploadPath, fileName);
+
             await Task.Run(async () =>
             {
-                if (!File.Exists(step.File))
+                if (!File.Exists(filePath))
                 {
-                    OnExecutionCompleted(new ExecutionCompletedEventArgs(step, false, "File " + step.File + " does not exist."));
+                    OnExecutionCompleted(new ExecutionCompletedEventArgs(step, false, "File " + fileName + " does not exist."));
                     return;
                 }
 
-                string fileName = Path.GetFileName(step.File);
-
                 try
                 {
-                    await using FileStream stream = File.OpenRead(step.File);
+                    await using FileStream stream = File.OpenRead(filePath);
                     using HttpRequestMessage request = new(HttpMethod.Post, "file");
                     using MultipartFormDataContent content = new()
                     {
@@ -49,7 +57,7 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
 
                     await httpClient.SendAsync(request);
 
-                    OnExecutionCompleted(new ExecutionCompletedEventArgs(step, true, "OK"));
+                    OnExecutionCompleted(new ExecutionCompletedEventArgs(step, true, "File " + fileName +  " downloaded successuflly."));
                 }
                 catch (Exception ex)
                 {
@@ -57,10 +65,6 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
                 }
             });
         }
-
-        public override Task Stop()
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

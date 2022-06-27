@@ -12,7 +12,7 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
         private readonly Step step;
         readonly ProcessStartInfo processStartInfo = new();
 
-        private readonly string? basePath = ConfigurationManager.AppSettings["basePath"]?.ToString();
+        private readonly string? executablesPath = ConfigurationManager.AppSettings["executablesPath"]?.ToString();
 
         public ScriptExecutor(Step step)
         {
@@ -22,7 +22,7 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
             processStartInfo.RedirectStandardError = true;
             processStartInfo.CreateNoWindow = true;
 
-            processStartInfo.WorkingDirectory = basePath;
+            processStartInfo.WorkingDirectory = executablesPath;
             processStartInfo.FileName = ConfigurationManager.AppSettings["processStartInfoFileName"]?.ToString();
 
             string command = ConfigurationManager.AppSettings["processStartInfoCommand"]?.ToString() + " " + step.ExecutablePath + " " + BuildParameters();
@@ -87,9 +87,5 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
             OnExecutionCompleted(new ExecutionCompletedEventArgs(step, true, output));    
         }
 
-        public override Task Stop()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

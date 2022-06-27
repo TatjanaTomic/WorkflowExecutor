@@ -13,7 +13,6 @@
     /*
      * Disabled - ne može se startati jer se njegov zavisni korak nije izvršio
      * NotStarted - može se startati
-     * Waiting - stavljen u red, ceka na izvrsavanje [ izbaceno ]
      * InProgress - trenutno se izvršava
      * Success - uspješno izvršen
      * Failed - neuspješno izvršavanje

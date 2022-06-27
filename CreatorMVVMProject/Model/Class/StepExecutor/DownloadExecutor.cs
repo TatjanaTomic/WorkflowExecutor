@@ -27,33 +27,33 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
             {
                 if (!Uri.TryCreate(step.File, UriKind.Absolute, out Uri? uriResult))
                 {
-                    OnExecutionCompleted(new ExecutionCompletedEventArgs(step, false, "Step property File is invalid."));
+                    OnExecutionCompleted(new ExecutionCompletedEventArgs(step, false, "Step property File is not valid."));
                     return;
                 }
 
-                string path = Path.Combine(downloadsPath, Path.GetFileName(step.File));
+                if(downloadsPath == null)
+                {
+                    OnExecutionCompleted(new ExecutionCompletedEventArgs(step, false, "Downloads path is not defined."));
+                    return;
+                }
+
+                string resultPath = Path.Combine(downloadsPath, Path.GetFileName(step.File));
 
                 try
                 {
                     byte[] fileBytes = await httpClient.GetByteArrayAsync(uriResult);
                     
-                    File.WriteAllBytes(path, fileBytes);
+                    File.WriteAllBytes(resultPath, fileBytes);
 
-                    OnExecutionCompleted(new ExecutionCompletedEventArgs(step, true, "Downloaded"));
+                    OnExecutionCompleted(new ExecutionCompletedEventArgs(step, true, "File " + Path.GetFileName(resultPath) +  " downloaded successuflly."));
                 }
                 catch (Exception ex)
                 {
                     OnExecutionCompleted(new ExecutionCompletedEventArgs(step, false, ex.Message));
-
                 }
                 
             });
 
-        }
-
-        public override Task Stop()
-        {
-            throw new NotImplementedException();
         }
     }
 }
