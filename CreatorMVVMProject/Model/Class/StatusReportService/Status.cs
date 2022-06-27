@@ -9,7 +9,7 @@
         Failed,
         Obsolete,
     }
-
+     
     /*
      * Disabled - ne može se startati jer se njegov zavisni korak nije izvršio
      * NotStarted - može se startati
