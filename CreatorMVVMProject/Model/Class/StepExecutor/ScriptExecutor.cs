@@ -25,7 +25,7 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
             processStartInfo.WorkingDirectory = executablesPath;
             processStartInfo.FileName = ConfigurationManager.AppSettings["processStartInfoFileName"]?.ToString();
 
-            string command = ConfigurationManager.AppSettings["processStartInfoCommand"]?.ToString() + " " + step.ExecutablePath + " " + BuildParameters();
+            var command = ConfigurationManager.AppSettings["processStartInfoCommand"]?.ToString() + " " + step.ExecutablePath + " " + BuildParameters();
             processStartInfo.Arguments = command;
         }
 
@@ -74,16 +74,16 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
                 return;
             }
             
-            Process process = sender as Process;
+            Process? process = sender as Process;
 
             if (process.ExitCode != 0)
             {
-                string error = process.StandardError.ReadToEnd();
+                var error = process.StandardError.ReadToEnd();
                 OnExecutionCompleted(new ExecutionCompletedEventArgs(step, false, error));
                 return;
             }
 
-            string output = process.StandardOutput.ReadToEnd();
+            var output = process.StandardOutput.ReadToEnd();
             OnExecutionCompleted(new ExecutionCompletedEventArgs(step, true, output));    
         }
 

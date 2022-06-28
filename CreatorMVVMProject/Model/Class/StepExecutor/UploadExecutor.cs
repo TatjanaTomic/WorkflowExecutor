@@ -33,8 +33,8 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
                 return;
             }
 
-            string fileName = Path.GetFileName(step.File);
-            string filePath = Path.Combine(uploadPath, fileName);
+            var fileName = Path.GetFileName(step.File);
+            var filePath = Path.Combine(uploadPath, fileName);
 
             await Task.Run(async () =>
             {

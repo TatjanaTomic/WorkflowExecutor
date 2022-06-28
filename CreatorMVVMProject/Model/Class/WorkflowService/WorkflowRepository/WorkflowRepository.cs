@@ -17,13 +17,17 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository
 
             try
             {
-                if (CONFIG_PATH == null)
+                if (CONFIG_PATH is null)
+                {
                     throw new ConfigurationException("Missing configuration path.");
+                }
 
                 var stagesList = StageListBuilder.GetStageList(CONFIG_PATH);
 
                 if (stagesList != null && stagesList.Stages != null)
+                {
                     stages = stagesList.Stages;
+                }
 
             } catch(ConfigurationException e)
             {

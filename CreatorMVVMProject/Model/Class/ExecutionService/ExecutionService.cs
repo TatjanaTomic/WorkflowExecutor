@@ -15,9 +15,6 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 {
     public class ExecutionService : IExecutionService
     {
-        private readonly BlockingCollection<StepStatus> stepsQueue = new();
-        private readonly BlockingCollection<StepStatus> stepsQueueParallel = new();
-
         private readonly CancellationTokenSource cancellationTokenSource = new();
         private readonly AutoResetEvent autoResetEvent = new(false);
 
@@ -178,9 +175,9 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 
         }
 
-        private BlockingCollection<StepStatus> StepsQueue => stepsQueue;
+        private BlockingCollection<StepStatus> StepsQueue { get; } = new();
 
-        private BlockingCollection<StepStatus> StepsQueueParallel => stepsQueueParallel;
+        private BlockingCollection<StepStatus> StepsQueueParallel { get; } = new();
 
         private AbstractExecutor CreateStepExecutor(Step step)
         {

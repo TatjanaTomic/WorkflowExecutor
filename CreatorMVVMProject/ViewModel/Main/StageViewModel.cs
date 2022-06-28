@@ -7,17 +7,13 @@ namespace CreatorMVVMProject.ViewModel.Main
 {
     public class StageViewModel: INotifyPropertyChanged
     {
-        private readonly List<StepViewModel> stepViewModels = new();
-
         public StageViewModel(StageStatus stage, IExecutionService executionService)
         {
             Stage = stage;
-            StepViewModel stepViewModel;
 
             foreach (StepStatus step in Stage.Steps)
             {
-                stepViewModel = new StepViewModel(step, executionService);
-                stepViewModels.Add(stepViewModel);
+                StepViewModels.Add(new StepViewModel(step, executionService));
             }
         }
         
@@ -31,7 +27,7 @@ namespace CreatorMVVMProject.ViewModel.Main
 
         public string StageId => Stage.Id;
 
-        public List<StepViewModel> StepViewModels => stepViewModels;
+        public List<StepViewModel> StepViewModels { get; } = new();
 
     }
     

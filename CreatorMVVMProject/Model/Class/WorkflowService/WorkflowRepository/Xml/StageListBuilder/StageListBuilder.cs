@@ -12,7 +12,9 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml.
         public static StageList GetStageList(string configPath)
         {
             if (!File.Exists(configPath))
-                throw new ConfigurationException("Missing configuration file.");
+            {
+                throw new ConfigurationException("Missing workflow configuration file.");
+            }
 
             try
             {
@@ -21,9 +23,13 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml.
 
                 var configuration = serializer.Deserialize(fileStream);
                 if (configuration == null)
+                {
                     throw new ConfigurationException("Error deserializing XML configuration.");
+                }
                 else
+                {
                     return (StageList)configuration;
+                }
 
             }
             catch (Exception ex)

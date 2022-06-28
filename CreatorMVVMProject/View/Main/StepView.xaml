@@ -67,7 +67,7 @@
                                 Content="Execute till this step"
                                 Command="{Binding StartStepCommand}"
                                 IsEnabled="{Binding IsButtonEnabled}"
-                                Style="{StaticResource PurpleButtonStyle}"
+                                Style="{StaticResource TurquoiseButtonStyle}"
                                 VerticalAlignment="Top"
                                 Height="31"
                                 MinWidth="150"

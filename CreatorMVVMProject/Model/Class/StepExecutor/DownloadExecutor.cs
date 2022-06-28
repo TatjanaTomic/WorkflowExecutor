@@ -37,11 +37,11 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
                     return;
                 }
 
-                string resultPath = Path.Combine(downloadsPath, Path.GetFileName(step.File));
+                var resultPath = Path.Combine(downloadsPath, Path.GetFileName(step.File));
 
                 try
                 {
-                    byte[] fileBytes = await httpClient.GetByteArrayAsync(uriResult);
+                    var fileBytes = await httpClient.GetByteArrayAsync(uriResult);
                     
                     File.WriteAllBytes(resultPath, fileBytes);
 

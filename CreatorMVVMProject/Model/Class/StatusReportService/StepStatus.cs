@@ -5,19 +5,18 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
 {
     public class StepStatus
     {
-        private readonly Step step;
         private Status status;
         private bool canBeExecuted;
         private string statusMessage = string.Empty;
         
         public StepStatus(Step step, Status initialStatus, bool canBeExecuted)
         {
-            this.step = step;
-            this.status = initialStatus;
+            Step = step;
+            status = initialStatus;
             this.canBeExecuted = canBeExecuted;
         }
 
-        public Step Step => step;
+        public Step Step { get; }
 
         public string StatusMessage
         {
@@ -34,8 +33,8 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
             get => status;
             set
             {
-                this.status = value;
-                StatusChanged?.Invoke(this, new StatusChangedEventArgs(status, step.Id));
+                status = value;
+                StatusChanged?.Invoke(this, new StatusChangedEventArgs(status, Step.Id));
             }
         }
 

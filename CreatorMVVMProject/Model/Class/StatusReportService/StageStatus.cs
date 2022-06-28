@@ -6,27 +6,25 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
 {
     public class StageStatus
     {
-        private readonly string id;
-        private readonly List<StepStatus> steps = new();
         private readonly IStatusReportService statusReportService;
 
         public StageStatus(Stage stage, IStatusReportService statusReportService)
         {
-            this.id = stage.Id;
+            Id = stage.Id;
             this.statusReportService = statusReportService;
 
             if (stage.Steps != null)
             {
                 foreach (var step in stage.Steps)
                 {
-                    steps.Add(new(step, statusReportService.GetInitialStatus(step), statusReportService.CanStepBeExecutedInitial(step)));
+                    Steps.Add(new(step, statusReportService.GetInitialStatus(step), statusReportService.CanStepBeExecutedInitial(step)));
                 }
             }
         }
 
-        public string Id => id;
+        public string Id { get; }
 
-        public List<StepStatus> Steps => steps;
+        public List<StepStatus> Steps { get; } = new();
 
     }
 }

@@ -98,7 +98,9 @@ namespace CreatorMVVMProject.ViewModel.Main
         private void EnableButtons()
         {
             foreach (StepViewModel stepViewModel in StageViewModels.SelectMany(stageViewModel => stageViewModel.StepViewModels).ToList())
+            {
                 stepViewModel.IsButtonEnabled = true;
+            }
 
             CanExecutionStart = true;
         }
@@ -106,7 +108,9 @@ namespace CreatorMVVMProject.ViewModel.Main
         private void DisableExecuteTillThisButtons()
         {
             foreach (StepViewModel stepViewModel in StageViewModels.SelectMany(stageViewModel => stageViewModel.StepViewModels).ToList())
+            {
                 stepViewModel.IsButtonEnabled = false;
+            }
         }
 
         private IList<StepViewModel> GetSelectedStepViewModels()

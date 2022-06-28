@@ -9,7 +9,6 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
     public class StatusReportService : IStatusReportService
     {
         private readonly IWorkflowService workflowService;
-        private readonly IList<StageStatus> stages = new List<StageStatus>();
 
         public StatusReportService(IWorkflowService workflowService)
         {
@@ -17,16 +16,18 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
 
             foreach(var stage in workflowService.Stages)
             {
-                stages.Add(new(stage, this));
+                Stages.Add(new(stage, this));
             }
         }
 
-        public IList<StageStatus> Stages => this.stages;
+        public IList<StageStatus> Stages { get; } = new List<StageStatus>();
 
         public Status GetInitialStatus(Step step)
         {
             if (workflowService.HasDependencySteps(step))
+            {
                 return Status.Disabled;
+            }
             
             return Status.NotStarted;
         }
@@ -38,7 +39,7 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
 
         public void SetCanStepBeExecuted(StepStatus stepStatus)
         {
-            bool canStepBeExecuted = true;
+            var canStepBeExecuted = true;
 
             if (stepStatus.Status == Status.Disabled || stepStatus.Status == Status.InProgress)
             {
@@ -99,7 +100,7 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
 
         public StepStatus GetStepStatus(Step step)
         {
-            return stages.SelectMany(stage => stage.Steps).First(s => s.Step.Id == step.Id);
+            return Stages.SelectMany(stage => stage.Steps).First(s => s.Step.Id == step.Id);
         }
 
         public IList<StepStatus> GetStepStatuses(List<Step> steps)

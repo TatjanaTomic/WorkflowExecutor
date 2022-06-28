@@ -6,37 +6,13 @@
         <Setter Property="FontFamily" Value="Verdana" />
         <Setter Property="FontSize" Value="13" />
     </Style>
+    
 
-    
-    <!--Ljubicasta verzija-->
-    <!--<SolidColorBrush x:Key="DeepDarkColorBrush" Color="#1F1D36"/>
-    <SolidColorBrush x:Key="DarkColorBrush" Color="#47395c"/>
-    <SolidColorBrush x:Key="ButtonDarkColor" Color="#864879"/>
-    <SolidColorBrush x:Key="ButtonLightColor" Color="Silver"/>-->
-    <!--<SolidColorBrush x:Key="TextLightColorBrush" Color="WhiteSmoke"/>
-    <SolidColorBrush x:Key="TextDarkColorBrush" Color="#1F1D36"/>-->
-    
-    <!-- Plava verzija - gora nego ljubicasta -->
-    <!--<SolidColorBrush x:Key="DeepDarkColorBrush" Color="#293241"/>
-    <SolidColorBrush x:Key="DarkColorBrush" Color="#3d5a80"/>
-    <SolidColorBrush x:Key="ButtonDarkColor" Color="#ee6c4d"/>
-    <SolidColorBrush x:Key="ButtonLightColor" Color="Silver"/>-->
-    <!--<SolidColorBrush x:Key="TextLightColorBrush" Color="WhiteSmoke"/>
-    <SolidColorBrush x:Key="TextDarkColorBrush" Color="#293241"/>-->
-    
-    <!-- Crna(siva) verzija-->
-    <!--<SolidColorBrush x:Key="DeepDarkColorBrush" Color="#303030"/>
-    <SolidColorBrush x:Key="DarkColorBrush" Color="#424242"/>
-    <SolidColorBrush x:Key="ButtonDarkColor" Color="#3E588F"/>
-    <SolidColorBrush x:Key="ButtonLightColor" Color="#c6cdd5"/>
-    <SolidColorBrush x:Key="TextLightColorBrush" Color="#c6cdd5"/>
-    <SolidColorBrush x:Key="TextDarkColorBrush" Color="#303030"/>-->
-    
     <SolidColorBrush x:Key="DeepDarkColorBrush" Color="#0a192f"/>
     <SolidColorBrush x:Key="DarkColorBrush" Color="#192949"/>
     <SolidColorBrush x:Key="ButtonDarkColor" Color="#3E588F"/>
     <SolidColorBrush x:Key="ButtonLightColor" Color="#c6cdd5"/>
-    <SolidColorBrush x:Key="GreenColorBrush" Color="#0193ab"/>
+    <SolidColorBrush x:Key="TurquoiseColorBrush" Color="#0193ab"/>
     <SolidColorBrush x:Key="TextLightColorBrush" Color="#c6cdd5"/>
     <SolidColorBrush x:Key="TextDarkColorBrush" Color="#303030"/>
 
@@ -56,9 +32,9 @@
         <Setter Property="Width" Value="130"/>
         <Setter Property="Foreground" Value="{StaticResource TextDarkColorBrush}"/>
     </Style>
-    
 
-    <Style TargetType="Button" x:Key="PurpleButtonStyle">
+
+    <Style TargetType="Button" x:Key="TurquoiseButtonStyle">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -70,14 +46,14 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEnabled" Value="True">
-                            <Setter Property="Background" Value="{StaticResource GreenColorBrush}"/>
+                            <Setter Property="Background" Value="{StaticResource TurquoiseColorBrush}"/>
                             <Setter Property="Foreground" Value="{StaticResource DeepDarkColorBrush}"/>
                             <Setter Property="BorderBrush" Value="{StaticResource DeepDarkColorBrush}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Background" Value="{StaticResource DarkColorBrush}"/>
-                            <Setter Property="Foreground" Value="{StaticResource GreenColorBrush}"/>
-                            <Setter Property="BorderBrush" Value="{StaticResource GreenColorBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource TurquoiseColorBrush}"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource TurquoiseColorBrush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -92,7 +68,7 @@
                 <ControlTemplate TargetType="CheckBox">
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEnabled" Value="True">
-                            <Setter Property="Foreground" Value="{StaticResource GreenColorBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource TurquoiseColorBrush}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Foreground" Value="{StaticResource ButtonDarkColor}"/>
