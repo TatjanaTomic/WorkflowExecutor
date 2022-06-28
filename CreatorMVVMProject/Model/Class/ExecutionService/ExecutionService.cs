@@ -64,8 +64,8 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                             OnExecutionCompleted();
                         }
 
-                        ExecuteParallelSteps();
                         ExecuteSerialSteps();
+                        ExecuteParallelSteps();
                         
                         autoResetEvent.WaitOne();
                     }
@@ -82,7 +82,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 
         private void ExecuteSerialSteps()
         {
-            while (StepsQueue.Any() && !StepsQueue.All(x => x.Status == Status.Disabled))
+            while (StepsQueue.Any() && !StepsQueue.All(s => s.Status == Status.Disabled))
             {
                 try
                 {
@@ -119,7 +119,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
         private void ExecuteParallelSteps()
         {
             List<Task> tasks = new();
-            while (StepsQueueParallel.Any() && !StepsQueueParallel.All(x => x.Status == Status.Disabled))
+            while (StepsQueueParallel.Any() && !StepsQueueParallel.All(s => s.Status == Status.Disabled))
             {
                 StepStatus stepStatus = StepsQueueParallel.Take();
                 try

@@ -24,7 +24,7 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
             }
         }
 
-        public string Id { get; set; }
+        public string Id => id;
 
         public List<StepStatus> Steps => steps;
 

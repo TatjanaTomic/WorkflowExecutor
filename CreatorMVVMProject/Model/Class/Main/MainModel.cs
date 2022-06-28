@@ -7,12 +7,6 @@ using System;
 
 namespace CreatorMVVMProject.Model.Class.Main
 {
-
-    // TODO: Precisti kod, obrisi nekoristene using-e i slicno
-    // TODO: Provjeri da li ima binding errora
-    // TODO: Napisi dokumentaciju za komplikovanije metode
-    // TODO: Sredi izgled Select steps Dialog Box-a
-
     public class MainModel
     {
         private readonly IStatusReportService statusReportService;
