@@ -21,14 +21,7 @@ namespace CreatorMVVMProject.Model.Class.Converters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is Status status && dictionary.ContainsKey(status))
-            {
-                return dictionary[status];
-            }
-            else
-            {
-                return false;
-            }
+            return value is Status status && dictionary.ContainsKey(status) ? dictionary[status] : (object)false;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

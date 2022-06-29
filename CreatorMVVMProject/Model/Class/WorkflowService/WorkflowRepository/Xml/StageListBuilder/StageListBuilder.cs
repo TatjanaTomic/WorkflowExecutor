@@ -22,14 +22,7 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml.
                 XmlSerializer serializer = new(typeof(StageList));
 
                 var configuration = serializer.Deserialize(fileStream);
-                if (configuration == null)
-                {
-                    throw new ConfigurationException("Error deserializing XML configuration.");
-                }
-                else
-                {
-                    return (StageList)configuration;
-                }
+                return configuration != null ? (StageList)configuration : throw new ConfigurationException("Error deserializing XML configuration.");
 
             }
             catch (Exception ex)

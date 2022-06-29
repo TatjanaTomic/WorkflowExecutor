@@ -29,52 +29,52 @@ namespace CreatorMVVMProject.ViewModel.Main
 
             foreach(StageStatus stage in mainModel.Stages)
             {
-                StageViewModels.Add(new(stage, this.mainModel.ExecutionService));
+                StageViewModels.Add(new(stage, mainModel.ExecutionService));
             }
-            this.selectedStage = StageViewModels[0];
+            selectedStage = StageViewModels[0];
 
-            this.selectedStageIndex = 0;
+            selectedStageIndex = 0;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void NotifyPropertyChange(string propertyName)
         {
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public List<StageViewModel> StageViewModels { get; set; } = new();
 
         public StageViewModel SelectedStage
         {
-            get => this.selectedStage;
+            get => selectedStage;
             set
             {
-                this.selectedStage = value;
+                selectedStage = value;
                 NotifyPropertyChange(nameof(SelectedStage));
             }
         }
 
         public int SelectedStageIndex
         {
-            get => this.selectedStageIndex;
+            get => selectedStageIndex;
             set
             {
-                this.selectedStageIndex = value;
+                selectedStageIndex = value;
                 NotifyPropertyChange(nameof(SelectedStageIndex));
             }
         }
 
         public bool CanExecutionStart
         {
-            get => this.canExecutionStart;
+            get => canExecutionStart;
             set
             {
-                this.canExecutionStart = value;
+                canExecutionStart = value;
                 NotifyPropertyChange(nameof(CanExecutionStart));
             }
         }
 
-        public ICommand StartExecutionCommand => this.startExecutionCommand ??= new DelegateCommand(StartExecutionCommandHandler);
+        public ICommand StartExecutionCommand => startExecutionCommand ??= new DelegateCommand(StartExecutionCommandHandler);
 
         public void StartExecutionCommandHandler()
         {
@@ -115,7 +115,7 @@ namespace CreatorMVVMProject.ViewModel.Main
 
         private IList<StepViewModel> GetSelectedStepViewModels()
         {
-            return this.StageViewModels.SelectMany(stageViewModel => stageViewModel.StepViewModels).Where(stepViewModel => stepViewModel.IsSelected).ToList();
+            return StageViewModels.SelectMany(stageViewModel => stageViewModel.StepViewModels).Where(stepViewModel => stepViewModel.IsSelected).ToList();
         }
 
         private void MainModel_ExecutionTillThisStepStarted(object? sender, EventArgs e)

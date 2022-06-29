@@ -24,12 +24,7 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
 
         public Status GetInitialStatus(Step step)
         {
-            if (workflowService.HasDependencySteps(step))
-            {
-                return Status.Disabled;
-            }
-            
-            return Status.NotStarted;
+            return workflowService.HasDependencySteps(step) ? Status.Disabled : Status.NotStarted;
         }
 
         public bool CanStepBeExecutedInitial(Step step)

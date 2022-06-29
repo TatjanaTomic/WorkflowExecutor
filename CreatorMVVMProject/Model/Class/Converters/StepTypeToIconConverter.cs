@@ -20,14 +20,7 @@ namespace CreatorMVVMProject.Model.Class.Converters
 
         public object? Convert(object value, System.Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is Type type && dictionary.ContainsKey(type))
-            {
-                return Application.Current.FindResource(dictionary[type]) as BitmapImage;
-            }
-            else 
-            {
-                return "";
-            }
+            return value is Type type && dictionary.ContainsKey(type) ? Application.Current.FindResource(dictionary[type]) as BitmapImage : (object)"";
         }
 
         public object ConvertBack(object value, System.Type targetType, object parameter, CultureInfo culture)
