@@ -22,11 +22,12 @@ namespace CreatorMVVMProject.Model.Class.DIBuilder
             IContainer containerBuilder = builder.Build();
             scope = containerBuilder.BeginLifetimeScope();
         }
+
+        public static ServiceContainer Instance => instance ??= new ServiceContainer();
+
         public static T Resolve<T>() where T: class
         {
             return Instance.scope.Resolve<T>();
         }
-        public static ServiceContainer Instance => instance ??= new ServiceContainer();
-
     }
 }

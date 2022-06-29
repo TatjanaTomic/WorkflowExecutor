@@ -40,7 +40,7 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
 
                     if (process == null)
                     {
-                        OnExecutionCompleted(new ExecutionCompletedEventArgs(step, false, "Moja neka poruka"));
+                        OnExecutionCompleted(new ExecutionCompletedEventArgs(step, false, "Unable to start execution of step."));
                         return;
                     }
 
@@ -69,12 +69,10 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
 
         private void ProcessExited(object? sender, EventArgs e)
         {
-            if(sender is not Process)
+            if (sender is not Process process)
             {
                 return;
             }
-            
-            Process? process = sender as Process;
 
             if (process.ExitCode != 0)
             {

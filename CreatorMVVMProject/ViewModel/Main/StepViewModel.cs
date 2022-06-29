@@ -10,8 +10,7 @@ namespace CreatorMVVMProject.ViewModel.Main
 {
     public class StepViewModel : INotifyPropertyChanged
     {
-        protected readonly StepStatus stepStatus;
-
+        private readonly StepStatus stepStatus;
         private readonly IExecutionService executionService;
 
         private bool isExpanded = true;
@@ -26,8 +25,7 @@ namespace CreatorMVVMProject.ViewModel.Main
             this.stepStatus.StatusChanged += OnStatusChanged;
             this.stepStatus.MessageChanged += OnMessageChanged;
             this.stepStatus.CanBeExecutedChanged += OnCanBeExecutedChanged;
-
-            this.executionService = executionService;
+            this.executionService = executionService;            
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -53,6 +51,8 @@ namespace CreatorMVVMProject.ViewModel.Main
         public string? StepDescription => stepStatus.Step.Description;
 
         public Type StepType => stepStatus.Step.Type;
+
+        public ICommand StartStepCommand => startStepCommand ??= new DelegateCommand(StartStepCommandHandler);
 
         public string Message
         {
@@ -103,8 +103,6 @@ namespace CreatorMVVMProject.ViewModel.Main
                 NotifyPropertyChange(nameof(IsIndeterminate));
             }
         }
-
-        public ICommand StartStepCommand => startStepCommand ??= new DelegateCommand(StartStepCommandHandler);
 
         public void StartStepCommandHandler()
         {

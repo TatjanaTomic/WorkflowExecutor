@@ -4,15 +4,9 @@ using Type = CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.X
 
 namespace CreatorMVVMProject.Model.Class.StepExecutor
 {
-    public class StepExecutorFabrique
+    public static class StepExecutorFabrique
     {
-        private static StepExecutorFabrique? instance;
-
-        private StepExecutorFabrique() { }
-
-        public static StepExecutorFabrique Instance => instance ??= new StepExecutorFabrique();
-
-        public AbstractExecutor CreateExecutor(Step step)
+        public static AbstractExecutor CreateExecutor(Step step)
         {
             return step.Type switch
             {

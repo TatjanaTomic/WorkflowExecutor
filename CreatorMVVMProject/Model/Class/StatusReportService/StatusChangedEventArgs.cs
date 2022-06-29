@@ -7,7 +7,9 @@
             Status = status;
             StepId = stepId;
         }
+
         public Status Status { get; set; }
+
         public string StepId { get; set; }
     }
 }

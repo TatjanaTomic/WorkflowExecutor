@@ -16,6 +16,12 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
             this.canBeExecuted = canBeExecuted;
         }
 
+        public event EventHandler? MessageChanged;
+
+        public event EventHandler? CanBeExecutedChanged;
+
+        public event EventHandler<StatusChangedEventArgs>? StatusChanged;
+
         public Step Step { get; }
 
         public string StatusMessage
@@ -47,9 +53,5 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
                 CanBeExecutedChanged?.Invoke(this, EventArgs.Empty);
             }
         }
-
-        public event EventHandler? MessageChanged;
-        public event EventHandler? CanBeExecutedChanged;
-        public event EventHandler<StatusChangedEventArgs>? StatusChanged;
     }
 }

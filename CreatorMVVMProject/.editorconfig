@@ -51,7 +51,7 @@ dotnet_style_coalesce_expression = true:suggestion
 dotnet_style_prefer_is_null_check_over_reference_equality_method = true:silent
 dotnet_style_prefer_inferred_tuple_names = true:suggestion
 dotnet_style_prefer_inferred_anonymous_type_member_names = true:error
-dotnet_style_prefer_auto_properties = true:error
+dotnet_style_prefer_auto_properties = true:silent
 dotnet_style_prefer_conditional_expression_over_assignment = true:silent
 dotnet_style_prefer_conditional_expression_over_return = true:silent
 ###############################
@@ -76,8 +76,8 @@ dotnet_style_namespace_match_folder = true:suggestion
 dotnet_style_allow_multiple_blank_lines_experimental = true:error
 dotnet_style_allow_statement_immediately_after_block_experimental = true:error
 dotnet_code_quality_unused_parameters = all:error
-dotnet_diagnostic.CA1710.severity = warning
-dotnet_diagnostic.CA1711.severity = warning
+dotnet_diagnostic.CA1710.severity = silent
+dotnet_diagnostic.CA1711.severity = silent
 dotnet_diagnostic.CA1712.severity = suggestion
 dotnet_diagnostic.CA1715.severity = warning
 ###############################
@@ -165,6 +165,10 @@ dotnet_diagnostic.S2190.severity = error
 ###############################
 # VB Coding Conventions       #
 ###############################
+
+# CS8604: Possible null reference argument.
+dotnet_diagnostic.CS8604.severity = none
+
 [*.vb]
 # Modifier preferences
 visual_basic_preferred_modifier_order = Partial,Default,Private,Protected,Public,Friend,NotOverridable,Overridable,MustOverride,Overloads,Overrides,MustInherit,NotInheritable,Static,Shared,Shadows,ReadOnly,WriteOnly,Dim,Const,WithEvents,Widening,Narrowing,Custom,Async:suggestion

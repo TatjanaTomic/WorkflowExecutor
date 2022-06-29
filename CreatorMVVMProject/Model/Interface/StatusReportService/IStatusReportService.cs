@@ -7,13 +7,13 @@ namespace CreatorMVVMProject.Model.Interface.StatusReportService
     public interface IStatusReportService
     {
         IList<StageStatus> Stages { get; }
-        void SetStatusToStep(StepStatus stepStatus, Status status);
-        void SetStatusToStep(Step step, Status status);
-        void SetStatusMessageToStep(Step step, string message);
+        bool CanStepBeExecutedInitial(Step step);
         Status GetInitialStatus(Step step);
         StepStatus GetStepStatus(Step step);
         IList<StepStatus> GetStepStatuses(List<Step> steps);
+        void SetStatusToStep(StepStatus stepStatus, Status status);
+        void SetStatusToStep(Step step, Status status);
+        void SetStatusMessageToStep(Step step, string message);
         void SetCanStepBeExecuted(StepStatus stepStatus);
-        bool CanStepBeExecutedInitial(Step step);
     }
 }

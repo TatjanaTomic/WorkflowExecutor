@@ -17,20 +17,13 @@ namespace CreatorMVVMProject.Model.Class.Main
         {
             this.statusReportService = statusReportService;
             this.workflowService = workflowService;
-
             this.executionService = executionService;
             this.executionService.ExecutionCompleted += StepsExecutionCompleted;
             this.executionService.ExecutionSelectedStepsStarted += SelectedStepsExecutionStarted;
             this.executionService.ExecutionTillThisStepStarted += ExecutionTillThisStarted;
         }
 
-
         public IList<StageStatus> Stages => statusReportService.Stages;
-
-        public void AddStepsToExecution(List<StepStatus> steps)
-        {
-            executionService.ExecuteSelectedSteps(steps);
-        }
 
         public IExecutionService ExecutionService => executionService;
 
@@ -40,16 +33,21 @@ namespace CreatorMVVMProject.Model.Class.Main
             ExecutionCompleted?.Invoke(this, e);
         }
 
+        public event EventHandler? ExecutionTillThisStepStarted;
+        private void ExecutionTillThisStarted(object? _, EventArgs e)
+        {
+            ExecutionTillThisStepStarted?.Invoke(this, e);
+        }
+
         public event EventHandler? ExecutionSelectedStepsStarted;
         private void SelectedStepsExecutionStarted(object? _, EventArgs e)
         {
             ExecutionSelectedStepsStarted?.Invoke(this, e);
         }
 
-        public event EventHandler? ExecutionTillThisStepStarted;
-        private void ExecutionTillThisStarted(object? _, EventArgs e)
+        public void AddStepsToExecution(List<StepStatus> steps)
         {
-            ExecutionTillThisStepStarted?.Invoke(this, e);
+            executionService.ExecuteSelectedSteps(steps);
         }
     }
 }

@@ -13,11 +13,10 @@ namespace CreatorMVVMProject.ViewModel.Main
     public class MainViewModel : INotifyPropertyChanged
     {
         private readonly MainModel mainModel;
+
         private StageViewModel selectedStage;
         private int selectedStageIndex;
-
         private bool canExecutionStart = true;
-        
         private ICommand? startExecutionCommand;
 
         public MainViewModel(MainModel model)
@@ -32,7 +31,6 @@ namespace CreatorMVVMProject.ViewModel.Main
                 StageViewModels.Add(new(stage, mainModel.ExecutionService));
             }
             selectedStage = StageViewModels[0];
-
             selectedStageIndex = 0;
         }
 
@@ -43,6 +41,8 @@ namespace CreatorMVVMProject.ViewModel.Main
         }
 
         public List<StageViewModel> StageViewModels { get; set; } = new();
+
+        public ICommand StartExecutionCommand => startExecutionCommand ??= new DelegateCommand(StartExecutionCommandHandler);
 
         public StageViewModel SelectedStage
         {
@@ -73,8 +73,6 @@ namespace CreatorMVVMProject.ViewModel.Main
                 NotifyPropertyChange(nameof(CanExecutionStart));
             }
         }
-
-        public ICommand StartExecutionCommand => startExecutionCommand ??= new DelegateCommand(StartExecutionCommandHandler);
 
         public void StartExecutionCommandHandler()
         {
