@@ -36,7 +36,7 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
         {
             var canStepBeExecuted = true;
 
-            if (stepStatus.Status == Status.Disabled || stepStatus.Status == Status.InProgress)
+            if (stepStatus.Status is Status.Disabled or Status.InProgress)
             {
                 canStepBeExecuted = false;
             }

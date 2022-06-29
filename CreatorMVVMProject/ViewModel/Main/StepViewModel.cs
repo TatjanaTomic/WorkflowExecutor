@@ -13,12 +13,11 @@ namespace CreatorMVVMProject.ViewModel.Main
         protected readonly StepStatus stepStatus;
 
         private readonly IExecutionService executionService;
-        
+
         private bool isExpanded = true;
         private bool isButtonEnabled = true;
         private bool isSelected;
         private bool isIndeterminate;
-
         private ICommand? startStepCommand;
 
         public StepViewModel(StepStatus stepStatus, IExecutionService executionService)
