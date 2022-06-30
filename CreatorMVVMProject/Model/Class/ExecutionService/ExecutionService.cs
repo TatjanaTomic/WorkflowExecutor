@@ -15,11 +15,10 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 {
     public class ExecutionService : IExecutionService
     {
-        private readonly CancellationTokenSource cancellationTokenSource = new();
-        private readonly AutoResetEvent autoResetEvent = new(false);
-
         private readonly IStatusReportService statusReportService;
         private readonly IWorkflowService workflowService;
+        private readonly AutoResetEvent autoResetEvent = new(false);
+        private readonly CancellationTokenSource cancellationTokenSource = new();
 
         public ExecutionService(IStatusReportService statusReportService, IWorkflowService workflowService)
         {
@@ -29,25 +28,33 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
             _ = StartExecution();
         }
 
-        private void EnqueueSteps(List<StepStatus> stepsToExecute)
+        public event EventHandler? ExecutionCompleted;
+        protected virtual void OnExecutionCompleted()
         {
-            foreach (StepStatus stepStatus in stepsToExecute)
-            {
-                if (stepStatus.Step.CanBeExecutedInParallel)
-                {
-                    StepsQueueParallel.Add(stepStatus);
-                }
-                else
-                {
-                    StepsQueue.Add(stepStatus);
-                }
-
-                stepStatus.CanBeExecuted = false;
-            }
-
-            autoResetEvent.Set();
+            ExecutionCompleted?.Invoke(this, EventArgs.Empty);
         }
 
+        public event EventHandler? ExecutionSelectedStepsStarted;
+        protected virtual void OnExecutionSelectedStepsStarted()
+        {
+            ExecutionSelectedStepsStarted?.Invoke(this, EventArgs.Empty);
+        }
+
+        public event EventHandler? ExecutionTillThisStepStarted;
+        protected virtual void OnExecutionTillThisStepStarted()
+        {
+            ExecutionTillThisStepStarted?.Invoke(this, EventArgs.Empty);
+        }
+
+        private BlockingCollection<StepStatus> StepsQueue { get; } = new();
+
+        private BlockingCollection<StepStatus> StepsQueueParallel { get; } = new();
+
+        /// <summary>
+        /// Method <c>StartExecution</c> runs long running Task that executes Steps in Queues.
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task StartExecution()
         {
             Task executingSteps = Task.Run(() =>
@@ -69,14 +76,74 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Console.WriteLine(e.StackTrace);
                 }
             });
 
             await executingSteps;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="stepsToExecute"></param>
+        public void ExecuteSelectedSteps(List<StepStatus> stepsToExecute)
+        {
+            Task.Run(() =>
+            {
+                EnqueueSteps(stepsToExecute);
 
+                OnExecutionSelectedStepsStarted();
+            });
+
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="stepStatus"></param>
+        public void ExecuteTillThisStep(StepStatus stepStatus)
+        {
+            Task.Run(() =>
+            {
+                IList<Step> allSteps = workflowService.GetAllDependencySteps(stepStatus.Step);
+                allSteps.Add(stepStatus.Step);
+
+                IList<StepStatus> stepStatuses = statusReportService.GetStepStatuses(allSteps.ToList());
+
+                EnqueueSteps(stepStatuses.ToList());
+
+                OnExecutionTillThisStepStarted();
+            });
+
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="stepsToExecute"></param>
+        private void EnqueueSteps(List<StepStatus> stepsToExecute)
+        {
+            foreach (StepStatus stepStatus in stepsToExecute)
+            {
+                if (stepStatus.Step.CanBeExecutedInParallel)
+                {
+                    StepsQueueParallel.Add(stepStatus);
+                }
+                else
+                {
+                    StepsQueue.Add(stepStatus);
+                }
+
+                stepStatus.CanBeExecuted = false;
+            }
+
+            autoResetEvent.Set();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         private void ExecuteSerialSteps()
         {
             while (StepsQueue.Any() && !StepsQueue.All(s => s.Status == Status.Disabled))
@@ -113,6 +180,9 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private void ExecuteParallelSteps()
         {
             List<Task> tasks = new();
@@ -148,37 +218,6 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
             }
         }
 
-        public void ExecuteSelectedSteps(List<StepStatus> stepsToExecute)
-        {
-            Task.Run(() =>
-            {
-                EnqueueSteps(stepsToExecute);
-
-                OnExecutionSelectedStepsStarted();
-            });
-
-        }
-
-        public void ExecuteTillThisStep(StepStatus stepStatus)
-        {
-            Task.Run(() =>
-            {
-                IList<Step> allSteps = workflowService.GetAllDependencySteps(stepStatus.Step);
-                allSteps.Add(stepStatus.Step);
-
-                IList<StepStatus> stepStatuses = statusReportService.GetStepStatuses(allSteps.ToList());
-
-                EnqueueSteps(stepStatuses.ToList());
-
-                OnExecutionTillThisStepStarted();
-            });
-
-        }
-
-        private BlockingCollection<StepStatus> StepsQueue { get; } = new();
-
-        private BlockingCollection<StepStatus> StepsQueueParallel { get; } = new();
-
         private AbstractExecutor CreateStepExecutor(Step step)
         {
             AbstractExecutor stepExecutor = StepExecutorFabrique.CreateExecutor(step);
@@ -198,30 +237,12 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
             statusReportService.SetStatusToStep(args.Step, args.IsSuccessful ? Status.Success : Status.Failed);
             statusReportService.SetStatusMessageToStep(args.Step, args.Message);
 
-            //Ako bilo koji step padne, zaustavljam izvrsavanje
+            //If any of steps failed, execution stops
             if (!args.IsSuccessful)
             {
                 ClearQueues();
                 cancellationTokenSource.Cancel();
             }
-        }
-
-        public event EventHandler? ExecutionCompleted;
-        protected virtual void OnExecutionCompleted()
-        {
-            ExecutionCompleted?.Invoke(this, EventArgs.Empty);
-        }
-
-        public event EventHandler? ExecutionSelectedStepsStarted;
-        protected virtual void OnExecutionSelectedStepsStarted()
-        {
-            ExecutionSelectedStepsStarted?.Invoke(this, EventArgs.Empty);
-        }
-
-        public event EventHandler? ExecutionTillThisStepStarted;
-        protected virtual void OnExecutionTillThisStepStarted()
-        {
-            ExecutionTillThisStepStarted?.Invoke(this, EventArgs.Empty);
         }
 
         private void ClearQueues()

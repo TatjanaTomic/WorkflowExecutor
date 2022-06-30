@@ -22,16 +22,35 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
 
         public IList<StageStatus> Stages { get; } = new List<StageStatus>();
 
-        public Status GetInitialStatus(Step step)
-        {
-            return workflowService.HasDependencySteps(step) ? Status.Disabled : Status.NotStarted;
-        }
-
+        /// <summary>
+        /// Method <c>CanStepBeExecutedInitial</c> checks if the specified step can be executed initially.
+        /// If it has no dependency steps it can be executed, otherwise cannot.
+        /// </summary>
+        /// <param name="step">Step for which method checks if it can be executed.</param>
+        /// <returns>Value that indicates if the step can be executed.</returns>
         public bool CanStepBeExecutedInitial(Step step)
         {
             return !workflowService.HasDependencySteps(step);
         }
 
+        /// <summary>
+        /// Method <c>GetInitialStatus</c> determines the initial status of the specified step.
+        /// If it has dependency steps the initial status is Disabled, otherwise NotStarted.
+        /// </summary>
+        /// <param name="step">Step for which method determines initial status.</param>
+        /// <returns>Initial status of the step.</returns>
+        public Status GetInitialStatus(Step step)
+        {
+            return workflowService.HasDependencySteps(step) ? Status.Disabled : Status.NotStarted;
+        }
+
+        /// <summary>
+        /// Method <c>SetCanStepBeExecuted</c> sets if the specified step can be executed.
+        /// If status of step is Disabled or InProgres it cannot be executed.
+        /// If status of step is Obsolete and any of it's dependency steps is not executed successfully, it cannot be executed.
+        /// In all other cases step can be executed.
+        /// </summary>
+        /// <param name="stepStatus">Step for which method sets if it can be executed.</param>
         public void SetCanStepBeExecuted(StepStatus stepStatus)
         {
             var canStepBeExecuted = true;
@@ -41,7 +60,7 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
                 canStepBeExecuted = false;
             }
 
-            if (stepStatus.Status == Status.Obsolete && workflowService.GetAllDependencySteps(stepStatus.Step).ToList().Exists(s => GetStepStatus(s).Status != Status.Success))
+            if (stepStatus.Status is Status.Obsolete && workflowService.GetAllDependencySteps(stepStatus.Step).ToList().Exists(s => GetStepStatus(s).Status != Status.Success))
             {
                 canStepBeExecuted = false;
             }
@@ -49,6 +68,12 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
             stepStatus.CanBeExecuted = canStepBeExecuted;
         }
 
+        //TODO: Finish this
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="stepStatus"></param>
+        /// <param name="status"></param>
         public void SetStatusToStep(StepStatus stepStatus, Status status)
         {
             Status oldStatus = stepStatus.Status;
