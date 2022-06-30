@@ -4,6 +4,7 @@ using ConfigurationException = CreatorMVVMProject.Model.Class.Exceptions.Configu
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using CreatorMVVMProject.Model.Class.Exceptions;
 
 namespace CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository
 {
@@ -11,6 +12,11 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository
     {
         private readonly string? CONFIG_PATH = ConfigurationManager.AppSettings["configPath"]?.ToString();
 
+        /// <summary>
+        /// Method <c>GetAllStages</c> creates list of Stages based on a StageList object that returnes StageListBuilder.GetStageList method.
+        /// </summary>
+        /// <returns>Method returns list of Stages. If an error occures the list will be empty.</returns>
+        /// <exception cref="ConfigurationException">Exception <c>ConfigurationException</c> is thrown if configuration path is not set.</exception>
         IList<Stage> IWorkflowRepository.GetAllStages()
         {
             IList<Stage> stages = new List<Stage>();
@@ -22,15 +28,13 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository
                     throw new ConfigurationException("Missing configuration path.");
                 }
 
-                var stagesList = StageListBuilder.GetStageList(CONFIG_PATH);
-
+                StageList? stagesList = StageListBuilder.GetStageList(CONFIG_PATH);
                 if (stagesList != null && stagesList.Stages != null)
                 {
                     stages = stagesList.Stages;
                 }
-
             }
-            catch (ConfigurationException e)
+            catch (Exception e) when (e is ConfigurationException or WrongDefinitionException)
             {
                 Console.WriteLine(e.Message);
             }
