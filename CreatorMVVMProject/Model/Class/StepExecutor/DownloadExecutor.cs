@@ -9,9 +9,8 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
 {
     public class DownloadExecutor : AbstractExecutor
     {
-        private readonly string? downloadsPath = ConfigurationManager.AppSettings["downloadsPath"]?.ToString();
-
-        readonly HttpClient httpClient = new();
+        private static readonly string? downloadsPath = ConfigurationManager.AppSettings["downloadsPath"]?.ToString();
+        private static readonly HttpClient httpClient = new();
         private readonly Step step;
 
         public DownloadExecutor(Step step)
@@ -19,6 +18,12 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
             this.step = step;
         }
 
+        /// <summary>
+        /// Method starts executino of Step which type is Download. It checks if the specified File property of Step is formatted correctly.
+        /// Method checks if downloads path is specified in Application configuration file.
+        /// It downloads the file from a Server to a specified path.
+        /// Method raises events when execution starts and when it is completed.
+        /// </summary>
         public override async Task Start()
         {
             OnExecutionStarted(step);

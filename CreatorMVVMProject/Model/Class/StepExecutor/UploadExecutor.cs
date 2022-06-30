@@ -15,7 +15,6 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
         {
             BaseAddress = new(httpClientBaseAddress)
         };
-
         private readonly Step step;
 
         public UploadExecutor(Step step)
@@ -23,6 +22,11 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
             this.step = step;
         }
 
+        /// <summary>
+        /// Method starts execution of Step which type is Upload. It checks if the specified file exists and if it does,
+        /// reads it from File System and uploads to a Server specified in Application configuration file.
+        /// Method raises events when execution starts and when it is completed. 
+        /// </summary>
         public override async Task Start()
         {
             OnExecutionStarted(step);

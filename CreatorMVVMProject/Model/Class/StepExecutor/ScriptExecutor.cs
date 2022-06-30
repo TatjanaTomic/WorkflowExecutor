@@ -9,10 +9,9 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
 {
     public class ScriptExecutor : AbstractExecutor
     {
+        private static readonly string? executablesPath = ConfigurationManager.AppSettings["executablesPath"]?.ToString();
         private readonly Step step;
-        readonly ProcessStartInfo processStartInfo = new();
-
-        private readonly string? executablesPath = ConfigurationManager.AppSettings["executablesPath"]?.ToString();
+        private readonly ProcessStartInfo processStartInfo = new();
 
         public ScriptExecutor(Step step)
         {
@@ -29,6 +28,10 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
             processStartInfo.Arguments = command;
         }
 
+        /// <summary>
+        /// Method starts execution of Step which type is Executable. It starts new local system process based on ProcessStartInfo object.
+        /// Method raises events when execution starts and when it is completed.
+        /// </summary>
         public override async Task Start()
         {
             OnExecutionStarted(step);
