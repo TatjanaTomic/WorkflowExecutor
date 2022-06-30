@@ -7,7 +7,7 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml
     {
         public Parameter()
         {
-                
+
         }
 
         [XmlAttribute("KeyWord")]

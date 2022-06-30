@@ -14,7 +14,7 @@ namespace CreatorMVVMProject.ViewModel.Main
     {
         private readonly MainModel mainModel;
 
-        private StageViewModel selectedStage;
+        private StageViewModel? selectedStage;
         private int selectedStageIndex;
         private bool canExecutionStart = true;
         private ICommand? startExecutionCommand;
@@ -30,8 +30,8 @@ namespace CreatorMVVMProject.ViewModel.Main
             {
                 StageViewModels.Add(new(stage, mainModel.ExecutionService));
             }
-            selectedStage = StageViewModels[0];
-            selectedStageIndex = 0;
+
+            setSelectedStage();
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -44,7 +44,7 @@ namespace CreatorMVVMProject.ViewModel.Main
 
         public ICommand StartExecutionCommand => startExecutionCommand ??= new DelegateCommand(StartExecutionCommandHandler);
 
-        public StageViewModel SelectedStage
+        public StageViewModel? SelectedStage
         {
             get => selectedStage;
             set
@@ -79,7 +79,7 @@ namespace CreatorMVVMProject.ViewModel.Main
             List<StepViewModel> selectedStepViewModels = GetSelectedStepViewModels().ToList();
             if(selectedStepViewModels.Count == 0)
             {
-                _ = MessageBox.Show("Select steps for execution");
+                _ = MessageBox.Show("Select steps for execution.");
                 return;
             }
 
@@ -91,6 +91,20 @@ namespace CreatorMVVMProject.ViewModel.Main
             }
 
             mainModel.AddStepsToExecution(steps);
+        }
+
+        private void setSelectedStage()
+        {
+            if(StageViewModels.Count > 0)
+            {
+                selectedStage = StageViewModels[0];
+                selectedStageIndex = 0;
+            }
+            else
+            {
+                _ = MessageBox.Show("Unable to start application.", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Shutdown();
+            }
         }
 
         private void EnableButtons()

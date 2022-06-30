@@ -17,7 +17,7 @@ namespace CreatorMVVMProject
         {
             InitializeComponent();
             
-            this.DataContext = new MainViewModel(ServiceContainer.Resolve<MainModel>());    
+            DataContext = new MainViewModel(ServiceContainer.Resolve<MainModel>());    
         }
     }
 }

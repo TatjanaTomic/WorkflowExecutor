@@ -31,7 +31,7 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
                     return;
                 }
 
-                if(downloadsPath == null)
+                if (downloadsPath == null)
                 {
                     OnExecutionCompleted(new ExecutionCompletedEventArgs(step, false, "Downloads path is not defined."));
                     return;
@@ -42,16 +42,16 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
                 try
                 {
                     var fileBytes = await httpClient.GetByteArrayAsync(uriResult);
-                    
+
                     File.WriteAllBytes(resultPath, fileBytes);
 
-                    OnExecutionCompleted(new ExecutionCompletedEventArgs(step, true, "File " + Path.GetFileName(resultPath) +  " downloaded successuflly."));
+                    OnExecutionCompleted(new ExecutionCompletedEventArgs(step, true, "File " + Path.GetFileName(resultPath) + " downloaded successuflly."));
                 }
                 catch (Exception ex)
                 {
                     OnExecutionCompleted(new ExecutionCompletedEventArgs(step, false, ex.Message));
                 }
-                
+
             });
 
         }

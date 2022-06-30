@@ -27,7 +27,7 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
         {
             OnExecutionStarted(step);
 
-            if(uploadPath == null)
+            if (uploadPath == null)
             {
                 OnExecutionCompleted(new ExecutionCompletedEventArgs(step, false, "Uploads path is not defined."));
                 return;
@@ -57,7 +57,7 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
 
                     await httpClient.SendAsync(request);
 
-                    OnExecutionCompleted(new ExecutionCompletedEventArgs(step, true, "File " + fileName +  " downloaded successuflly."));
+                    OnExecutionCompleted(new ExecutionCompletedEventArgs(step, true, "File " + fileName + " downloaded successuflly."));
                 }
                 catch (Exception ex)
                 {
@@ -65,6 +65,6 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
                 }
             });
         }
-        
+
     }
 }

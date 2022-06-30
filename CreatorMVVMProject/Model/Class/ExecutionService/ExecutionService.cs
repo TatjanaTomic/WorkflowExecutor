@@ -28,7 +28,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 
             _ = StartExecution();
         }
-        
+
         private void EnqueueSteps(List<StepStatus> stepsToExecute)
         {
             foreach (StepStatus stepStatus in stepsToExecute)
@@ -63,7 +63,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 
                         ExecuteSerialSteps();
                         ExecuteParallelSteps();
-                        
+
                         autoResetEvent.WaitOne();
                     }
                 }
@@ -85,15 +85,15 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                 {
                     StepStatus stepStatus = StepsQueue.Take();
 
-                    if(stepStatus.Status == Status.Disabled)
+                    if (stepStatus.Status == Status.Disabled)
                     {
                         StepsQueue.Add(stepStatus);
                         continue;
                     }
-                    
+
                     AbstractExecutor stepExecutor = CreateStepExecutor(stepStatus.Step);
                     stepExecutor.Start().Wait();
-                    
+
                 }
                 catch (Exception e)
                 {
@@ -147,7 +147,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                 autoResetEvent.Set();
             }
         }
-        
+
         public void ExecuteSelectedSteps(List<StepStatus> stepsToExecute)
         {
             Task.Run(() =>
@@ -199,7 +199,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
             statusReportService.SetStatusMessageToStep(args.Step, args.Message);
 
             //Ako bilo koji step padne, zaustavljam izvrsavanje
-            if(!args.IsSuccessful)
+            if (!args.IsSuccessful)
             {
                 ClearQueues();
                 cancellationTokenSource.Cancel();

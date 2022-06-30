@@ -8,7 +8,7 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml
     {
         public StageList()
         {
-           
+
         }
 
         [XmlArray]

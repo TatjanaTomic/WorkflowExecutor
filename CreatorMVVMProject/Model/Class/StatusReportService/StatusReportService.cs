@@ -2,7 +2,7 @@
 using CreatorMVVMProject.Model.Interface.StatusReportService;
 using CreatorMVVMProject.Model.Interface.WorkflowService;
 using System.Collections.Generic;
-using System.Linq; 
+using System.Linq;
 
 namespace CreatorMVVMProject.Model.Class.StatusReportService
 {
@@ -14,7 +14,7 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
         {
             this.workflowService = workflowService;
 
-            foreach(var stage in workflowService.Stages)
+            foreach (var stage in workflowService.Stages)
             {
                 Stages.Add(new(stage, this));
             }
@@ -49,20 +49,20 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
             stepStatus.CanBeExecuted = canStepBeExecuted;
         }
 
-        public void SetStatusToStep(StepStatus stepStatus, Status status) 
+        public void SetStatusToStep(StepStatus stepStatus, Status status)
         {
             Status oldStatus = stepStatus.Status;
             stepStatus.Status = status; //promijeni odmah status na novi
 
-            if(status == Status.Success)
+            if (status == Status.Success)
             {
                 IList<StepStatus> reverseDependencySteps = GetStepStatuses(workflowService.GetReverseDependencySteps(stepStatus.Step).ToList());
 
                 foreach (StepStatus dependencyStepStatus in reverseDependencySteps)
                 {
-                    IList<StepStatus> firstLevelDependencySteps = GetStepStatuses(workflowService.GetFirstLevelDependencySteps(dependencyStepStatus.Step).ToList());  
+                    IList<StepStatus> firstLevelDependencySteps = GetStepStatuses(workflowService.GetFirstLevelDependencySteps(dependencyStepStatus.Step).ToList());
 
-                    if(dependencyStepStatus.Status == Status.Disabled && firstLevelDependencySteps.All(s => s.Status == Status.Success) )
+                    if (dependencyStepStatus.Status == Status.Disabled && firstLevelDependencySteps.All(s => s.Status == Status.Success))
                     {
                         SetStatusToStep(dependencyStepStatus, Status.NotStarted);
                     }
@@ -72,7 +72,7 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
             if (oldStatus.Equals(Status.Success) && status.Equals(Status.InProgress))
             {
                 IList<Step> obsoletedSteps = workflowService.GetAllDependencySteps(stepStatus.Step);
-                foreach(Step step in obsoletedSteps)
+                foreach (Step step in obsoletedSteps)
                 {
                     SetStatusToStep(step, Status.Obsolete);
                 }

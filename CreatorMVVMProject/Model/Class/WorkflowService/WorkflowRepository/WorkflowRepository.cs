@@ -29,7 +29,8 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository
                     stages = stagesList.Stages;
                 }
 
-            } catch(ConfigurationException e)
+            }
+            catch (ConfigurationException e)
             {
                 Console.WriteLine(e.Message);
             }

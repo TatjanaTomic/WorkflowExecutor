@@ -8,7 +8,7 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
         private Status status;
         private bool canBeExecuted;
         private string statusMessage = string.Empty;
-        
+
         public StepStatus(Step step, Status initialStatus, bool canBeExecuted)
         {
             Step = step;

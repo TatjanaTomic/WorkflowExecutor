@@ -82,7 +82,7 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
             }
 
             var output = process.StandardOutput.ReadToEnd();
-            OnExecutionCompleted(new ExecutionCompletedEventArgs(step, true, output));    
+            OnExecutionCompleted(new ExecutionCompletedEventArgs(step, true, output));
         }
 
     }
