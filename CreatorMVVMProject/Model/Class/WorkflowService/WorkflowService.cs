@@ -6,6 +6,9 @@ using System.Linq;
 
 namespace CreatorMVVMProject.Model.Class.WorkflowService
 {
+    /// <summary>
+    /// Class <c>WorkflowService</c> models a service that reads Steps from specified repository and is in charge of calculating interdependencies of given Steps.
+    /// </summary>
     public class WorkflowService : IWorkflowService
     {
         public WorkflowService(IWorkflowRepository workflowRepository)
@@ -14,7 +17,17 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService
         }
 
         public IList<Stage> Stages { get; }
+        
+        public bool HasDependencySteps(Step step)
+        {
+            return step.Dependencies.Count > 0;
+        }
 
+        /// <summary>
+        /// Method <c>GetFirstLevelDependencySteps</c> calculates the list of steps on which the forwarded step directly depends.
+        /// </summary>
+        /// <param name="step">Method takes a step for which calculates first level dependency steps.</param>
+        /// <returns>Method returns a list of dependency steps. List is empty if given step has no dependency steps.</returns>
         public IList<Step> GetFirstLevelDependencySteps(Step step)
         {
             IList<Step> dependencySteps = new List<Step>();
@@ -29,7 +42,11 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService
             return dependencySteps;
         }
 
-        //vraca sve stepove od kojih zavisi proslijedjeni step
+        /// <summary>
+        /// Method <c>GetAllDependencySteps</c> calculates the list of all steps on which the forwarded step depends.
+        /// </summary>
+        /// <param name="step">Method takes a step for which calculates all dependency steps.</param>
+        /// <returns>Method returns a list of dependency steps. List is empty if given step has no dependency steps.</returns>
         public IList<Step> GetAllDependencySteps(Step step)
         {
             IList<Step> firstLevelDependencySteps = GetFirstLevelDependencySteps(step);
@@ -45,12 +62,11 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService
             return allDependencySteps;
         }
 
-        public bool HasDependencySteps(Step step)
-        {
-            return step.Dependencies.Count > 0;
-        }
-
-        //vraca sve stepove koji zavise od proslijedjenog stepa
+        /// <summary>
+        /// Method <c>GetReverseDependencySteps</c> calculates the list of all steps that depend on a given step.
+        /// </summary>
+        /// <param name="step">Method takes a step for which calculates reverse dependency steps.</param>
+        /// <returns>Method returns a list of dependency steps. List is empty if there is no step that depends on given step.</returns>
         public IList<Step> GetReverseDependencySteps(Step step)
         {
             IList<Step> reverseDependencySteps = new List<Step>();
