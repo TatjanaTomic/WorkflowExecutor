@@ -13,6 +13,9 @@ using CreatorMVVMProject.Model.Class.StepExecutor;
 
 namespace CreatorMVVMProject.Model.Class.ExecutionService
 {
+    /// <summary>
+    /// Class <c>ExecutionService</c> models a service that is responsible for executing serial and parallel steps.
+    /// </summary>
     public class ExecutionService : IExecutionService
     {
         private readonly IStatusReportService statusReportService;
@@ -46,13 +49,20 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
             ExecutionTillThisStepStarted?.Invoke(this, EventArgs.Empty);
         }
 
+        /// <summary>
+        /// Serial steps queue
+        /// </summary>
         private BlockingCollection<StepStatus> StepsQueue { get; } = new();
 
+        /// <summary>
+        /// Parallel steps queue
+        /// </summary>
         private BlockingCollection<StepStatus> StepsQueueParallel { get; } = new();
 
         /// <summary>
         /// Method <c>StartExecution</c> runs long running Task that executes Steps in Queues.
-        /// 
+        /// It calls methods <c>ExecuteSerialSteps</c> and <c>ExecuteParallelSteps</c> and then waits for the auto reset event to be set.
+        /// When cancellation is requested, it raises event ExecutionCompleted.
         /// </summary>
         /// <returns></returns>
         public async Task StartExecution()
@@ -84,9 +94,9 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
         }
 
         /// <summary>
-        /// 
+        /// Method <c>ExecuteSelectedSteps</c> adds the passed steps to the queues and raises execution selected steps started.
         /// </summary>
-        /// <param name="stepsToExecute"></param>
+        /// <param name="stepsToExecute">A list of steps to be executed.</param>
         public void ExecuteSelectedSteps(List<StepStatus> stepsToExecute)
         {
             Task.Run(() =>
@@ -95,13 +105,14 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 
                 OnExecutionSelectedStepsStarted();
             });
-
         }
 
         /// <summary>
-        /// 
+        /// Method <c>ExecuteTillThisStep</c> takes a step to be executed. It builds a list of all dependency steps of the passed step (containing that step)
+        /// and calls method <c>EnqueueSteps</c> passing it that list.
+        /// The method raises execution till this step started.
         /// </summary>
-        /// <param name="stepStatus"></param>
+        /// <param name="stepStatus">A step to be executed.</param>
         public void ExecuteTillThisStep(StepStatus stepStatus)
         {
             Task.Run(() =>
@@ -119,9 +130,11 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
         }
 
         /// <summary>
-        /// 
+        /// Method <c>EnqueueSteps</c> takes a list of steps and checks for each step if it can be executed in parallel or not. 
+        /// If a step can be executed in parallel, the method adds it to parallel steps queue. Otherwise, the step is added to the serial steps queue.
+        /// At the end, it sets auto reset event.
         /// </summary>
-        /// <param name="stepsToExecute"></param>
+        /// <param name="stepsToExecute">List of steps that need to bee executed.</param>
         private void EnqueueSteps(List<StepStatus> stepsToExecute)
         {
             foreach (StepStatus stepStatus in stepsToExecute)
@@ -142,7 +155,11 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
         }
 
         /// <summary>
-        /// 
+        /// Method <c>ExecuteParallelSteps</c> starts all serial steps that can be executed.
+        /// The method is performed while there is any step in serial steps queue and not all steps have status Disabled.
+        /// It takes steps from the queue one by one and checks if step's status is Disabled, if so the step is added at the end of the queue.
+        /// Otherwise, an executor for that step is created and the step is started. The method waits for the step to complete execution.
+        /// The method raises execution completed event when there is no serial nor parallel steps to be executed.
         /// </summary>
         private void ExecuteSerialSteps()
         {
@@ -181,7 +198,13 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
         }
 
         /// <summary>
-        /// 
+        /// Method <c>ExecuteParallelSteps</c> creates a list of tasks and starts all the paralle steps that can be executed.
+        /// The method is performed while there is any step in parallel steps queue and not all steps have status Disabled.
+        /// It takes steps from the queue one by one and checks if step's status is Disabled, if so the step is added at the end of the queue.
+        /// Otherwise, an executor for that step and new task are created.
+        /// The method waits for all the steps to complete execution.
+        /// The method raises execution completed event when there is no serial nor parallel steps to be executed.
+        /// When queues of serial and parallel steps are empty, the execution is finished and the method raises an event. Otherwise, it sets auto reset event. 
         /// </summary>
         private void ExecuteParallelSteps()
         {
@@ -199,7 +222,6 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 
                     AbstractExecutor stepExecutor = CreateStepExecutor(stepStatus.Step);
                     tasks.Add(stepExecutor.Start());
-
                 }
                 catch (Exception e)
                 {
@@ -237,7 +259,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
             statusReportService.SetStatusToStep(args.Step, args.IsSuccessful ? Status.Success : Status.Failed);
             statusReportService.SetStatusMessageToStep(args.Step, args.Message);
 
-            //If any of steps failed, execution stops
+            // If any of the steps failes, execution stops
             if (!args.IsSuccessful)
             {
                 ClearQueues();

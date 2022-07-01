@@ -27,7 +27,7 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService
         /// Method <c>GetFirstLevelDependencySteps</c> calculates the list of steps on which the forwarded step directly depends.
         /// </summary>
         /// <param name="step">Method takes a step for which calculates first level dependency steps.</param>
-        /// <returns>Method returns a list of dependency steps. List is empty if given step has no dependency steps.</returns>
+        /// <returns>Method returns a list of dependency steps. List is empty if the given step has no dependency steps.</returns>
         public IList<Step> GetFirstLevelDependencySteps(Step step)
         {
             IList<Step> dependencySteps = new List<Step>();
