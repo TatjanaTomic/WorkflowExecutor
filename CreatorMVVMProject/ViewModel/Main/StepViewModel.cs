@@ -1,9 +1,9 @@
-﻿using CreatorMVVMProject.Model.Class.Commands;
-using CreatorMVVMProject.Model.Class.StatusReportService;
-using CreatorMVVMProject.Model.Interface.ExecutionService;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Windows.Input;
+using CreatorMVVMProject.Model.Class.Commands;
+using CreatorMVVMProject.Model.Class.StatusReportService;
+using CreatorMVVMProject.Model.Interface.ExecutionService;
 using Type = CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml.Type;
 
 namespace CreatorMVVMProject.ViewModel.Main
@@ -25,7 +25,7 @@ namespace CreatorMVVMProject.ViewModel.Main
             this.stepStatus.StatusChanged += OnStatusChanged;
             this.stepStatus.MessageChanged += OnMessageChanged;
             this.stepStatus.CanBeExecutedChanged += OnCanBeExecutedChanged;
-            this.executionService = executionService;            
+            this.executionService = executionService;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

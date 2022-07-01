@@ -1,6 +1,6 @@
-﻿using CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml;
+﻿using System.Collections.Generic;
+using CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml;
 using CreatorMVVMProject.Model.Interface.StatusReportService;
-using System.Collections.Generic;
 
 namespace CreatorMVVMProject.Model.Class.StatusReportService
 {

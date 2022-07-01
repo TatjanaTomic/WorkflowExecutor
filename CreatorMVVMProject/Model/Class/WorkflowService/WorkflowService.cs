@@ -1,8 +1,8 @@
-﻿using CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository;
+﻿using System.Collections.Generic;
+using System.Linq;
+using CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository;
 using CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml;
 using CreatorMVVMProject.Model.Interface.WorkflowService;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace CreatorMVVMProject.Model.Class.WorkflowService
 {
@@ -17,7 +17,7 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService
         }
 
         public IList<Stage> Stages { get; }
-        
+
         public bool HasDependencySteps(Step step)
         {
             return step.Dependencies.Count > 0;

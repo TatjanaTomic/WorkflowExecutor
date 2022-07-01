@@ -21,19 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="6.3.0" />
-    <PackageReference Include="Dragablz" Version="0.0.3.223" />
-    <PackageReference Include="HandyControls" Version="3.3.11" />
-    <PackageReference Include="MahApps.Metro" Version="2.4.9" />
-    <PackageReference Include="MaterialDesignColors" Version="2.0.6" />
-    <PackageReference Include="MaterialDesignThemes" Version="4.5.0" />
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.40.0.48530">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="View\Resources\Icons\download.png" />
     <Resource Include="View\Resources\Icons\execute.png" />
     <Resource Include="View\Resources\Icons\upload.png" />

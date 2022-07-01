@@ -1,5 +1,5 @@
-﻿using CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml;
-using System;
+﻿using System;
+using CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml;
 
 namespace CreatorMVVMProject.Model.Class.StatusReportService
 {

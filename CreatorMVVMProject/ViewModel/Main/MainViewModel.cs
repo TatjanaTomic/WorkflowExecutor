@@ -1,12 +1,12 @@
-﻿using CreatorMVVMProject.Model.Class.StatusReportService;
-using CreatorMVVMProject.Model.Class.Main;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using CreatorMVVMProject.Model.Class.Commands;
-using System.Linq;
-using System.ComponentModel;
-using System.Windows;
-using System;
+using CreatorMVVMProject.Model.Class.Main;
+using CreatorMVVMProject.Model.Class.StatusReportService;
 
 namespace CreatorMVVMProject.ViewModel.Main
 {
@@ -26,7 +26,7 @@ namespace CreatorMVVMProject.ViewModel.Main
             mainModel.ExecutionSelectedStepsStarted += MainModel_ExecutionSelectedStepsStarted;
             mainModel.ExecutionTillThisStepStarted += MainModel_ExecutionTillThisStepStarted;
 
-            foreach(StageStatus stage in mainModel.Stages)
+            foreach (StageStatus stage in mainModel.Stages)
             {
                 StageViewModels.Add(new(stage, mainModel.ExecutionService));
             }
@@ -77,14 +77,14 @@ namespace CreatorMVVMProject.ViewModel.Main
         public void StartExecutionCommandHandler()
         {
             List<StepViewModel> selectedStepViewModels = GetSelectedStepViewModels().ToList();
-            if(selectedStepViewModels.Count == 0)
+            if (selectedStepViewModels.Count == 0)
             {
                 _ = MessageBox.Show("Select steps for execution.");
                 return;
             }
 
             List<StepStatus> steps = new();
-            foreach(StepViewModel stepViewModel in selectedStepViewModels)
+            foreach (StepViewModel stepViewModel in selectedStepViewModels)
             {
                 steps.Add(stepViewModel.StepStatus);
                 stepViewModel.IsSelected = false;
@@ -95,7 +95,7 @@ namespace CreatorMVVMProject.ViewModel.Main
 
         private void setSelectedStage()
         {
-            if(StageViewModels.Count > 0)
+            if (StageViewModels.Count > 0)
             {
                 selectedStage = StageViewModels[0];
                 selectedStageIndex = 0;

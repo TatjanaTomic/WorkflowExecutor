@@ -1,10 +1,10 @@
-﻿using CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml;
-using CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml.StageListBuilder;
-using ConfigurationException = CreatorMVVMProject.Model.Class.Exceptions.ConfigurationException;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using CreatorMVVMProject.Model.Class.Exceptions;
+using CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml;
+using CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml.StageListBuilder;
+using ConfigurationException = CreatorMVVMProject.Model.Class.Exceptions.ConfigurationException;
 
 namespace CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository
 {

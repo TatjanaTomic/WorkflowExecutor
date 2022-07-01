@@ -1,11 +1,11 @@
-﻿using CreatorMVVMProject.Model.Class.StatusReportService;
-using CreatorMVVMProject.Model.Interface.ExecutionService;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
+using CreatorMVVMProject.Model.Class.StatusReportService;
+using CreatorMVVMProject.Model.Interface.ExecutionService;
 
 namespace CreatorMVVMProject.ViewModel.Main
 {
-    public class StageViewModel: INotifyPropertyChanged
+    public class StageViewModel : INotifyPropertyChanged
     {
         public StageViewModel(StageStatus stage, IExecutionService executionService)
         {
@@ -16,7 +16,7 @@ namespace CreatorMVVMProject.ViewModel.Main
                 StepViewModels.Add(new StepViewModel(step, executionService));
             }
         }
-        
+
         public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void NotifyPropertyChange(string propertyName)
         {
@@ -30,5 +30,5 @@ namespace CreatorMVVMProject.ViewModel.Main
         public List<StepViewModel> StepViewModels { get; } = new();
 
     }
-    
+
 }

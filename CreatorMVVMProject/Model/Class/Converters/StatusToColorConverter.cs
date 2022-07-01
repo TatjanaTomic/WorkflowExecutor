@@ -1,8 +1,8 @@
-﻿using CreatorMVVMProject.Model.Class.StatusReportService;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Data;
+using CreatorMVVMProject.Model.Class.StatusReportService;
 
 namespace CreatorMVVMProject.Model.Class.Converters
 {

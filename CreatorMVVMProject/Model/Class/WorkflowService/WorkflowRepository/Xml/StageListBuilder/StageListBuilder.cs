@@ -1,7 +1,7 @@
-﻿using CreatorMVVMProject.Model.Class.Exceptions;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
+using CreatorMVVMProject.Model.Class.Exceptions;
 
 namespace CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml.StageListBuilder
 {

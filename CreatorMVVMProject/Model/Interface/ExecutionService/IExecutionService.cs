@@ -1,6 +1,6 @@
-﻿using CreatorMVVMProject.Model.Class.StatusReportService;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using CreatorMVVMProject.Model.Class.StatusReportService;
 
 namespace CreatorMVVMProject.Model.Interface.ExecutionService
 {

@@ -1,5 +1,5 @@
-﻿using CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml;
 
 namespace CreatorMVVMProject.Model.Interface.WorkflowService
 {

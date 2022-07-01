@@ -1,10 +1,7 @@
-﻿using CreatorMVVMProject.Model.Class.StatusReportService;
+﻿using System.Windows;
+using CreatorMVVMProject.Model.Class.DIBuilder;
 using CreatorMVVMProject.Model.Class.Main;
 using CreatorMVVMProject.ViewModel.Main;
-using System.Windows;
-using CreatorMVVMProject.Model.Class.DIBuilder;
-using Autofac;
-using CreatorMVVMProject.Model.Interface.StatusReportService;
 
 namespace CreatorMVVMProject
 {
@@ -16,8 +13,8 @@ namespace CreatorMVVMProject
         public MainWindow()
         {
             InitializeComponent();
-            
-            DataContext = new MainViewModel(ServiceContainer.Resolve<MainModel>());    
+
+            DataContext = new MainViewModel(ServiceContainer.Resolve<MainModel>());
         }
     }
 }
