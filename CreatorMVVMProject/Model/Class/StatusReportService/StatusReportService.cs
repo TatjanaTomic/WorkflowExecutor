@@ -6,6 +6,9 @@ using System.Linq;
 
 namespace CreatorMVVMProject.Model.Class.StatusReportService
 {
+    /// <summary>
+    /// Class <c>StatusReportService</c> models a service that is responsible for setting the status of the steps.
+    /// </summary>
     public class StatusReportService : IStatusReportService
     {
         private readonly IWorkflowService workflowService;
@@ -26,8 +29,8 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
         /// Method <c>CanStepBeExecutedInitial</c> checks if the specified step can be executed initially.
         /// If it has no dependency steps it can be executed, otherwise cannot.
         /// </summary>
-        /// <param name="step">Step for which method checks if it can be executed.</param>
-        /// <returns>Value that indicates if the step can be executed.</returns>
+        /// <param name="step">A step for which method checks if it can be executed.</param>
+        /// <returns>A value that indicates if the step can be executed.</returns>
         public bool CanStepBeExecutedInitial(Step step)
         {
             return !workflowService.HasDependencySteps(step);
@@ -37,7 +40,7 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
         /// Method <c>GetInitialStatus</c> determines the initial status of the specified step.
         /// If it has dependency steps the initial status is Disabled, otherwise NotStarted.
         /// </summary>
-        /// <param name="step">Step for which method determines initial status.</param>
+        /// <param name="step">A step for which method determines the initial status.</param>
         /// <returns>Initial status of the step.</returns>
         public Status GetInitialStatus(Step step)
         {
@@ -46,11 +49,11 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
 
         /// <summary>
         /// Method <c>SetCanStepBeExecuted</c> sets if the specified step can be executed.
-        /// If status of step is Disabled or InProgres it cannot be executed.
-        /// If status of step is Obsolete and any of it's dependency steps is not executed successfully, it cannot be executed.
+        /// If the status of the step is Disabled or InProgres it cannot be executed.
+        /// If the status of the step is Obsolete and any of it's dependency steps is not executed successfully, it cannot be executed.
         /// In all other cases step can be executed.
         /// </summary>
-        /// <param name="stepStatus">Step for which method sets if it can be executed.</param>
+        /// <param name="stepStatus">A step for which method sets if it can be executed.</param>
         public void SetCanStepBeExecuted(StepStatus stepStatus)
         {
             var canStepBeExecuted = true;
@@ -68,22 +71,24 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
             stepStatus.CanBeExecuted = canStepBeExecuted;
         }
 
-        //TODO: Finish this
         /// <summary>
-        /// 
+        /// Method <c>SetStatusToStep</c> sets the new status to a passed step. 
+        /// If the step changes its status to Success, the method checks all steps that depend on it. If dependency step has status Disabled 
+        /// and all of its first level dependency steps are executed successfully, the dependency step changes its status to NotStarted.
+        /// If the passed step changes its status from Success to InProgress, all the steps on which that step depends change their status to Obsolete. 
         /// </summary>
-        /// <param name="stepStatus"></param>
-        /// <param name="status"></param>
+        /// <param name="stepStatus">A step which changes its status.</param>
+        /// <param name="status">New status of a step.</param>
         public void SetStatusToStep(StepStatus stepStatus, Status status)
         {
             Status oldStatus = stepStatus.Status;
-            stepStatus.Status = status; //promijeni odmah status na novi
+            stepStatus.Status = status;
 
             if (status == Status.Success)
             {
-                IList<StepStatus> reverseDependencySteps = GetStepStatuses(workflowService.GetReverseDependencySteps(stepStatus.Step).ToList());
+                IList<StepStatus> reverseDependencyStepStatuses = GetStepStatuses(workflowService.GetReverseDependencySteps(stepStatus.Step).ToList());
 
-                foreach (StepStatus dependencyStepStatus in reverseDependencySteps)
+                foreach (StepStatus dependencyStepStatus in reverseDependencyStepStatuses)
                 {
                     IList<StepStatus> firstLevelDependencySteps = GetStepStatuses(workflowService.GetFirstLevelDependencySteps(dependencyStepStatus.Step).ToList());
 
