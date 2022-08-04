@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
@@ -25,7 +26,7 @@ namespace CreatorMVVMProject.Model.Class.Converters
 
         public object ConvertBack(object value, System.Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return value is string icon && dictionary.ContainsValue(icon) ? dictionary.FirstOrDefault(x => x.Value == icon).Key : DependencyProperty.UnsetValue;
         }
     }
 }

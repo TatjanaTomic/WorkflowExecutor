@@ -69,6 +69,11 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
             }
 
             stepStatus.CanBeExecuted = canStepBeExecuted;
+          
+            foreach(var step in workflowService.GetReverseDependencySteps(stepStatus.Step))
+            {
+                SetCanStepBeExecuted(GetStepStatus(step));
+            }
         }
 
         /// <summary>
@@ -101,10 +106,13 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
 
             if (oldStatus.Equals(Status.Success) && status.Equals(Status.InProgress))
             {
-                IList<Step> obsoletedSteps = workflowService.GetAllDependencySteps(stepStatus.Step);
+                IList<Step> obsoletedSteps = workflowService.GetReverseDependencySteps(stepStatus.Step);
                 foreach (Step step in obsoletedSteps)
                 {
-                    SetStatusToStep(step, Status.Obsolete);
+                    if(GetStepStatus(step).Status is not Status.NotStarted and not Status.Disabled)
+                    {
+                        SetStatusToStep(step, Status.Obsolete);
+                    }
                 }
             }
 

@@ -11,12 +11,12 @@ namespace CreatorMVVMProject.Model.Class.StepExecutor
 
         public abstract Task Start();
 
-        protected virtual void OnExecutionStarted(Step e)
+        protected void OnExecutionStarted(Step e)
         {
             ExecutionStarted?.Invoke(this, e);
         }
 
-        protected virtual void OnExecutionCompleted(ExecutionCompletedEventArgs e)
+        protected void OnExecutionCompleted(ExecutionCompletedEventArgs e)
         {
             ExecutionCompleted?.Invoke(this, e);
         }

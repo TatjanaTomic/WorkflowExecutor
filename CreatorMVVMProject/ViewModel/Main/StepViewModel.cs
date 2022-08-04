@@ -29,16 +29,7 @@ namespace CreatorMVVMProject.ViewModel.Main
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        protected virtual void NotifyPropertyChange(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
         public event EventHandler? ExecuteTillThisPressed;
-        protected virtual void OnExecuteTillThisPressed()
-        {
-            ExecuteTillThisPressed?.Invoke(this, EventArgs.Empty);
-        }
 
         public StepStatus StepStatus => stepStatus;
 
@@ -60,7 +51,7 @@ namespace CreatorMVVMProject.ViewModel.Main
             set
             {
                 stepStatus.StatusMessage = value;
-                NotifyPropertyChange(nameof(Message));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Message)));
             }
         }
 
@@ -70,7 +61,7 @@ namespace CreatorMVVMProject.ViewModel.Main
             set
             {
                 isSelected = value;
-                NotifyPropertyChange(nameof(IsSelected));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSelected)));
             }
         }
 
@@ -80,7 +71,7 @@ namespace CreatorMVVMProject.ViewModel.Main
             set
             {
                 isExpanded = value;
-                NotifyPropertyChange(nameof(IsExpanded));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsExpanded)));
             }
         }
 
@@ -90,7 +81,7 @@ namespace CreatorMVVMProject.ViewModel.Main
             set
             {
                 isButtonEnabled = value;
-                NotifyPropertyChange(nameof(IsButtonEnabled));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsButtonEnabled)));
             }
         }
 
@@ -100,7 +91,7 @@ namespace CreatorMVVMProject.ViewModel.Main
             set
             {
                 isIndeterminate = value;
-                NotifyPropertyChange(nameof(IsIndeterminate));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsIndeterminate)));
             }
         }
 
@@ -108,23 +99,23 @@ namespace CreatorMVVMProject.ViewModel.Main
         {
             executionService.ExecuteTillThisStep(StepStatus);
 
-            OnExecuteTillThisPressed();
+            ExecuteTillThisPressed?.Invoke(this, EventArgs.Empty);
         }
 
         private void OnStatusChanged(object? _, StatusChangedEventArgs statusChangedEventArgs)
         {
             IsIndeterminate = statusChangedEventArgs.Status == Status.InProgress;
-            NotifyPropertyChange(nameof(Status));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Status)));
         }
 
         private void OnMessageChanged(object? _, EventArgs _2)
         {
-            NotifyPropertyChange(nameof(Message));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Message)));
         }
 
         private void OnCanBeExecutedChanged(object? _, EventArgs _2)
         {
-            NotifyPropertyChange(nameof(CanBeSelected));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanBeSelected)));
         }
     }
 }

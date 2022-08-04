@@ -18,10 +18,6 @@ namespace CreatorMVVMProject.ViewModel.Main
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        protected virtual void NotifyPropertyChange(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
 
         public StageStatus Stage { get; set; }
 

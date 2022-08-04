@@ -35,10 +35,6 @@ namespace CreatorMVVMProject.ViewModel.Main
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        protected virtual void NotifyPropertyChange(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
 
         public List<StageViewModel> StageViewModels { get; set; } = new();
 
@@ -50,7 +46,7 @@ namespace CreatorMVVMProject.ViewModel.Main
             set
             {
                 selectedStage = value;
-                NotifyPropertyChange(nameof(SelectedStage));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedStage)));
             }
         }
 
@@ -60,7 +56,7 @@ namespace CreatorMVVMProject.ViewModel.Main
             set
             {
                 selectedStageIndex = value;
-                NotifyPropertyChange(nameof(SelectedStageIndex));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedStageIndex)));
             }
         }
 
@@ -70,7 +66,7 @@ namespace CreatorMVVMProject.ViewModel.Main
             set
             {
                 canExecutionStart = value;
-                NotifyPropertyChange(nameof(CanExecutionStart));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanExecutionStart)));
             }
         }
 

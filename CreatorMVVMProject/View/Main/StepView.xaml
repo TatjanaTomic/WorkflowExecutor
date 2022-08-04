@@ -10,7 +10,6 @@
     
     <UserControl.Resources>
         <converters:StatusToColorConverter x:Key="statusToColorConverter"/>
-        <converters:StatusToEnabledConverter x:Key="statusToEnabledConverter"/>
         <converters:StepTypeToIconConverter x:Key="typeToIconConverter"/>
     </UserControl.Resources>
 

@@ -32,22 +32,8 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
         }
 
         public event EventHandler? ExecutionCompleted;
-        protected virtual void OnExecutionCompleted()
-        {
-            ExecutionCompleted?.Invoke(this, EventArgs.Empty);
-        }
-
         public event EventHandler? ExecutionSelectedStepsStarted;
-        protected virtual void OnExecutionSelectedStepsStarted()
-        {
-            ExecutionSelectedStepsStarted?.Invoke(this, EventArgs.Empty);
-        }
-
         public event EventHandler? ExecutionTillThisStepStarted;
-        protected virtual void OnExecutionTillThisStepStarted()
-        {
-            ExecutionTillThisStepStarted?.Invoke(this, EventArgs.Empty);
-        }
 
         /// <summary>
         /// Serial steps queue
@@ -75,7 +61,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                     {
                         if (cancellationTokenSource.IsCancellationRequested)
                         {
-                            OnExecutionCompleted();
+                            ExecutionCompleted?.Invoke(this, EventArgs.Empty);
                         }
 
                         ExecuteSerialSteps();
@@ -103,7 +89,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
             {
                 EnqueueSteps(stepsToExecute);
 
-                OnExecutionSelectedStepsStarted();
+                ExecutionSelectedStepsStarted?.Invoke(this, EventArgs.Empty);
             });
         }
 
@@ -124,7 +110,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 
                 EnqueueSteps(stepStatuses.ToList());
 
-                OnExecutionTillThisStepStarted();
+                ExecutionTillThisStepStarted?.Invoke(this, EventArgs.Empty);
             });
 
         }
@@ -187,7 +173,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 
                 if (StepsQueue.Count == 0 && StepsQueueParallel.Count == 0)
                 {
-                    OnExecutionCompleted();
+                    ExecutionCompleted?.Invoke(this, EventArgs.Empty);
                 }
                 else
                 {
@@ -232,7 +218,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 
             if (StepsQueue.Count == 0 && StepsQueueParallel.Count == 0)
             {
-                OnExecutionCompleted();
+                ExecutionCompleted?.Invoke(this, EventArgs.Empty);
             }
             else
             {
