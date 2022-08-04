@@ -16,7 +16,7 @@ namespace CreatorMVVMProject.Model.Class.Converters
         private const string Green = "#116530";
         private const string LightGreen = "#5AA469";
         private const string Gray = "#A9A9A9";
-        private const string Orange = "#FFAE42";
+        private const string Orange = "#FD7702";
         private readonly Dictionary<Status, string> dictionary = new()
         {
             { Status.NotStarted, Gray },
