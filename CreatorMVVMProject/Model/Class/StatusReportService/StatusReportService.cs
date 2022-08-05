@@ -38,18 +38,18 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
 
         /// <summary>
         /// Method <c>GetInitialStatus</c> determines the initial status of the specified step.
-        /// If it has dependency steps the initial status is Disabled, otherwise NotStarted.
+        /// If it has dependency steps the initial status is Blocked, otherwise Ready.
         /// </summary>
         /// <param name="step">A step for which method determines the initial status.</param>
         /// <returns>Initial status of the step.</returns>
         public Status GetInitialStatus(Step step)
         {
-            return workflowService.HasDependencySteps(step) ? Status.Disabled : Status.NotStarted;
+            return workflowService.HasDependencySteps(step) ? Status.Blocked : Status.Ready;
         }
 
         /// <summary>
         /// Method <c>SetCanStepBeExecuted</c> sets if the specified step can be executed.
-        /// If the status of the step is Disabled or InProgres it cannot be executed.
+        /// If the status of the step is Blocked or InProgres it cannot be executed.
         /// If the status of the step is Obsolete and any of it's dependency steps is not executed successfully, it cannot be executed.
         /// In all other cases step can be executed.
         /// </summary>
@@ -58,7 +58,7 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
         {
             var canStepBeExecuted = true;
 
-            if (stepStatus.Status is Status.Disabled or Status.InProgress)
+            if (stepStatus.Status is Status.Blocked or Status.Running)
             {
                 canStepBeExecuted = false;
             }
@@ -78,9 +78,9 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
 
         /// <summary>
         /// Method <c>SetStatusToStep</c> sets the new status to a passed step. 
-        /// If the step changes its status to Success, the method checks all steps that depend on it. If dependency step has status Disabled 
-        /// and all of its first level dependency steps are executed successfully, the dependency step changes its status to NotStarted.
-        /// If the passed step changes its status from Success to InProgress, all the steps on which that step depends change their status to Obsolete. 
+        /// If the step changes its status to Success, the method checks all steps that depend on it. If dependency step has status Blocked 
+        /// and all of its first level dependency steps are executed successfully, the dependency step changes its status to Ready.
+        /// If the passed step changes its status from Success to Running, all the steps on which that step depends change their status to Obsolete. 
         /// </summary>
         /// <param name="stepStatus">A step which changes its status.</param>
         /// <param name="status">New status of a step.</param>
@@ -97,19 +97,19 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
                 {
                     IList<StepStatus> firstLevelDependencySteps = GetStepStatuses(workflowService.GetFirstLevelDependencySteps(dependencyStepStatus.Step).ToList());
 
-                    if (dependencyStepStatus.Status == Status.Disabled && firstLevelDependencySteps.All(s => s.Status == Status.Success))
+                    if (dependencyStepStatus.Status == Status.Blocked && firstLevelDependencySteps.All(s => s.Status == Status.Success))
                     {
-                        SetStatusToStep(dependencyStepStatus, Status.NotStarted);
+                        SetStatusToStep(dependencyStepStatus, Status.Ready);
                     }
                 }
             }
 
-            if (oldStatus.Equals(Status.Success) && status.Equals(Status.InProgress))
+            if (oldStatus.Equals(Status.Success) && status.Equals(Status.Running))
             {
                 IList<Step> obsoletedSteps = workflowService.GetReverseDependencySteps(stepStatus.Step);
                 foreach (Step step in obsoletedSteps)
                 {
-                    if(GetStepStatus(step).Status is not Status.NotStarted and not Status.Disabled)
+                    if(GetStepStatus(step).Status is not Status.Ready and not Status.Blocked)
                     {
                         SetStatusToStep(step, Status.Obsolete);
                     }

@@ -142,20 +142,20 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 
         /// <summary>
         /// Method <c>ExecuteParallelSteps</c> starts all serial steps that can be executed.
-        /// The method is performed while there is any step in serial steps queue and not all steps have status Disabled.
-        /// It takes steps from the queue one by one and checks if step's status is Disabled, if so the step is added at the end of the queue.
+        /// The method is performed while there is any step in serial steps queue and not all steps have status Blocked.
+        /// It takes steps from the queue one by one and checks if step's status is Blocked, if so the step is added at the end of the queue.
         /// Otherwise, an executor for that step is created and the step is started. The method waits for the step to complete execution.
         /// The method raises execution completed event when there is no serial nor parallel steps to be executed.
         /// </summary>
         private void ExecuteSerialSteps()
         {
-            while (StepsQueue.Any() && !StepsQueue.All(s => s.Status == Status.Disabled))
+            while (StepsQueue.Any() && !StepsQueue.All(s => s.Status == Status.Blocked))
             {
                 try
                 {
                     StepStatus stepStatus = StepsQueue.Take();
 
-                    if (stepStatus.Status == Status.Disabled)
+                    if (stepStatus.Status == Status.Blocked)
                     {
                         StepsQueue.Add(stepStatus);
                         continue;
@@ -185,8 +185,8 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 
         /// <summary>
         /// Method <c>ExecuteParallelSteps</c> creates a list of tasks and starts all the paralle steps that can be executed.
-        /// The method is performed while there is any step in parallel steps queue and not all steps have status Disabled.
-        /// It takes steps from the queue one by one and checks if step's status is Disabled, if so the step is added at the end of the queue.
+        /// The method is performed while there is any step in parallel steps queue and not all steps have status Blocked.
+        /// It takes steps from the queue one by one and checks if step's status is Blocked, if so the step is added at the end of the queue.
         /// Otherwise, an executor for that step and new task are created.
         /// The method waits for all the steps to complete execution.
         /// The method raises execution completed event when there is no serial nor parallel steps to be executed.
@@ -195,12 +195,12 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
         private void ExecuteParallelSteps()
         {
             List<Task> tasks = new();
-            while (StepsQueueParallel.Any() && !StepsQueueParallel.All(s => s.Status == Status.Disabled))
+            while (StepsQueueParallel.Any() && !StepsQueueParallel.All(s => s.Status == Status.Blocked))
             {
                 StepStatus stepStatus = StepsQueueParallel.Take();
                 try
                 {
-                    if (stepStatus.Status == Status.Disabled)
+                    if (stepStatus.Status == Status.Blocked)
                     {
                         StepsQueueParallel.Add(stepStatus);
                         continue;
@@ -237,7 +237,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 
         private void StepExecutionStarted(object? _, Step e)
         {
-            statusReportService.SetStatusToStep(e, Status.InProgress);
+            statusReportService.SetStatusToStep(e, Status.Running);
         }
 
         private void StepExecutionCompleted(object? _, ExecutionCompletedEventArgs args)

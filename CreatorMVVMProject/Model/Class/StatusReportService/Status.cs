@@ -6,19 +6,19 @@
     public enum Status
     {
         /// <summary>
-        /// Status Disabled - Step cannot be started because it's dependency Steps are not executed successfully
+        /// Status Blocked - Step cannot be started because it's dependency Steps are not executed successfully
         /// </summary>
-        Disabled,
+        Blocked,
 
         /// <summary>
-        /// Status NotStarted - Step can be started, it has no dependency Steps or all of it's dependency Steps are executed successfully 
+        /// Status Ready - Step can be started, it has no dependency Steps or all of it's dependency Steps are executed successfully 
         /// </summary>
-        NotStarted,
+        Ready,
 
         /// <summary>
-        /// Status InProgress - Step execution started and it is executing currently
+        /// Status Running - Step execution started and it is executing currently
         /// </summary>
-        InProgress,
+        Running,
 
         /// <summary>
         /// Status Success - Step execution finished successfully

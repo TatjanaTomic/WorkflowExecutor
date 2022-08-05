@@ -28,17 +28,11 @@
         <Setter Property="TextAlignment" Value="Justify"/>
     </Style>
 
-    <Style TargetType="TextBlock" x:Key="TextBlockStatusStyle">
-        <Setter Property="Width" Value="130"/>
-        <Setter Property="Foreground" Value="{StaticResource TextDarkColorBrush}"/>
-    </Style>
-
 
     <Style TargetType="Button" x:Key="TurquoiseButtonStyle">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <!--<Border CornerRadius="10" Background="{TemplateBinding Background}" BorderThickness="1">-->
                     <Border CornerRadius="10" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" Background="{TemplateBinding Background}">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center">
 
@@ -109,5 +103,12 @@
     <BitmapImage x:Key="DownloadIcon" UriSource="../Icons/download.png" ></BitmapImage>
     <BitmapImage x:Key="ExecuteIcon"  UriSource="../Icons/execute.png" ></BitmapImage>
 
-    
+    <BitmapImage x:Key="GrayIcon"  UriSource="../Icons/GrayIcon.png" ></BitmapImage>
+    <BitmapImage x:Key="LightGreenIcon"  UriSource="../Icons/LightGreenIcon.png" ></BitmapImage>
+    <BitmapImage x:Key="GreenIcon"  UriSource="../Icons/GreenIcon.png" ></BitmapImage>
+    <BitmapImage x:Key="OrangeIcon"  UriSource="../Icons/OrangeIcon.png" ></BitmapImage>
+    <BitmapImage x:Key="DarkRedIcon"  UriSource="../Icons/DarkRedIcon.png" ></BitmapImage>
+    <BitmapImage x:Key="RedIcon"  UriSource="../Icons/RedIcon.png" ></BitmapImage>
+
+  
 </ResourceDictionary>

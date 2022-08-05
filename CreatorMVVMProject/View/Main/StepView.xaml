@@ -11,15 +11,18 @@
     <UserControl.Resources>
         <converters:StatusToColorConverter x:Key="statusToColorConverter"/>
         <converters:StepTypeToIconConverter x:Key="typeToIconConverter"/>
+        <converters:StatusToIconConverter x:Key="statusToIconConverter"/>
+        <converters:StatusToForecolorConverter x:Key="statusToForecolorConverter"/>
     </UserControl.Resources>
 
     <Border BorderThickness="0" Margin="10,10,10,10" CornerRadius="12,12,12,12" Background="{StaticResource DarkColorBrush}">
         <Expander IsExpanded="{Binding IsExpanded}" >
 
             <Expander.Header>
-                <StackPanel Orientation="Horizontal">
-                    <Image Width="40" Height="40" Source="{Binding StepType, Converter={StaticResource typeToIconConverter}}"></Image>
-                    <Label Margin="20,0,0,0"
+                <DockPanel LastChildFill="False">
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                        <Image Width="40" Height="40" Source="{Binding StepType, Converter={StaticResource typeToIconConverter}}"></Image>
+                        <Label Margin="20,0,0,0"
                            Height="40"
                            VerticalAlignment="Stretch"
                            VerticalContentAlignment="Center"
@@ -27,7 +30,13 @@
                            FontSize="18"
                            FontWeight="Bold"
                            Foreground="{StaticResource TextLightColorBrush}"></Label>
-                </StackPanel>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                        <Image Margin="5,0,0,0" Width="20" Height="20" Source="{Binding Status, Converter={StaticResource statusToIconConverter}, UpdateSourceTrigger=PropertyChanged}"></Image>
+                        <Image Margin="5,0,0,0" Width="20" Height="20" Source="{Binding Status, Converter={StaticResource statusToIconConverter}, UpdateSourceTrigger=PropertyChanged}"></Image>
+                        <Image Margin="5,0,0,0" Width="20" Height="20" Source="{Binding Status, Converter={StaticResource statusToIconConverter}, UpdateSourceTrigger=PropertyChanged}"></Image>
+                    </StackPanel>
+                </DockPanel>
             </Expander.Header>
 
             <Expander.Content>
@@ -50,8 +59,13 @@
                         <StackPanel Grid.Row="0"
                                     Orientation="Horizontal"
                                     Background="{Binding Status, Converter={StaticResource statusToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
-                            <TextBlock Text="Step status:" Margin="0,5,0,5" Style="{StaticResource TextBlockStatusStyle}"></TextBlock>
-                            <TextBlock Text="{Binding Status}" Margin="0,5,0,5"  Style="{StaticResource TextBlockStatusStyle}"></TextBlock>
+                            <TextBlock Text="Step status:"
+                                       Margin="0,5,0,5"
+                                       Foreground="{Binding Status, Converter={StaticResource statusToForecolorConverter}}"
+                                       Width="130"></TextBlock>
+                            <TextBlock Text="{Binding Status}"
+                                       Margin="0,5,0,5"
+                                       Foreground="{Binding Status, Converter={StaticResource statusToForecolorConverter}}"></TextBlock>
                         </StackPanel>
                         <DockPanel Grid.Row="2" Margin="0,20,0,0">
                             <TextBlock Text="Step description:" Style="{StaticResource TextBlockAsLabelStyle}"></TextBlock>

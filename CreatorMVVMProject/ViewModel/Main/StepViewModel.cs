@@ -104,7 +104,7 @@ namespace CreatorMVVMProject.ViewModel.Main
 
         private void OnStatusChanged(object? _, StatusChangedEventArgs statusChangedEventArgs)
         {
-            IsIndeterminate = statusChangedEventArgs.Status == Status.InProgress;
+            IsIndeterminate = statusChangedEventArgs.Status == Status.Running;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Status)));
         }
 

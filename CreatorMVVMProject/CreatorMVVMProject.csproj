@@ -15,14 +15,26 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="View\Resources\Icons\DarkRedIcon.png" />
     <None Remove="View\Resources\Icons\download.png" />
     <None Remove="View\Resources\Icons\execute.png" />
+    <None Remove="View\Resources\Icons\GrayIcon.png" />
+    <None Remove="View\Resources\Icons\GreenIcon.png" />
+    <None Remove="View\Resources\Icons\LightGreenIcon.png" />
+    <None Remove="View\Resources\Icons\OrangeIcon.png" />
+    <None Remove="View\Resources\Icons\RedIcon.png" />
     <None Remove="View\Resources\Icons\upload.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="View\Resources\Icons\DarkRedIcon.png" />
     <Resource Include="View\Resources\Icons\download.png" />
     <Resource Include="View\Resources\Icons\execute.png" />
+    <Resource Include="View\Resources\Icons\GrayIcon.png" />
+    <Resource Include="View\Resources\Icons\GreenIcon.png" />
+    <Resource Include="View\Resources\Icons\LightGreenIcon.png" />
+    <Resource Include="View\Resources\Icons\OrangeIcon.png" />
+    <Resource Include="View\Resources\Icons\RedIcon.png" />
     <Resource Include="View\Resources\Icons\upload.png" />
   </ItemGroup>
 
