@@ -21,7 +21,8 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
         private readonly IStatusReportService statusReportService;
         private readonly IWorkflowService workflowService;
         private readonly AutoResetEvent autoResetEvent = new(false);
-        private readonly CancellationTokenSource cancellationTokenSource = new();
+        private bool executionFailed = false;
+        private bool executionAborted = false;
 
         public ExecutionService(IStatusReportService statusReportService, IWorkflowService workflowService)
         {
@@ -31,9 +32,9 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
             _ = StartExecution();
         }
 
-        public event EventHandler? ExecutionCompleted;
-        public event EventHandler? ExecutionSelectedStepsStarted;
-        public event EventHandler? ExecutionTillThisStepStarted;
+        public event EventHandler<string>? ExecutionCompleted;
+        public event EventHandler<string>? ExecutionSelectedStepsStarted;
+        public event EventHandler<string>? ExecutionTillThisStepStarted;
 
         /// <summary>
         /// Serial steps queue
@@ -48,7 +49,6 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
         /// <summary>
         /// Method <c>StartExecution</c> runs long running Task that executes Steps in Queues.
         /// It calls methods <c>ExecuteSerialSteps</c> and <c>ExecuteParallelSteps</c> and then waits for the auto reset event to be set.
-        /// When cancellation is requested, it raises event ExecutionCompleted.
         /// </summary>
         /// <returns></returns>
         public async Task StartExecution()
@@ -59,13 +59,19 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                 {
                     while (true)
                     {
-                        if (cancellationTokenSource.IsCancellationRequested)
-                        {
-                            ExecutionCompleted?.Invoke(this, EventArgs.Empty);
-                        }
-
-                        ExecuteSerialSteps();
                         ExecuteParallelSteps();
+                        ExecuteSerialSteps();
+
+                        if(executionFailed)
+                        {
+                            ExecutionCompleted?.Invoke(this, "Execution failed. One or more steps executed unsuccessfully.");
+                            executionFailed = false;
+                        }
+                        else if(executionAborted)
+                        {
+                            ExecutionCompleted?.Invoke(this, "Execution aborted. There was no step that could be started.");
+                            executionAborted = false;
+                        }
 
                         autoResetEvent.WaitOne();
                     }
@@ -87,9 +93,17 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
         {
             Task.Run(() =>
             {
-                EnqueueSteps(stepsToExecute);
+                if(stepsToExecute.Any())
+                {
+                    ExecutionSelectedStepsStarted?.Invoke(this, string.Empty);
+                    EnqueueSteps(stepsToExecute);
+                }
+                else
+                {
+                    ExecutionSelectedStepsStarted?.Invoke(this, "Select steps for execution!");
+                    ExecutionCompleted?.Invoke(this, string.Empty);
+                }
 
-                ExecutionSelectedStepsStarted?.Invoke(this, EventArgs.Empty);
             });
         }
 
@@ -107,12 +121,19 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                 allSteps.Add(stepStatus.Step);
 
                 IList<StepStatus> stepStatuses = statusReportService.GetStepStatuses(allSteps.ToList());
+                List<StepStatus> stepStatusesToExecute = stepStatuses.Where(s => s.Status != Status.Success).ToList();
 
-                EnqueueSteps(stepStatuses.ToList());
-
-                ExecutionTillThisStepStarted?.Invoke(this, EventArgs.Empty);
+                if(stepStatusesToExecute.Any())
+                {
+                    ExecutionTillThisStepStarted?.Invoke(this, string.Empty);
+                    EnqueueSteps(stepStatusesToExecute);
+                }
+                else
+                {
+                    ExecutionTillThisStepStarted?.Invoke(this, "All the steps are executed successfully!");
+                    ExecutionCompleted?.Invoke(this, string.Empty);
+                }
             });
-
         }
 
         /// <summary>
@@ -133,11 +154,9 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                 {
                     StepsQueue.Add(stepStatus);
                 }
-
-                stepStatus.CanBeExecuted = false;
             }
 
-            autoResetEvent.Set();
+            _ = autoResetEvent.Set();
         }
 
         /// <summary>
@@ -149,13 +168,13 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
         /// </summary>
         private void ExecuteSerialSteps()
         {
-            while (StepsQueue.Any() && !StepsQueue.All(s => s.Status == Status.Blocked))
+            while (StepsQueue.Any() && !StepsQueue.All(s => !s.CanBeExecuted))
             {
                 try
                 {
                     StepStatus stepStatus = StepsQueue.Take();
 
-                    if (stepStatus.Status == Status.Blocked)
+                    if (!stepStatus.CanBeExecuted)
                     {
                         StepsQueue.Add(stepStatus);
                         continue;
@@ -173,14 +192,18 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 
                 if (StepsQueue.Count == 0 && StepsQueueParallel.Count == 0)
                 {
-                    ExecutionCompleted?.Invoke(this, EventArgs.Empty);
+                    ExecutionCompleted?.Invoke(this, string.Empty);
+                }
+                else if (StepsQueue.All(s => !s.CanBeExecuted) && StepsQueueParallel.All(s => !s.CanBeExecuted))
+                {
+                    ClearQueues();
+                    executionAborted = true;
                 }
                 else
                 {
-                    autoResetEvent.Set();
+                    _ = autoResetEvent.Set();
                 }
             }
-
         }
 
         /// <summary>
@@ -195,12 +218,12 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
         private void ExecuteParallelSteps()
         {
             List<Task> tasks = new();
-            while (StepsQueueParallel.Any() && !StepsQueueParallel.All(s => s.Status == Status.Blocked))
+            while (StepsQueueParallel.Any() && !StepsQueueParallel.All(s => !s.CanBeExecuted))
             {
                 StepStatus stepStatus = StepsQueueParallel.Take();
                 try
                 {
-                    if (stepStatus.Status == Status.Blocked)
+                    if (!stepStatus.CanBeExecuted)
                     {
                         StepsQueueParallel.Add(stepStatus);
                         continue;
@@ -216,13 +239,19 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
             }
             Task.WaitAll(tasks.ToArray());
 
+
             if (StepsQueue.Count == 0 && StepsQueueParallel.Count == 0)
             {
-                ExecutionCompleted?.Invoke(this, EventArgs.Empty);
+                ExecutionCompleted?.Invoke(this, string.Empty);
+            }
+            else if(StepsQueue.All(s => !s.CanBeExecuted) && StepsQueueParallel.All(s => !s.CanBeExecuted))
+            {
+                ClearQueues();
+                executionAborted = true;
             }
             else
             {
-                autoResetEvent.Set();
+                _ = autoResetEvent.Set();
             }
         }
 
@@ -249,7 +278,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
             if (!args.IsSuccessful)
             {
                 ClearQueues();
-                cancellationTokenSource.Cancel();
+                executionFailed = true;
             }
         }
 

@@ -73,12 +73,7 @@ namespace CreatorMVVMProject.ViewModel.Main
         public void StartExecutionCommandHandler()
         {
             List<StepViewModel> selectedStepViewModels = GetSelectedStepViewModels().ToList();
-            if (selectedStepViewModels.Count == 0)
-            {
-                _ = MessageBox.Show("Select steps for execution.");
-                return;
-            }
-
+            
             List<StepStatus> steps = new();
             foreach (StepViewModel stepViewModel in selectedStepViewModels)
             {
@@ -126,20 +121,36 @@ namespace CreatorMVVMProject.ViewModel.Main
             return StageViewModels.SelectMany(stageViewModel => stageViewModel.StepViewModels).Where(stepViewModel => stepViewModel.IsSelected).ToList();
         }
 
-        private void MainModel_ExecutionTillThisStepStarted(object? sender, EventArgs e)
+        private void MainModel_ExecutionTillThisStepStarted(object? sender, string message)
         {
             DisableExecuteTillThisButtons();
             CanExecutionStart = false;
+
+            if (!string.IsNullOrEmpty(message))
+            {
+                _ = MessageBox.Show(message);
+            }
         }
 
-        private void MainModel_ExecutionCompleted(object? sender, EventArgs e)
+        private void MainModel_ExecutionCompleted(object? sender, string message)
         {
+            if (!string.IsNullOrEmpty(message))
+            {
+                _ = MessageBox.Show(message);
+            }
+
             EnableButtons();
         }
 
-        private void MainModel_ExecutionSelectedStepsStarted(object? sender, EventArgs e)
+        private void MainModel_ExecutionSelectedStepsStarted(object? sender, string message)
         {
             DisableExecuteTillThisButtons();
+
+            if (!string.IsNullOrEmpty(message))
+            {
+                CanExecutionStart = false;
+                _ = MessageBox.Show(message);
+            }
         }
     }
 }

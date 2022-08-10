@@ -22,27 +22,29 @@ namespace CreatorMVVMProject.Model.Class.Main
             this.executionService.ExecutionSelectedStepsStarted += SelectedStepsExecutionStarted;
             this.executionService.ExecutionTillThisStepStarted += ExecutionTillThisStarted;
         }
-
+        
+        public event EventHandler<string>? ExecutionCompleted;
+        public event EventHandler<string>? ExecutionTillThisStepStarted;
+        public event EventHandler<string>? ExecutionSelectedStepsStarted;
+        
         public IList<StageStatus> Stages => statusReportService.Stages;
 
         public IExecutionService ExecutionService => executionService;
 
-        public event EventHandler? ExecutionCompleted;
-        private void StepsExecutionCompleted(object? _, EventArgs e)
+        
+        private void StepsExecutionCompleted(object? _, string message)
         {
-            ExecutionCompleted?.Invoke(this, e);
+            ExecutionCompleted?.Invoke(this, message);
+        }
+        
+        private void ExecutionTillThisStarted(object? _, string message)
+        {
+            ExecutionTillThisStepStarted?.Invoke(this, message);
         }
 
-        public event EventHandler? ExecutionTillThisStepStarted;
-        private void ExecutionTillThisStarted(object? _, EventArgs e)
+        private void SelectedStepsExecutionStarted(object? _, string message)
         {
-            ExecutionTillThisStepStarted?.Invoke(this, e);
-        }
-
-        public event EventHandler? ExecutionSelectedStepsStarted;
-        private void SelectedStepsExecutionStarted(object? _, EventArgs e)
-        {
-            ExecutionSelectedStepsStarted?.Invoke(this, e);
+            ExecutionSelectedStepsStarted?.Invoke(this, message);
         }
 
         public void AddStepsToExecution(List<StepStatus> steps)

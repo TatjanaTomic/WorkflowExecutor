@@ -10,7 +10,31 @@
     
     <Grid >
 
-        <ListView ItemsSource="{Binding StepViewModels}"
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Style="{StaticResource ExpandCollapseButtonStyle}" Command="{Binding ExpandAllCommand}">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="30" Height="30" Source="{StaticResource ExpandAllIcon}"/>
+                        <TextBlock VerticalAlignment="Center" Text="Expand all"></TextBlock>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+            <Button Style="{StaticResource ExpandCollapseButtonStyle}" Command="{Binding CollapseAllCommand}">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="30" Height="30" Source="{StaticResource CollapseAllIcon}"/>
+                        <TextBlock VerticalAlignment="Center" Text="Collapse all"></TextBlock>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+        </StackPanel>
+        
+        <ListView Grid.Row="1" ItemsSource="{Binding StepViewModels}"
                   Background="{StaticResource DeepDarkColorBrush}"
                   VirtualizingPanel.ScrollUnit="Pixel"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"

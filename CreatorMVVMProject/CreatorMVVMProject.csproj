@@ -15,9 +15,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="View\Resources\Icons\CollapseIcon.png" />
     <None Remove="View\Resources\Icons\DarkRedIcon.png" />
     <None Remove="View\Resources\Icons\download.png" />
     <None Remove="View\Resources\Icons\execute.png" />
+    <None Remove="View\Resources\Icons\expandIcon.png" />
     <None Remove="View\Resources\Icons\GrayIcon.png" />
     <None Remove="View\Resources\Icons\GreenIcon.png" />
     <None Remove="View\Resources\Icons\LightGreenIcon.png" />
@@ -40,6 +42,14 @@
 
   <ItemGroup>
     <EditorConfigFiles Remove="C:\Users\tatjanat\source\repos\TatjanaTomic\WorkflowExecutor\CreatorMVVMProject\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="View\Resources\Icons\expandIcon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="View\Resources\Icons\collapseIcon.png" />
   </ItemGroup>
 
   <ItemGroup>
