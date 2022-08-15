@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using CreatorMVVMProject.Model.Class.Commands;
+using CreatorMVVMProject.Model.Class.ExecutionService;
 using CreatorMVVMProject.Model.Class.Main;
 using CreatorMVVMProject.Model.Class.StatusReportService;
 
@@ -121,35 +121,35 @@ namespace CreatorMVVMProject.ViewModel.Main
             return StageViewModels.SelectMany(stageViewModel => stageViewModel.StepViewModels).Where(stepViewModel => stepViewModel.IsSelected).ToList();
         }
 
-        private void MainModel_ExecutionTillThisStepStarted(object? sender, string message)
+        private void MainModel_ExecutionTillThisStepStarted(object? sender, ExecutionEventArgs args)
         {
             DisableExecuteTillThisButtons();
             CanExecutionStart = false;
 
-            if (!string.IsNullOrEmpty(message))
+            if (!string.IsNullOrEmpty(args.Message))
             {
-                _ = MessageBox.Show(message);
+                mainModel.DialogService.ShowMessage(new Message.MessageViewModel(args.Message, args.ExecutionFailed));
             }
         }
 
-        private void MainModel_ExecutionCompleted(object? sender, string message)
+        private void MainModel_ExecutionCompleted(object? sender, ExecutionEventArgs args)
         {
-            if (!string.IsNullOrEmpty(message))
+            if (!string.IsNullOrEmpty(args.Message))
             {
-                _ = MessageBox.Show(message);
+                mainModel.DialogService.ShowMessage(new Message.MessageViewModel(args.Message, args.ExecutionFailed));
             }
 
             EnableButtons();
         }
 
-        private void MainModel_ExecutionSelectedStepsStarted(object? sender, string message)
+        private void MainModel_ExecutionSelectedStepsStarted(object? sender, ExecutionEventArgs args)
         {
             DisableExecuteTillThisButtons();
 
-            if (!string.IsNullOrEmpty(message))
+            if (!string.IsNullOrEmpty(args.Message))
             {
                 CanExecutionStart = false;
-                _ = MessageBox.Show(message);
+                mainModel.DialogService.ShowMessage(new Message.MessageViewModel(args.Message, args.ExecutionFailed));
             }
         }
     }

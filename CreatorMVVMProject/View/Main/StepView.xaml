@@ -33,8 +33,6 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
                         <Image Margin="5,0,0,0" Width="20" Height="20" Source="{Binding Status, Converter={StaticResource statusToIconConverter}, UpdateSourceTrigger=PropertyChanged}"></Image>
-                        <Image Margin="5,0,0,0" Width="20" Height="20" Source="{Binding Status, Converter={StaticResource statusToIconConverter}, UpdateSourceTrigger=PropertyChanged}"></Image>
-                        <Image Margin="5,0,0,0" Width="20" Height="20" Source="{Binding Status, Converter={StaticResource statusToIconConverter}, UpdateSourceTrigger=PropertyChanged}"></Image>
                     </StackPanel>
                 </DockPanel>
             </Expander.Header>
@@ -46,18 +44,11 @@
                         <ColumnDefinition Width="2*" ></ColumnDefinition>
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
-                    </Grid.RowDefinitions>
 
                     <ProgressBar Grid.Column="0" Orientation="Vertical" Height="10" IsIndeterminate="{Binding IsIndeterminate}" Background="silver" />
 
                     <StackPanel Grid.Column="1" Margin="20,0,0,0">
-                        <StackPanel Grid.Row="0"
-                                    Orientation="Horizontal"
+                        <StackPanel Orientation="Horizontal"
                                     Background="{Binding Status, Converter={StaticResource statusToColorConverter}, UpdateSourceTrigger=PropertyChanged}">
                             <TextBlock Text="Step status:"
                                        Margin="0,5,0,5"
@@ -67,25 +58,29 @@
                                        Margin="0,5,0,5"
                                        Foreground="{Binding Status, Converter={StaticResource statusToForecolorConverter}}"></TextBlock>
                         </StackPanel>
-                        <DockPanel Grid.Row="2" Margin="0,20,0,0">
+                        <DockPanel Margin="0,20,0,0">
                             <TextBlock Text="Step description:" Style="{StaticResource TextBlockAsLabelStyle}"></TextBlock>
                             <TextBlock Text="{Binding StepDescription}" Style="{StaticResource TextBlockStyle}"></TextBlock>
                         </DockPanel>
-                        <DockPanel Grid.Row="3" Margin="0,20,0,10">
+                        <DockPanel Margin="0,20,0,10">
                             <TextBlock Text="Output:" Style="{StaticResource TextBlockAsLabelStyle}"></TextBlock>
                             <TextBlock Text="{Binding Message}" Style="{StaticResource TextBlockStyle}"></TextBlock>
                         </DockPanel>
                     </StackPanel>
 
-                    <Grid Grid.Row="0" Grid.Column="2" Grid.RowSpan="2">
+                    <Grid Grid.Column="2">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" ></ColumnDefinition>
                             <ColumnDefinition Width="4*"></ColumnDefinition>
                             <ColumnDefinition Width="*" ></ColumnDefinition>
                             <ColumnDefinition Width="auto"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
 
-                        <Button Grid.Column="1" 
+                        <Button Grid.Column="1" Grid.Row="0"
                                 Content="Execute till this step"
                                 Command="{Binding StartStepCommand}"
                                 IsEnabled="{Binding IsButtonEnabled}"
@@ -96,7 +91,7 @@
                                 MaxWidth="250"
                                 />
 
-                        <CheckBox Grid.Column="3" HorizontalAlignment="Right"
+                        <CheckBox Grid.Column="3" Grid.Row="0" HorizontalAlignment="Right"
                                   Style="{StaticResource MaterialDesignFilterChipOutlineCheckBox}"
                                   Foreground="{StaticResource TextLightColorBrush}"
                                   IsEnabled="{Binding CanBeSelected}"
@@ -106,7 +101,12 @@
                                   Height="30"
                                   Margin="0,0,20,0">
                         </CheckBox>
+
+                        <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3">
+                            
+                        </StackPanel>
                     </Grid>
+
                 </Grid>
             </Expander.Content>
         </Expander>

@@ -3,7 +3,7 @@ using CreatorMVVMProject.Model.Class.DIBuilder;
 using CreatorMVVMProject.Model.Class.Main;
 using CreatorMVVMProject.ViewModel.Main;
 
-namespace CreatorMVVMProject
+namespace CreatorMVVMProject.View.Main
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

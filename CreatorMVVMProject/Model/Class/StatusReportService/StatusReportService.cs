@@ -58,12 +58,12 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
         {
             var canStepBeExecuted = true;
 
-            if (stepStatus.Status is Status.Blocked or Status.Running)
+            if (stepStatus.Status is Status.Running)
             {
                 canStepBeExecuted = false;
             }
 
-            if (stepStatus.Status is Status.Obsolete && workflowService.GetAllDependencySteps(stepStatus.Step).ToList().Exists(s => GetStepStatus(s).Status != Status.Success))
+            if (workflowService.GetAllDependencySteps(stepStatus.Step).ToList().Exists(s => GetStepStatus(s).Status != Status.Success))
             {
                 canStepBeExecuted = false;
             }
@@ -104,7 +104,8 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
                 }
             }
 
-            if (oldStatus.Equals(Status.Success) && status.Equals(Status.Running))
+            //if (oldStatus.Equals(Status.Success) && status.Equals(Status.Running))
+            if (oldStatus.Equals(Status.Success))
             {
                 IList<Step> obsoletedSteps = workflowService.GetReverseDependencySteps(stepStatus.Step);
                 foreach (Step step in obsoletedSteps)

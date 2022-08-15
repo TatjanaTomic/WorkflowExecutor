@@ -15,14 +15,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="View\Resources\Icons\CollapseIcon.png" />
+    <None Remove="View\Resources\Icons\alert.png" />
+    <None Remove="View\Resources\Icons\collapse.png" />
     <None Remove="View\Resources\Icons\DarkRedIcon.png" />
     <None Remove="View\Resources\Icons\download.png" />
+    <None Remove="View\Resources\Icons\error.png" />
     <None Remove="View\Resources\Icons\execute.png" />
-    <None Remove="View\Resources\Icons\expandIcon.png" />
+    <None Remove="View\Resources\Icons\expand.png" />
     <None Remove="View\Resources\Icons\GrayIcon.png" />
     <None Remove="View\Resources\Icons\GreenIcon.png" />
+    <None Remove="View\Resources\Icons\information.png" />
     <None Remove="View\Resources\Icons\LightGreenIcon.png" />
+    <None Remove="View\Resources\Icons\management.png" />
     <None Remove="View\Resources\Icons\OrangeIcon.png" />
     <None Remove="View\Resources\Icons\RedIcon.png" />
     <None Remove="View\Resources\Icons\upload.png" />
@@ -31,7 +35,6 @@
   <ItemGroup>
     <Resource Include="View\Resources\Icons\DarkRedIcon.png" />
     <Resource Include="View\Resources\Icons\download.png" />
-    <Resource Include="View\Resources\Icons\execute.png" />
     <Resource Include="View\Resources\Icons\GrayIcon.png" />
     <Resource Include="View\Resources\Icons\GreenIcon.png" />
     <Resource Include="View\Resources\Icons\LightGreenIcon.png" />
@@ -45,11 +48,31 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="View\Resources\Icons\expandIcon.png" />
+    <Resource Include="View\Resources\Icons\execute.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="View\Resources\Icons\collapseIcon.png" />
+    <Resource Include="View\Resources\Icons\management.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="View\Resources\Icons\error.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="View\Resources\Icons\information.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="View\Resources\Icons\alert.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="View\Resources\Icons\collapse.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="View\Resources\Icons\expand.png" />
   </ItemGroup>
 
   <ItemGroup>

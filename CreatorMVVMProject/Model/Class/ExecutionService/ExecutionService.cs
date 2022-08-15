@@ -32,9 +32,9 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
             _ = StartExecution();
         }
 
-        public event EventHandler<string>? ExecutionCompleted;
-        public event EventHandler<string>? ExecutionSelectedStepsStarted;
-        public event EventHandler<string>? ExecutionTillThisStepStarted;
+        public event EventHandler<ExecutionEventArgs>? ExecutionCompleted;
+        public event EventHandler<ExecutionEventArgs>? ExecutionSelectedStepsStarted;
+        public event EventHandler<ExecutionEventArgs>? ExecutionTillThisStepStarted;
 
         /// <summary>
         /// Serial steps queue
@@ -64,12 +64,12 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 
                         if(executionFailed)
                         {
-                            ExecutionCompleted?.Invoke(this, "Execution failed. One or more steps executed unsuccessfully.");
+                            ExecutionCompleted?.Invoke(this, new ExecutionEventArgs("Execution failed. One or more steps executed unsuccessfully.", true));
                             executionFailed = false;
                         }
                         else if(executionAborted)
                         {
-                            ExecutionCompleted?.Invoke(this, "Execution aborted. There was no step that could be started.");
+                            ExecutionCompleted?.Invoke(this, new ExecutionEventArgs("Execution aborted. There was no step that could be started.", true));
                             executionAborted = false;
                         }
 
@@ -93,15 +93,20 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
         {
             Task.Run(() =>
             {
-                if(stepsToExecute.Any())
+                if(!stepsToExecute.Any())
                 {
-                    ExecutionSelectedStepsStarted?.Invoke(this, string.Empty);
-                    EnqueueSteps(stepsToExecute);
+                    ExecutionSelectedStepsStarted?.Invoke(this, new ExecutionEventArgs("Select steps for execution.", false));
+                    ExecutionCompleted?.Invoke(this, new ExecutionEventArgs(string.Empty, false));
                 }
                 else
                 {
-                    ExecutionSelectedStepsStarted?.Invoke(this, "Select steps for execution!");
-                    ExecutionCompleted?.Invoke(this, string.Empty);
+                    ExecutionSelectedStepsStarted?.Invoke(this, new ExecutionEventArgs(string.Empty, false));
+                    foreach (StepStatus stepStatus in stepsToExecute.Where(s => s.Status == Status.Success))
+                    {
+                        statusReportService.SetStatusToStep(stepStatus, statusReportService.GetInitialStatus(stepStatus.Step));
+                    }
+                    
+                    EnqueueSteps(stepsToExecute);
                 }
 
             });
@@ -117,21 +122,26 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
         {
             Task.Run(() =>
             {
-                IList<Step> allSteps = workflowService.GetAllDependencySteps(stepStatus.Step);
+                List<Step> allSteps = workflowService.GetAllDependencySteps(stepStatus.Step).ToList();
                 allSteps.Add(stepStatus.Step);
 
-                IList<StepStatus> stepStatuses = statusReportService.GetStepStatuses(allSteps.ToList());
+                IList<StepStatus> stepStatuses = statusReportService.GetStepStatuses(allSteps);
                 List<StepStatus> stepStatusesToExecute = stepStatuses.Where(s => s.Status != Status.Success).ToList();
 
                 if(stepStatusesToExecute.Any())
                 {
-                    ExecutionTillThisStepStarted?.Invoke(this, string.Empty);
+                    ExecutionTillThisStepStarted?.Invoke(this, new ExecutionEventArgs(string.Empty, false));
                     EnqueueSteps(stepStatusesToExecute);
                 }
                 else
-                {
-                    ExecutionTillThisStepStarted?.Invoke(this, "All the steps are executed successfully!");
-                    ExecutionCompleted?.Invoke(this, string.Empty);
+                {                    
+                    ExecutionTillThisStepStarted?.Invoke(this, new ExecutionEventArgs("All steps are executed successfully. The execution is going to start all over again.", false));
+                    foreach(Step step in allSteps)
+                    {
+                        statusReportService.SetStatusToStep(step, statusReportService.GetInitialStatus(step));
+                    }
+                    EnqueueSteps(statusReportService.GetStepStatuses(allSteps).ToList());
+
                 }
             });
         }
@@ -192,7 +202,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 
                 if (StepsQueue.Count == 0 && StepsQueueParallel.Count == 0)
                 {
-                    ExecutionCompleted?.Invoke(this, string.Empty);
+                    ExecutionCompleted?.Invoke(this, new ExecutionEventArgs(string.Empty, false));
                 }
                 else if (StepsQueue.All(s => !s.CanBeExecuted) && StepsQueueParallel.All(s => !s.CanBeExecuted))
                 {
@@ -242,7 +252,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 
             if (StepsQueue.Count == 0 && StepsQueueParallel.Count == 0)
             {
-                ExecutionCompleted?.Invoke(this, string.Empty);
+                ExecutionCompleted?.Invoke(this, new ExecutionEventArgs(string.Empty, false));
             }
             else if(StepsQueue.All(s => !s.CanBeExecuted) && StepsQueueParallel.All(s => !s.CanBeExecuted))
             {
