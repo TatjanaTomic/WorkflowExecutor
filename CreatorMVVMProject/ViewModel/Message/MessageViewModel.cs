@@ -1,14 +1,12 @@
-﻿using System;
-using System.ComponentModel;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
 using CreatorMVVMProject.Model.Class.Commands;
 
 namespace CreatorMVVMProject.ViewModel.Message
 {
-    public class MessageViewModel : INotifyPropertyChanged
+    public class MessageViewModel
     {
-        private string message;
+        private readonly string message;
         private readonly bool isErrorMessage;
         private ICommand? okCommand;
 
@@ -18,19 +16,11 @@ namespace CreatorMVVMProject.ViewModel.Message
             this.isErrorMessage = isErrorMessage;
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-
         public ICommand OkCommand => okCommand ??= new DelegateCommand<object>(OkCommandHandler);
 
-        public bool IsErrorMessage => isErrorMessage;
+        public string Message => message;
 
-        public string Message { 
-            get => message;
-            set {
-                message = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Message)));
-            }
-        }
+        public bool IsErrorMessage => isErrorMessage;
 
         private void OkCommandHandler(object obj)
         {

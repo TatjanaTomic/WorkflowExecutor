@@ -73,7 +73,7 @@ namespace CreatorMVVMProject.ViewModel.Main
         public void StartExecutionCommandHandler()
         {
             List<StepViewModel> selectedStepViewModels = GetSelectedStepViewModels().ToList();
-            
+
             List<StepStatus> steps = new();
             foreach (StepViewModel stepViewModel in selectedStepViewModels)
             {
@@ -93,7 +93,7 @@ namespace CreatorMVVMProject.ViewModel.Main
             }
             else
             {
-                _ = MessageBox.Show("Unable to start application.", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                mainModel.DialogService.ShowMessage(new Message.MessageViewModel("Unable to start application!", true));
                 Application.Current.Shutdown();
             }
         }

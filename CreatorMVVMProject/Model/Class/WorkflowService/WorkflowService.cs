@@ -30,16 +30,9 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService
         /// <returns>Method returns a list of dependency steps. List is empty if the given step has no dependency steps.</returns>
         public IList<Step> GetFirstLevelDependencySteps(Step step)
         {
-            IList<Step> dependencySteps = new List<Step>();
+            IList<string> dependencySteps = step.Dependencies.Select(x => x.DependencyStepId).ToList();
 
-            foreach (var dependency in step.Dependencies)
-            {
-                Step dependencyStep = Stages.SelectMany(stage => stage.Steps).First(s => s.Id == dependency.DependencyStepId);
-
-                dependencySteps.Add(dependencyStep);
-            }
-
-            return dependencySteps;
+            return Stages.SelectMany(stage => stage.Steps).Where(x => dependencySteps.Contains(x.Id)).ToList();
         }
 
         /// <summary>
@@ -69,14 +62,7 @@ namespace CreatorMVVMProject.Model.Class.WorkflowService
         /// <returns>Method returns a list of dependency steps. List is empty if there is no step that depends on given step.</returns>
         public IList<Step> GetReverseDependencySteps(Step step)
         {
-            IList<Step> reverseDependencySteps = new List<Step>();
-
-            foreach (Step s in Stages.SelectMany(stage => stage.Steps).Where(s => s.Dependencies.Any(d => d.DependencyStepId == step.Id)))
-            {
-                reverseDependencySteps.Add(s);
-            }
-
-            return reverseDependencySteps;
+            return Stages.SelectMany(stage => stage.Steps).Where(s => s.Dependencies.Any(d => d.DependencyStepId == step.Id)).ToList();
         }
     }
 }

@@ -11,7 +11,7 @@ namespace CreatorMVVMProject.Model.Class.Converters
     {
         public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if(value is bool isErrorMessage && !isErrorMessage)
+            if (value is bool isErrorMessage && !isErrorMessage)
             {
                 return Application.Current.FindResource("InformationIcon") as BitmapImage;
             }

@@ -12,7 +12,7 @@ namespace CreatorMVVMProject.Model.Class.Converters
     {
         public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if(value is Status status && Status.Success == status)
+            if (value is Status status && Status.Success == status)
             {
                 return Application.Current.FindResource("TextLightColorBrush") as SolidColorBrush;
             }

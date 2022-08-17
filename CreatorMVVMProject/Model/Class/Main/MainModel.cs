@@ -26,11 +26,11 @@ namespace CreatorMVVMProject.Model.Class.Main
             this.executionService.ExecutionTillThisStepStarted += ExecutionTillThisStarted;
             this.dialogService = dialogService;
         }
-        
+
         public event EventHandler<ExecutionEventArgs>? ExecutionCompleted;
         public event EventHandler<ExecutionEventArgs>? ExecutionTillThisStepStarted;
         public event EventHandler<ExecutionEventArgs>? ExecutionSelectedStepsStarted;
-        
+
         public IList<StageStatus> Stages => statusReportService.Stages;
 
         public IExecutionService ExecutionService => executionService;
@@ -42,14 +42,14 @@ namespace CreatorMVVMProject.Model.Class.Main
         {
             ExecutionCompleted?.Invoke(this, args);
         }
-        
+
         private void ExecutionTillThisStarted(object? _, ExecutionEventArgs args)
         {
             ExecutionTillThisStepStarted?.Invoke(this, args);
         }
 
         private void SelectedStepsExecutionStarted(object? _, ExecutionEventArgs args)
-        { 
+        {
             ExecutionSelectedStepsStarted?.Invoke(this, args);
         }
 

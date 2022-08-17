@@ -69,8 +69,8 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
             }
 
             stepStatus.CanBeExecuted = canStepBeExecuted;
-          
-            foreach(var step in workflowService.GetReverseDependencySteps(stepStatus.Step))
+
+            foreach (var step in workflowService.GetReverseDependencySteps(stepStatus.Step))
             {
                 SetCanStepBeExecuted(GetStepStatus(step));
             }
@@ -80,7 +80,8 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
         /// Method <c>SetStatusToStep</c> sets the new status to a passed step. 
         /// If the step changes its status to Success, the method checks all steps that depend on it. If dependency step has status Blocked 
         /// and all of its first level dependency steps are executed successfully, the dependency step changes its status to Ready.
-        /// If the passed step changes its status from Success to Running, all the steps on which that step depends change their status to Obsolete. 
+        /// If the passed step changes its status from Success to any other status, all the steps on which that step depends change their status to Obsolete. 
+        /// 
         /// </summary>
         /// <param name="stepStatus">A step which changes its status.</param>
         /// <param name="status">New status of a step.</param>
@@ -89,7 +90,7 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
             Status oldStatus = stepStatus.Status;
             stepStatus.Status = status;
 
-            if (status == Status.Success)
+            if (status.Equals(Status.Success))
             {
                 IList<StepStatus> reverseDependencyStepStatuses = GetStepStatuses(workflowService.GetReverseDependencySteps(stepStatus.Step).ToList());
 
@@ -110,12 +111,25 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
                 IList<Step> obsoletedSteps = workflowService.GetReverseDependencySteps(stepStatus.Step);
                 foreach (Step step in obsoletedSteps)
                 {
-                    if(GetStepStatus(step).Status is not Status.Ready and not Status.Blocked)
+                    if (GetStepStatus(step).Status is not Status.Ready and not Status.Blocked)
                     {
                         SetStatusToStep(step, Status.Obsolete);
                     }
                 }
             }
+
+            if (status.Equals(Status.Obsolete))
+            {
+                IList<Step> reverseDependencySteps = workflowService.GetReverseDependencySteps(stepStatus.Step);
+                foreach (Step step in reverseDependencySteps)
+                {
+                    if (GetStepStatus(step).Status is Status.Ready)
+                    {
+                        SetStatusToStep(step, Status.Blocked);
+                    }
+                }
+            }
+
 
             SetCanStepBeExecuted(stepStatus);
         }

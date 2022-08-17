@@ -62,12 +62,12 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                         ExecuteParallelSteps();
                         ExecuteSerialSteps();
 
-                        if(executionFailed)
+                        if (executionFailed)
                         {
                             ExecutionCompleted?.Invoke(this, new ExecutionEventArgs("Execution failed. One or more steps executed unsuccessfully.", true));
                             executionFailed = false;
                         }
-                        else if(executionAborted)
+                        else if (executionAborted)
                         {
                             ExecutionCompleted?.Invoke(this, new ExecutionEventArgs("Execution aborted. There was no step that could be started.", true));
                             executionAborted = false;
@@ -93,7 +93,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
         {
             Task.Run(() =>
             {
-                if(!stepsToExecute.Any())
+                if (!stepsToExecute.Any())
                 {
                     ExecutionSelectedStepsStarted?.Invoke(this, new ExecutionEventArgs("Select steps for execution.", false));
                     ExecutionCompleted?.Invoke(this, new ExecutionEventArgs(string.Empty, false));
@@ -105,7 +105,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                     {
                         statusReportService.SetStatusToStep(stepStatus, statusReportService.GetInitialStatus(stepStatus.Step));
                     }
-                    
+
                     EnqueueSteps(stepsToExecute);
                 }
 
@@ -128,15 +128,15 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
                 IList<StepStatus> stepStatuses = statusReportService.GetStepStatuses(allSteps);
                 List<StepStatus> stepStatusesToExecute = stepStatuses.Where(s => s.Status != Status.Success).ToList();
 
-                if(stepStatusesToExecute.Any())
+                if (stepStatusesToExecute.Any())
                 {
                     ExecutionTillThisStepStarted?.Invoke(this, new ExecutionEventArgs(string.Empty, false));
                     EnqueueSteps(stepStatusesToExecute);
                 }
                 else
-                {                    
+                {
                     ExecutionTillThisStepStarted?.Invoke(this, new ExecutionEventArgs("All steps are executed successfully. The execution is going to start all over again.", false));
-                    foreach(Step step in allSteps)
+                    foreach (Step step in allSteps)
                     {
                         statusReportService.SetStatusToStep(step, statusReportService.GetInitialStatus(step));
                     }
@@ -254,7 +254,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
             {
                 ExecutionCompleted?.Invoke(this, new ExecutionEventArgs(string.Empty, false));
             }
-            else if(StepsQueue.All(s => !s.CanBeExecuted) && StepsQueueParallel.All(s => !s.CanBeExecuted))
+            else if (StepsQueue.All(s => !s.CanBeExecuted) && StepsQueueParallel.All(s => !s.CanBeExecuted))
             {
                 ClearQueues();
                 executionAborted = true;

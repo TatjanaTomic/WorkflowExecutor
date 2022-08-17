@@ -18,7 +18,7 @@ namespace CreatorMVVMProject.Model.Class.DialogService
                 };
                 messageWindow.ShowDialog();
             });
-            
+
         }
     }
 }

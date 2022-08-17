@@ -1,9 +1,8 @@
-﻿using CreatorMVVMProject.Model.Class.Commands;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.Windows.Input;
+using CreatorMVVMProject.Model.Class.Commands;
 using CreatorMVVMProject.Model.Class.StatusReportService;
 using CreatorMVVMProject.Model.Interface.ExecutionService;
-using System.Windows.Input;
 
 namespace CreatorMVVMProject.ViewModel.Main
 {
@@ -29,7 +28,7 @@ namespace CreatorMVVMProject.ViewModel.Main
         public List<StepViewModel> StepViewModels { get; } = new();
 
         public ICommand ExpandAllCommand => expandAllCommand ??= new DelegateCommand(ExpandAll);
-        
+
         public ICommand CollapseAllCommand => collapseAllCommand ??= new DelegateCommand(CollapseAll);
 
         private void ExpandAll()
@@ -39,7 +38,7 @@ namespace CreatorMVVMProject.ViewModel.Main
                 stepViewModel.IsExpanded = true;
             }
         }
-        
+
         private void CollapseAll()
         {
             foreach (StepViewModel stepViewModel in StepViewModels)
