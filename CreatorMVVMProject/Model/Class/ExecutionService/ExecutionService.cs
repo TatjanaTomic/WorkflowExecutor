@@ -267,7 +267,7 @@ namespace CreatorMVVMProject.Model.Class.ExecutionService
 
         private AbstractExecutor CreateStepExecutor(Step step)
         {
-            AbstractExecutor stepExecutor = StepExecutorFabrique.CreateExecutor(step);
+            AbstractExecutor stepExecutor = StepExecutorFactory.CreateExecutor(step);
             stepExecutor.ExecutionStarted += StepExecutionStarted;
             stepExecutor.ExecutionCompleted += StepExecutionCompleted;
 

@@ -4,7 +4,7 @@ using Type = CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.X
 
 namespace CreatorMVVMProject.Model.Class.StepExecutor
 {
-    public static class StepExecutorFabrique
+    public static class StepExecutorFactory
     {
         public static AbstractExecutor CreateExecutor(Step step)
         {
