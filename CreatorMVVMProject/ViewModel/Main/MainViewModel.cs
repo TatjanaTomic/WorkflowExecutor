@@ -28,7 +28,7 @@ namespace CreatorMVVMProject.ViewModel.Main
 
             foreach (StageStatus stage in mainModel.Stages)
             {
-                StageViewModels.Add(new(stage, mainModel.ExecutionService));
+                StageViewModels.Add(new(stage, mainModel.ExecutionService, mainModel.StatusReportService, mainModel.WorkflowService));
             }
 
             setSelectedStage();

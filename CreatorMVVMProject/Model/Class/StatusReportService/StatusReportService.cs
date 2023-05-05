@@ -151,7 +151,7 @@ namespace CreatorMVVMProject.Model.Class.StatusReportService
             return Stages.SelectMany(stage => stage.Steps).First(s => s.Step.Id == step.Id);
         }
 
-        public IList<StepStatus> GetStepStatuses(List<Step> steps)
+        public IList<StepStatus> GetStepStatuses(IList<Step> steps)
         {
             IList<StepStatus> stepStatuses = new List<StepStatus>();
             foreach (Step step in steps)

@@ -3,6 +3,8 @@ using System.Windows.Input;
 using CreatorMVVMProject.Model.Class.Commands;
 using CreatorMVVMProject.Model.Class.StatusReportService;
 using CreatorMVVMProject.Model.Interface.ExecutionService;
+using CreatorMVVMProject.Model.Interface.StatusReportService;
+using CreatorMVVMProject.Model.Interface.WorkflowService;
 
 namespace CreatorMVVMProject.ViewModel.Main
 {
@@ -11,13 +13,13 @@ namespace CreatorMVVMProject.ViewModel.Main
         private DelegateCommand? expandAllCommand;
         private DelegateCommand? collapseAllCommand;
 
-        public StageViewModel(StageStatus stage, IExecutionService executionService)
+        public StageViewModel(StageStatus stage, IExecutionService executionService, IStatusReportService statusReportService, IWorkflowService workflowService)
         {
             Stage = stage;
 
             foreach (StepStatus step in Stage.Steps)
             {
-                StepViewModels.Add(new StepViewModel(step, executionService));
+                StepViewModels.Add(new StepViewModel(step, executionService, statusReportService, workflowService));
             }
         }
 

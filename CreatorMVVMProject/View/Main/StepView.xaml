@@ -102,8 +102,19 @@
                                   Margin="0,0,20,0">
                         </CheckBox>
 
-                        <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3">
-                            
+                        <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Orientation="Vertical">
+                            <TextBlock Margin="10,17,0,0" Text="Dependency tree:" FontSize="13" Foreground="{StaticResource TextLightColorBrush}" />
+
+                            <TreeView ItemsSource="{Binding TreeView}" x:Name="DependenciesTree" >
+                                <TreeView.ItemTemplate>
+                                    <HierarchicalDataTemplate DataType="{x:Type main:TreeViewNode}" ItemsSource="{Binding Children}">
+                                        <StackPanel Margin="5,0,0,0" Orientation="Horizontal">
+                                            <Image Width="15" Height="15" Source="{Binding NodeStepStatus, Converter={StaticResource statusToIconConverter}, UpdateSourceTrigger=PropertyChanged}"></Image>
+                                            <TextBlock Margin="10,0,0,0" Text="{Binding NodeStepId}" FontSize="13" Foreground="{StaticResource TextLightColorBrush}" />
+                                        </StackPanel>
+                                    </HierarchicalDataTemplate>
+                                </TreeView.ItemTemplate>
+                            </TreeView>
                         </StackPanel>
                     </Grid>
 

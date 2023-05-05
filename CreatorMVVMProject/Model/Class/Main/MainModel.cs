@@ -37,6 +37,10 @@ namespace CreatorMVVMProject.Model.Class.Main
 
         public IDialogService DialogService => dialogService;
 
+        public IStatusReportService StatusReportService => statusReportService;
+
+        public IWorkflowService WorkflowService => workflowService;
+
 
         private void StepsExecutionCompleted(object? _, ExecutionEventArgs args)
         {
