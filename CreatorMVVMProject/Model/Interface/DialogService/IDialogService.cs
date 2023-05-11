@@ -1,9 +1,8 @@
 ﻿using CreatorMVVMProject.ViewModel.Message;
 
-namespace CreatorMVVMProject.Model.Interface.DialogService
+namespace CreatorMVVMProject.Model.Interface.DialogService;
+
+public interface IDialogService
 {
-    public interface IDialogService
-    {
-        public void ShowMessage(MessageViewModel messageViewModel);
-    }
+    public void ShowMessage(MessageViewModel messageViewModel);
 }

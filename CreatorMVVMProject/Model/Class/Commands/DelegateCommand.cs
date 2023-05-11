@@ -1,51 +1,50 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace CreatorMVVMProject.Model.Class.Commands
+namespace CreatorMVVMProject.Model.Class.Commands;
+
+public class DelegateCommand<T> : ICommand
 {
-    public class DelegateCommand<T> : ICommand
+    private readonly Action<T> action;
+
+    public DelegateCommand(Action<T> action)
     {
-        private readonly Action<T> action;
-
-        public DelegateCommand(Action<T> action)
-        {
-            this.action = action;
-        }
-
-        public event EventHandler? CanExecuteChanged;
-
-        public bool CanExecute(object? parameter)
-        {
-            return true;
-        }
-
-        public void Execute(object? parameter)
-        {
-            action((T?)parameter);
-
-        }
+        this.action = action;
     }
 
+    public event EventHandler? CanExecuteChanged;
 
-    public class DelegateCommand : ICommand
+    public bool CanExecute(object? parameter)
     {
-        private readonly Action action;
+        return true;
+    }
 
-        public DelegateCommand(Action action)
-        {
-            this.action = action;
-        }
+    public void Execute(object? parameter)
+    {
+        action((T?)parameter);
 
-        public event EventHandler? CanExecuteChanged;
+    }
+}
 
-        public bool CanExecute(object? parameter)
-        {
-            return true;
-        }
 
-        public void Execute(object? parameter)
-        {
-            action();
-        }
+public class DelegateCommand : ICommand
+{
+    private readonly Action action;
+
+    public DelegateCommand(Action action)
+    {
+        this.action = action;
+    }
+
+    public event EventHandler? CanExecuteChanged;
+
+    public bool CanExecute(object? parameter)
+    {
+        return true;
+    }
+
+    public void Execute(object? parameter)
+    {
+        action();
     }
 }

@@ -3,22 +3,21 @@ using CreatorMVVMProject.Model.Interface.DialogService;
 using CreatorMVVMProject.View.Message;
 using CreatorMVVMProject.ViewModel.Message;
 
-namespace CreatorMVVMProject.Model.Class.DialogService
+namespace CreatorMVVMProject.Model.Class.DialogService;
+
+public class MessageService : IDialogService
 {
-    public class MessageService : IDialogService
+
+    public void ShowMessage(MessageViewModel messageViewModel)
     {
-
-        public void ShowMessage(MessageViewModel messageViewModel)
+        Application.Current.Dispatcher.Invoke(delegate
         {
-            Application.Current.Dispatcher.Invoke(delegate
+            MessageWindow messageWindow = new MessageWindow
             {
-                MessageWindow messageWindow = new MessageWindow
-                {
-                    DataContext = messageViewModel
-                };
-                messageWindow.ShowDialog();
-            });
+                DataContext = messageViewModel
+            };
+            messageWindow.ShowDialog();
+        });
 
-        }
     }
 }

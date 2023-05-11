@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml;
 
-namespace CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository
+namespace CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository;
+
+public interface IWorkflowRepository
 {
-    public interface IWorkflowRepository
-    {
-        IList<Stage> GetAllStages();
-    }
+    IList<Stage> GetAllStages();
 }

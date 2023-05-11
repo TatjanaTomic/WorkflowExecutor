@@ -1,15 +1,14 @@
-﻿namespace CreatorMVVMProject.Model.Class.StatusReportService
+﻿namespace CreatorMVVMProject.Model.Class.StatusReportService;
+
+public class StatusChangedEventArgs
 {
-    public class StatusChangedEventArgs
+    public StatusChangedEventArgs(Status status, string stepId)
     {
-        public StatusChangedEventArgs(Status status, string stepId)
-        {
-            Status = status;
-            StepId = stepId;
-        }
-
-        public Status Status { get; set; }
-
-        public string StepId { get; set; }
+        Status = status;
+        StepId = stepId;
     }
+
+    public Status Status { get; set; }
+
+    public string StepId { get; set; }
 }

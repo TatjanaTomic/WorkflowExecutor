@@ -1,57 +1,56 @@
 ﻿using System;
 using CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml;
 
-namespace CreatorMVVMProject.Model.Class.StatusReportService
+namespace CreatorMVVMProject.Model.Class.StatusReportService;
+
+public class StepStatus
 {
-    public class StepStatus
+    private Status status;
+    private bool canBeExecuted;
+    private string statusMessage = string.Empty;
+
+    public StepStatus(Step step, Status initialStatus, bool canBeExecuted)
     {
-        private Status status;
-        private bool canBeExecuted;
-        private string statusMessage = string.Empty;
+        Step = step;
+        status = initialStatus;
+        this.canBeExecuted = canBeExecuted;
+    }
 
-        public StepStatus(Step step, Status initialStatus, bool canBeExecuted)
+    public event EventHandler? MessageChanged;
+
+    public event EventHandler? CanBeExecutedChanged;
+
+    public event EventHandler<StatusChangedEventArgs>? StatusChanged;
+
+    public Step Step { get; }
+
+    public string StatusMessage
+    {
+        get => statusMessage;
+        set
         {
-            Step = step;
-            status = initialStatus;
-            this.canBeExecuted = canBeExecuted;
+            statusMessage = value;
+            MessageChanged?.Invoke(this, EventArgs.Empty);
         }
+    }
 
-        public event EventHandler? MessageChanged;
-
-        public event EventHandler? CanBeExecutedChanged;
-
-        public event EventHandler<StatusChangedEventArgs>? StatusChanged;
-
-        public Step Step { get; }
-
-        public string StatusMessage
+    public Status Status
+    {
+        get => status;
+        set
         {
-            get => statusMessage;
-            set
-            {
-                statusMessage = value;
-                MessageChanged?.Invoke(this, EventArgs.Empty);
-            }
+            status = value;
+            StatusChanged?.Invoke(this, new StatusChangedEventArgs(status, Step.Id));
         }
+    }
 
-        public Status Status
+    public bool CanBeExecuted
+    {
+        get => canBeExecuted;
+        set
         {
-            get => status;
-            set
-            {
-                status = value;
-                StatusChanged?.Invoke(this, new StatusChangedEventArgs(status, Step.Id));
-            }
-        }
-
-        public bool CanBeExecuted
-        {
-            get => canBeExecuted;
-            set
-            {
-                canBeExecuted = value;
-                CanBeExecutedChanged?.Invoke(this, EventArgs.Empty);
-            }
+            canBeExecuted = value;
+            CanBeExecutedChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

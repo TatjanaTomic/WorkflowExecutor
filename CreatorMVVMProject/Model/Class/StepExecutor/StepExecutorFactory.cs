@@ -2,19 +2,18 @@
 using CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml;
 using Type = CreatorMVVMProject.Model.Class.WorkflowService.WorkflowRepository.Xml.Type;
 
-namespace CreatorMVVMProject.Model.Class.StepExecutor
+namespace CreatorMVVMProject.Model.Class.StepExecutor;
+
+public static class StepExecutorFactory
 {
-    public static class StepExecutorFactory
+    public static AbstractExecutor CreateExecutor(Step step)
     {
-        public static AbstractExecutor CreateExecutor(Step step)
+        return step.Type switch
         {
-            return step.Type switch
-            {
-                Type.Executable => new ScriptExecutor(step),
-                Type.Upload => new UploadExecutor(step),
-                Type.Download => new DownloadExecutor(step),
-                _ => throw new WrongDefinitionException("Step type must be defined.")
-            };
-        }
+            Type.Executable => new ScriptExecutor(step),
+            Type.Upload => new UploadExecutor(step),
+            Type.Download => new DownloadExecutor(step),
+            _ => throw new WrongDefinitionException("Step type must be defined.")
+        };
     }
 }
